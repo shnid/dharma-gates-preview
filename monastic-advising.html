@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="dg-preview" content="1">
+<title>Monastic Advising — Dharma Gates</title>
+<meta name="description" content="Dharma Gates' donation-based advising service connects people considering deeper practice, residential training, or monastic life with trustworthy Buddhist practice centers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<!-- picks the remembered design version before first paint, so the page doesn't flash another palette -->
+<script>(function(){var d;try{d=new URLSearchParams(location.search).get("design")||localStorage.getItem("dg-design")}catch(e){}document.documentElement.setAttribute("data-design",/^v[1-4]$/.test(d||"")?d:"v1")})()</script>
+</head>
+<body data-page="monastic-advising.html" data-nav="a">
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Monastic advising</div>
+      <h1>Considering deeper practice?</h1>
+      <p class="lead">For those who seek to discover greater depths of practice, full-time study of meditation in a residential training environment has been encouraged for millennia. We help you find the right place to do it.</p>
+      <div class="cta-row"><a class="btn" href="#interest">Request a conversation</a><a class="btn ghost" href="more.html#places">Browse practice centers</a></div>
+    </div>
+    <div class="art"><img src="assets/img/group-hall-monastics-1280.jpg" srcset="assets/img/group-hall-monastics-640.jpg 640w, assets/img/group-hall-monastics-1280.jpg 1280w, assets/img/group-hall-monastics.jpg 2000w" sizes="(max-width: 900px) 100vw, 45vw" width="1280" height="960" fetchpriority="high" alt="Retreat participants with palms joined beside monastic teachers in a meditation hall"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap narrow">
+    <p>Dharma Gates offers a donation-based advising service for people in any stage of life who seek to deepen their practice or are considering entering residential training or monastic life.</p>
+    <p class="note">Naming decision for Lyndsey: the nav says <b>Monastic Advising</b>, the current page heading says <b>Meditation Advising Program</b>, and the meta description says “free” while the body says “donation-based.” The prototype uses “Monastic Advising” + “donation-based.”</p>
+  </div>
+</section>
+
+<section class="alt bg-garden">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>Three conversations, one recommendation</h2>
+    <div class="grid cols-3">
+      <div class="card"><h3>1 · Talk with an advisor</h3><p>Speak 1:1 with someone who has lived residential practice, about your background, aims, and interests.</p></div>
+      <div class="card"><h3>2 · Discern what matters</h3><p>Work through the important factors when choosing a practice center — tradition, teacher, structure, cost, length of stay, community.</p></div>
+      <div class="card"><h3>3 · Get trusted recommendations</h3><p>Receive recommendations for trustworthy centers compatible with you, and where possible an introduction to a current or former resident.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="interest">
+  <div class="wrap two">
+    <div>
+      <div class="eyebrow">Interest form</div>
+      <h2>Tell us a little about yourself</h2>
+      <p>We'll read it and reach out to set up a conversation. Advising is offered by donation, like everything we do.</p>
+      <p class="note">In WordPress this becomes a real form (WPForms, Gravity Forms or Fluent Forms; we pick one before the build starts). Submissions should go to the advising team, not to a personal inbox. The current Squarespace form's questions still need to be copied over; they couldn't be read from outside the site.</p>
+    </div>
+    <form class="stack" onsubmit="event.preventDefault();alert('Prototype only — nothing is sent.')">
+      <input type="text" placeholder="Name" aria-label="Name">
+      <input type="email" placeholder="Email" aria-label="Email">
+      <textarea rows="5" placeholder="What draws you toward deeper practice? Any traditions, centers, or questions on your mind?" aria-label="Message"></textarea>
+      <label style="font-size:.9rem;color:var(--muted)"><input type="checkbox" required> I've read the <a href="https://www.dharma-gates.org/dg-advising-liability-waiver" rel="noopener">advising liability waiver</a>.</label>
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>
+</section>
+
+<section class="alt bg-forest">
+  <div class="wrap narrow">
+    <div class="eyebrow">Read first</div>
+    <h2>Places to meditate</h2>
+    <p>A curated directory of monasteries and retreat centers across the Theravada, Mahayana, and Vajrayana traditions, plus self-retreat options. All have either been visited by our team or recommended by our mentors and advisors.</p>
+    <p><a class="btn ghost" href="more.html#places">Open the directory</a> &nbsp; <a href="https://www.dharma-gates.org/blog/how-to-find-amp-vet-a-buddhist-teacher" rel="noopener">How to find (&amp; vet) a Buddhist teacher →</a></p>
+  </div>
+</section>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
