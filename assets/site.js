@@ -35,7 +35,6 @@
     ["about.html", "About", [
       ["about.html#team", "Our Team"],
       ["about.html#impact", "Our Impact"],
-      ["about.html#stories", "Participant Stories"],
       ["about.html#values", "Dana, Ethics & Inclusion"],
       ["about.html#work", "Work With Us"]
     ]],
@@ -54,8 +53,10 @@
     ["v1", "1 · Earth", "Lyndsey's starter palette"],
     ["v2", "2 · Blue", "Blue and white with an ink-like navy"],
     ["v3", "3 · Ink", "Wildcard: black ink with one vermilion accent"],
-    ["v4", "4 · Textured", "Earth colors with photo backgrounds on alternating blocks"]
+    ["v4", "4 · Textured", "Earth colors with photo backgrounds on alternating blocks"],
+    ["v5", "5 · Textured Blue", "Blue colors with photo backgrounds on alternating blocks"]
   ];
+  var DEFAULT_DESIGN = "v5"; // Textured Blue for first-time visitors (DG, 2026-10-21)
   var SLOTS = [ // [token, label] — the nine slots Lyndsey and the team can change live on a call
     ["--paper", "Page background"],
     ["--paper-2", "Alternate blocks"],
@@ -95,7 +96,7 @@
   var bannerHidden = false;
   try { bannerHidden = !isPreview && sessionStorage.getItem("dg-bar") === "hidden"; } catch (e) {}
   var banner = bannerHidden ? "" : isPreview
-    ? '<div class="proto-bar preview-bar" id="proto-bar"><span><b>Preview: not the live site.</b><span class="wide-only"> Compare the four designs with the switcher at the bottom right.</span></span>' +
+    ? '<div class="proto-bar preview-bar" id="proto-bar"><span><b>Preview: not the live site.</b><span class="wide-only"> Compare the five designs with the switcher at the bottom right.</span></span>' +
       '<a id="feedback-link" href="mailto:anid.laoui@gmail.com">Send feedback on this page</a>' +
       '<button type="button" onclick="document.getElementById(\'proto-bar\').remove()">hide</button></div>'
     : '<div class="proto-bar" id="proto-bar"><span><b>Skeleton prototype</b> — structure & real copy from the current site; colors, photos and video are a draft. Use the switcher (bottom-right) to compare design versions and navigation A vs B.</span>' +
@@ -147,24 +148,26 @@
     save("dg-switcher", sw.classList.contains("open") ? "open" : "folded");
   });
 
-  /* ---------- Design versions (remembered per browser; ?design=v2 in a link picks one) ---------- */
+  /* ---------- Design versions (remembered per browser; ?design=v2 in a link picks one) ----------
+     Only a version the viewer picks (or a link names) is remembered, so the default can change later. */
   function isDesign(d) { return DESIGNS.some(function (x) { return x[0] === d; }); }
   var design = params.get("design");
-  if (!isDesign(design)) design = load("dg-design", "v1");
-  if (!isDesign(design)) design = "v1";
-  function setDesign(d) {
+  var designFromLink = isDesign(design);
+  if (!isDesign(design)) design = load("dg-design", DEFAULT_DESIGN);
+  if (!isDesign(design)) design = DEFAULT_DESIGN;
+  function setDesign(d, remember) {
     design = d;
     root.setAttribute("data-design", d);
     sw.querySelectorAll("[data-design]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-design") === d); });
     var name = DESIGNS.filter(function (x) { return x[0] === d; })[0][1];
     swToggle.textContent = "Design: " + name.replace(/^\d · /, "") + (sw.classList.contains("open") ? " ▾" : " ▴");
-    save("dg-design", d);
+    if (remember) save("dg-design", d);
     msg.textContent = "";
     applyColorEdits();
     updateFeedbackLink();
   }
   sw.querySelectorAll("[data-design]").forEach(function (b) {
-    b.addEventListener("click", function () { setDesign(b.getAttribute("data-design")); });
+    b.addEventListener("click", function () { setDesign(b.getAttribute("data-design"), true); });
   });
 
   /* ---------- A/B navigation (remembered per browser; ?nav=b in a link picks one) ---------- */
@@ -228,10 +231,10 @@
   }
 
   setVariant(variant);
-  setDesign(design);
-  // open on wide screens, folded into one small button on phones and tablets; after that, as the viewer last left it
-  var swState = load("dg-switcher", "");
-  setOpen(swState ? swState === "open" : window.matchMedia("(min-width: 1200px)").matches);
+  setDesign(design, designFromLink);
+  // folded into one small button until the viewer opens it, so it never sits on the page itself (it used to open
+  // by itself on wide screens and covered part of the first screen); after that, as the viewer last left it
+  setOpen(load("dg-switcher", "") === "open");
 
   /* ---------- Hero video: a muted ~5s loop over a still photo ----------
      Loads only after the page has finished loading, never under reduced motion or Save-Data,
@@ -297,16 +300,18 @@
     setClip(clip);
   }
 
-  /* ---------- YouTube slot for the full fundraiser video ----------
-     Set data-youtube-id on .video-slot once Lyndsey uploads it; the player loads only when clicked. */
+  /* ---------- YouTube slot for the full video ----------
+     data-youtube-id on .video-slot names the video. Nothing loads from YouTube until the viewer presses play;
+     then the youtube-nocookie.com player replaces the poster. */
   document.querySelectorAll(".video-slot").forEach(function (slot) {
     var id = slot.getAttribute("data-youtube-id");
     var play = slot.querySelector("button.play");
     if (!play) return;
     if (!id) { play.disabled = true; return; }
+    slot.classList.add("ready");
     play.addEventListener("click", function () {
       var f = document.createElement("iframe");
-      f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0";
+      f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(id) + "?autoplay=1&rel=0&playsinline=1";
       f.setAttribute("title", slot.getAttribute("data-title") || "Video");
       f.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
       f.setAttribute("allowfullscreen", "");
@@ -340,9 +345,13 @@
     } else { counters.forEach(run); }
   }
 
-  /* ---------- Testimonial carousel: one at a time, "1 of N" ---------- */
+  /* ---------- Testimonial carousel: one at a time, "1 of N", turning by itself (DG, 2026-10-21) ----------
+     Moves on every 6.5 s. It waits while the pointer is over it, while focus is inside it, while it's off screen
+     or the tab is hidden; its Pause button stops it for good; under reduced motion it never turns by itself.
+     Screen readers hear each quote only when the viewer moves it, not on every automatic turn. */
   document.querySelectorAll("[data-carousel]").forEach(function (car) {
     var slides = car.querySelectorAll(".slide"), i = 0, counter = car.querySelector("[data-counter]");
+    var track = car.querySelector(".track"), ctrls = car.querySelector(".ctrls");
     var show = function (n) {
       i = (n + slides.length) % slides.length;
       slides.forEach(function (s, k) { s.classList.toggle("on", k === i); });
@@ -353,6 +362,35 @@
     if (next) next.addEventListener("click", function () { show(i + 1); });
     car.addEventListener("keydown", function (e) { if (e.key === "ArrowLeft") show(i - 1); if (e.key === "ArrowRight") show(i + 1); });
     show(0);
+
+    var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (still || slides.length < 2) return;
+    var timer = null, stopped = false, hovering = false, focused = false, onScreen = true, pause = null;
+    var sync = function () {
+      var run = !stopped && !hovering && !focused && onScreen && !document.hidden;
+      if (run && !timer) timer = setInterval(function () { show(i + 1); }, 6500);
+      if (!run && timer) { clearInterval(timer); timer = null; }
+      if (track) track.setAttribute("aria-live", run ? "off" : "polite");
+    };
+    if (ctrls) {
+      ctrls.insertAdjacentHTML("beforeend", '<button type="button" data-pause aria-pressed="false">Pause</button>');
+      pause = ctrls.querySelector("[data-pause]");
+      pause.addEventListener("click", function () {
+        stopped = !stopped;
+        pause.textContent = stopped ? "Play" : "Pause";
+        pause.setAttribute("aria-pressed", stopped);
+        sync();
+      });
+    }
+    car.addEventListener("mouseenter", function () { hovering = true; sync(); });
+    car.addEventListener("mouseleave", function () { hovering = false; sync(); });
+    car.addEventListener("focusin", function () { focused = true; sync(); });
+    car.addEventListener("focusout", function (e) { if (!car.contains(e.relatedTarget)) { focused = false; sync(); } });
+    document.addEventListener("visibilitychange", sync);
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) { onScreen = entries[0].isIntersecting; sync(); }).observe(car);
+    }
+    sync();
   });
 
   /* ---------- Retreat Guru embed: load on approach, then a watchdog ---------- */
@@ -363,16 +401,27 @@
   var rg = document.querySelector(".rbg-list") || document.querySelector(".rbg-table");
   var rgFrame = document.querySelector(".rg-frame[data-rbg-src]");
   var PROGRAM = "tbody tr, .rs-event-wrapper"; // one per program, in table and list views
+  // DG's names for the homepage table's columns (2026-10-21). The embed hard-codes "Hosts" and "Available Dates"
+  // in its headers and in the data-rs-title labels the phone layout shows, so rename both once it has drawn.
+  var RG_LABELS = { "Hosts": "Teacher", "Available Dates": "Dates" };
   var RG_SITE = "https://dharma-gates.secure.retreat.guru";
   if (rg && rgFrame) {
     rg.classList.add("pending");
     // Without the embed's hash router (it breaks the page's own #anchors), its "#/event/<id>/<slug>" links would
-    // lead nowhere, so point each program at its page on Retreat Guru instead.
+    // lead nowhere, so point each program at its page on Retreat Guru instead. The same pass renames the columns.
     if ("MutationObserver" in window) {
       new MutationObserver(function () {
         rg.querySelectorAll('a[href^="#/event/"]').forEach(function (a) {
           var slug = a.getAttribute("href").split("/")[3];
           if (slug) a.setAttribute("href", RG_SITE + "/program/" + encodeURIComponent(slug) + "/");
+        });
+        rg.querySelectorAll("th").forEach(function (th) {
+          var name = RG_LABELS[th.textContent.trim()];
+          if (name) th.textContent = name;
+        });
+        rg.querySelectorAll("td[data-rs-title]").forEach(function (td) {
+          var name = RG_LABELS[td.getAttribute("data-rs-title")];
+          if (name) td.setAttribute("data-rs-title", name);
         });
       }).observe(rg, { childList: true, subtree: true });
     }

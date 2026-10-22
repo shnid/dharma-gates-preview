@@ -6,12 +6,12 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="dg-preview" content="1">
 <title>Retreats &amp; Events — Dharma Gates</title>
-<meta name="description" content="Upcoming donation-based meditation retreats, immersions, and workshops for young adults (18–35), plus ongoing online practice.">
+<meta name="description" content="Upcoming donation-based meditation retreats, immersions, and workshops for young adults (18–35).">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <!-- picks the remembered design version before first paint, so the page doesn't flash another palette -->
-<script>(function(){var d;try{d=new URLSearchParams(location.search).get("design")||localStorage.getItem("dg-design")}catch(e){}document.documentElement.setAttribute("data-design",/^v[1-4]$/.test(d||"")?d:"v1")})()</script>
+<script>(function(){var d;try{d=new URLSearchParams(location.search).get("design")||localStorage.getItem("dg-design")}catch(e){}document.documentElement.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5")})()</script>
 </head>
 <body data-page="retreats.html" data-nav="a">
 
@@ -33,49 +33,6 @@
   </div>
 </section>
 
-<section class="alt bg-forest" id="what-to-expect">
-  <div class="wrap">
-    <div class="eyebrow">What to expect</div>
-    <h2>Retreats, immersions &amp; workshops</h2>
-    <div class="grid cols-3">
-      <div class="card">
-        <span class="pill">Retreat</span>
-        <h3 style="margin-top:10px">Residential, mostly silent</h3>
-        <p>Retreats at Dharma Gates are residential practice experiences rooted in lineage-based Dharma transmission and held within a strong supportive container. Most retreats are held in noble silence — refraining from unnecessary talking, including social courtesies, as well as from reading, writing, and technology use unless explicitly invited by the teacher. Retreats are practice-heavy and experiential, rather than conceptual or lecture-based. All retreats are led by Dharma teachers with permission to teach from within their lineage.</p>
-      </div>
-      <div class="card">
-        <span class="pill">Immersion</span>
-        <h3 style="margin-top:10px">Live the rhythm of a community</h3>
-        <p>Immersions are multi-day experiences designed to introduce participants to the life and flow of a monastic or lineage-based community. Periods of silence may be included, but silence is not central. Immersions often feature more conceptual learning, discussion, and interactive elements.</p>
-      </div>
-      <div class="card">
-        <span class="pill">Workshop</span>
-        <h3 style="margin-top:10px">Shorter, teaching-forward</h3>
-        <p>Workshops are shorter, practice-oriented learning experiences designed to introduce participants to specific aspects of Dharma practice. They are generally not silent. Workshops are primarily talk and teaching heavy, supplemented by experiential exercises and educational activities.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="ongoing">
-  <div class="wrap">
-    <div class="eyebrow">Ongoing</div>
-    <h2>Practice between retreats</h2>
-    <div class="grid cols-2">
-      <div class="card">
-        <h3>Dharma Office Hours <span class="pill">monthly · online</span></h3>
-        <p>Dharma Office Hours is a monthly online space to practice with sangha and bring your questions. The format is simple: meditate together, then group Q&amp;A. It's here for you if you're looking for help troubleshooting your meditation practice, accountability and encouragement from community, support integrating your retreat experience into daily life, or a way to learn and engage with the Dharma before a retreat.</p>
-        <a class="btn" href="https://dharma-gates.secure.retreat.guru/program/office-hours" rel="noopener">Register on Retreat Guru</a>
-      </div>
-      <div class="card">
-        <h3>Dharma Friends <span class="pill">seasonal · NYC &amp; online</span></h3>
-        <p>Seasonal gatherings combining Tibetan Buddhist teachings, meditation, and art practice, hosted with Tibet House NYC. <span class="todo">next-gathering block should be editable by staff; verify registration link</span></p>
-        <a class="btn ghost" href="https://www.dharma-friends.com/" rel="noopener">Learn more</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section class="alt bg-hall" id="dana">
   <div class="wrap narrow">
     <div class="eyebrow">Cost</div>
@@ -89,7 +46,7 @@
 <!-- Retreat Guru generic embed (list view). Configure BEFORE loading rbg-connect.min.js. -->
 <script>
   // classSelector mode renders the list into .rbg-list without the embed's hash router, which would otherwise
-  // break this page's #anchors (retreats.html#what-to-expect, #ongoing). Colors follow the design version on screen.
+  // break this page's #anchors (retreats.html#dana). Colors follow the design version on screen.
   var rbgCss = getComputedStyle(document.documentElement);
   var rbgOptions = {
     customer: "dharma-gates",

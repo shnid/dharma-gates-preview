@@ -35,8 +35,8 @@
    9 Labels on dark blocks --on-dark-label */
 
 /* V1 Earth: Lyndsey's starter palette (Palette 1, 2026-10-15), plus lighter and darker shades.
-   Also the default, and the base for V4 Textured. */
-:root, html[data-design="v1"], html[data-design="v4"] {
+   Also the base for V4 Textured. */
+html[data-design="v1"], html[data-design="v4"] {
   --paper: #f8f3ee;          /* Lyndsey: background, footer-banner text */
   --paper-2: #d8bb9a;        /* Lyndsey: blocks */
   --ink: #624129;            /* Lyndsey: body text */
@@ -50,8 +50,10 @@
   --footer-bg: var(--accent);
 }
 
-/* V2 Blue: blue and white with a dark, ink-like navy (the 2026-09-30 direction: safe, serene, water) */
-html[data-design="v2"] {
+/* V2 Blue: blue and white with a dark, ink-like navy (the 2026-09-30 direction: safe, serene, water).
+   Also the base for V5 Textured Blue, the default since DG's 2026-10-21 feedback (hence :root, for pages
+   opened without scripts). */
+:root, html[data-design="v2"], html[data-design="v5"] {
   --paper: #f7fafd;
   --paper-2: #e3edf7;
   --ink: #13233f;
@@ -205,6 +207,8 @@ body[data-nav="b"] .nav-a { display: none !important; }
 .dark .carousel blockquote footer { color: var(--on-dark-label); }
 .carousel .ctrls { display: flex; gap: 10px; align-items: center; margin-top: 18px; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; }
 .carousel .ctrls button { border: 1.5px solid currentColor; background: transparent; color: inherit; border-radius: 999px; width: 40px; height: 40px; cursor: pointer; font-size: 1rem; }
+/* the carousel turns by itself (DG, 2026-10-21); this button stops it for good, as WCAG 2.2.2 asks */
+.carousel .ctrls button[data-pause] { width: auto; padding: 0 14px; margin-left: 6px; font: inherit; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; }
 
 /* hero (split variant, used on inner pages) */
 .hero { padding: 72px 0 56px; background: linear-gradient(180deg, color-mix(in srgb, var(--paper-2) 55%, var(--paper)), var(--paper)); }
@@ -273,6 +277,8 @@ form.stack input, form.stack textarea { width: 100%; padding: 12px 14px; border:
 .rbg-table a { color: var(--sage) !important; }
 .rbg-table th, .rbg-table td { padding: 8px 10px !important; text-align: left !important; }
 .rbg-table td a { white-space: nowrap; }
+/* every second row shaded (DG, 2026-10-21), from the alternate-blocks slot so it follows each design */
+.rbg-table tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, var(--surface)) !important; }
 /* Retreats page list (classSelector mode): the embed's own colors are fixed when it loads, so follow the slots */
 .rbg-list, .rbg-list h3, .rbg-list .rs-event-date { color: var(--ink) !important; font-family: var(--font-body) !important; }
 .rbg-list h1 { font-family: var(--font-display) !important; font-weight: 500 !important; font-size: 1.5rem !important; color: var(--ink) !important; margin: 0 0 6px !important; }
@@ -286,7 +292,7 @@ form.stack input, form.stack textarea { width: 100%; padding: 12px 14px; border:
 @media (max-width: 700px) {
   .rbg-table table, .rbg-table tbody { display: block !important; }
   .rbg-table thead { display: none !important; }
-  .rbg-table tr { display: block !important; padding: 14px 0 !important; border-bottom: 1px solid var(--line) !important; background: transparent !important; }
+  .rbg-table tr { display: block !important; padding: 14px 12px !important; border-bottom: 1px solid var(--line) !important; background: transparent !important; border-radius: 10px; }
   .rbg-table td { display: block !important; text-align: left !important; padding: 2px 0 !important; border: 0 !important; }
   .rbg-table td::before { content: attr(data-rs-title) ": " !important; font-weight: 600; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); }
   .rbg-table td:first-child { font-family: var(--font-display); font-size: 1.15rem; margin-bottom: 4px; }
@@ -294,41 +300,43 @@ form.stack input, form.stack textarea { width: 100%; padding: 12px 14px; border:
   .rbg-table td:last-child { margin-top: 8px !important; }
   .rbg-table td:empty { display: none !important; }
   .rbg-table td > div { display: inline !important; }
+  .rbg-table tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, var(--surface)) !important; }
   .rbg-list .rs-event-details-container { float: none !important; width: 100% !important; padding: 0 !important; }
 }
 
 /* video slot for Lyndsey's full fundraiser video (YouTube, once it's uploaded) */
 .video-slot { position: relative; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; background: var(--dark-bg); color: var(--on-dark); }
 .video-slot img { width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+.video-slot.ready img { opacity: .85; }
 .video-slot .slot-note { position: absolute; inset: auto 0 0 0; padding: 14px 18px; background: color-mix(in srgb, var(--scrim) 85%, transparent); font-size: .92rem; color: var(--on-dark); }
 .video-slot button.play { position: absolute; inset: 0; margin: auto; width: 76px; height: 76px; border-radius: 50%; border: 0; background: var(--on-dark); color: var(--ink); font-size: 1.6rem; cursor: pointer; }
 .video-slot button.play[disabled] { opacity: .6; cursor: default; }
 .video-slot iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
-/* V4 Textured: V1 Earth colors, with photo backgrounds under a veil on alternating blocks, like The Returning.
-   Lyndsey's photos stand in until she sends textures. Each block names its photo with a bg-* class (so a page
+/* V4 Textured and V5 Textured Blue: V1 Earth or V2 Blue colors, with photo backgrounds under a veil on
+   alternating blocks, like The Returning. Lyndsey's photos stand in until she sends textures. Each block names its photo with a bg-* class (so a page
    never repeats its own hero photo); the veil is an inset shadow over the photo, strong enough for AA text
    contrast over any of them. */
-html[data-design="v4"] section.alt, html[data-design="v4"] section.dark, html[data-design="v4"] section.sage { background-size: cover; background-position: center; }
-html[data-design="v4"] section.alt { box-shadow: inset 0 0 0 200vmax var(--veil-light); background-image: url("img/forest-circle-1280.jpg"); }
-html[data-design="v4"] section.dark, html[data-design="v4"] section.sage { box-shadow: inset 0 0 0 200vmax var(--veil-dark); background-image: url("img/group-hillside-1280.jpg"); }
-html[data-design="v4"] section.bg-forest { background-image: url("img/forest-circle-1280.jpg"); }
-html[data-design="v4"] section.bg-garden { background-image: url("img/sitting-temple-garden-1280.jpg"); }
-html[data-design="v4"] section.bg-hall { background-image: url("img/circle-hall-1280.jpg"); }
-html[data-design="v4"] section.bg-lawn { background-image: url("img/three-sitters-lawn-1280.jpg"); }
-html[data-design="v4"] section.bg-hillside { background-image: url("img/group-hillside-1280.jpg"); }
-html[data-design="v4"] section.bg-kitchen { background-image: url("img/kitchen-team-1280.jpg"); }
-html[data-design="v4"] section.bg-monastics { background-image: url("img/group-hall-monastics-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.alt, html:is([data-design="v4"], [data-design="v5"]) section.dark, html:is([data-design="v4"], [data-design="v5"]) section.sage { background-size: cover; background-position: center; }
+html:is([data-design="v4"], [data-design="v5"]) section.alt { box-shadow: inset 0 0 0 200vmax var(--veil-light); background-image: url("img/forest-circle-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.dark, html:is([data-design="v4"], [data-design="v5"]) section.sage { box-shadow: inset 0 0 0 200vmax var(--veil-dark); background-image: url("img/group-hillside-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.bg-forest { background-image: url("img/forest-circle-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.bg-garden { background-image: url("img/sitting-temple-garden-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.bg-hall { background-image: url("img/circle-hall-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.bg-lawn { background-image: url("img/three-sitters-lawn-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.bg-hillside { background-image: url("img/group-hillside-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.bg-kitchen { background-image: url("img/kitchen-team-1280.jpg"); }
+html:is([data-design="v4"], [data-design="v5"]) section.bg-monastics { background-image: url("img/group-hall-monastics-1280.jpg"); }
 @media (max-width: 700px) {
-  html[data-design="v4"] section.alt { background-image: url("img/forest-circle-640.jpg"); }
-  html[data-design="v4"] section.dark, html[data-design="v4"] section.sage { background-image: url("img/group-hillside-640.jpg"); }
-  html[data-design="v4"] section.bg-forest { background-image: url("img/forest-circle-640.jpg"); }
-  html[data-design="v4"] section.bg-garden { background-image: url("img/sitting-temple-garden-640.jpg"); }
-  html[data-design="v4"] section.bg-hall { background-image: url("img/circle-hall-640.jpg"); }
-  html[data-design="v4"] section.bg-lawn { background-image: url("img/three-sitters-lawn-640.jpg"); }
-  html[data-design="v4"] section.bg-hillside { background-image: url("img/group-hillside-640.jpg"); }
-  html[data-design="v4"] section.bg-kitchen { background-image: url("img/kitchen-team-640.jpg"); }
-  html[data-design="v4"] section.bg-monastics { background-image: url("img/group-hall-monastics-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.alt { background-image: url("img/forest-circle-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.dark, html:is([data-design="v4"], [data-design="v5"]) section.sage { background-image: url("img/group-hillside-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.bg-forest { background-image: url("img/forest-circle-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.bg-garden { background-image: url("img/sitting-temple-garden-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.bg-hall { background-image: url("img/circle-hall-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.bg-lawn { background-image: url("img/three-sitters-lawn-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.bg-hillside { background-image: url("img/group-hillside-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.bg-kitchen { background-image: url("img/kitchen-team-640.jpg"); }
+  html:is([data-design="v4"], [data-design="v5"]) section.bg-monastics { background-image: url("img/group-hall-monastics-640.jpg"); }
 }
 
 /* footer */
@@ -398,4 +406,8 @@ footer.site { padding-bottom: 76px; }
 }
 @media (max-width: 420px) {
   .hero.bleed h1 { font-size: 2.2rem; }
+}
+/* on phones the folded switcher button sits where the scroll cue would be */
+@media (max-width: 480px) {
+  .scroll-cue { display: none; }
 }
