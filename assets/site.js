@@ -149,19 +149,24 @@
   });
 
   /* ---------- Design versions (remembered per browser; ?design=v2 in a link picks one) ----------
-     Only a version the viewer picks (or a link names) is remembered, so the default can change later. */
+     Only a version the viewer picks (or a link names) is remembered, so the default can change later. Picks live
+     under "dg-design-pick": the 10/19 preview saved "dg-design" on every visit, chosen or not, so that key can't
+     tell a choice from the old default and is dropped. */
   function isDesign(d) { return DESIGNS.some(function (x) { return x[0] === d; }); }
+  try { localStorage.removeItem("dg-design"); } catch (e) {}
   var design = params.get("design");
   var designFromLink = isDesign(design);
-  if (!isDesign(design)) design = load("dg-design", DEFAULT_DESIGN);
+  if (!isDesign(design)) design = load("dg-design-pick", DEFAULT_DESIGN);
   if (!isDesign(design)) design = DEFAULT_DESIGN;
   function setDesign(d, remember) {
     design = d;
     root.setAttribute("data-design", d);
     sw.querySelectorAll("[data-design]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-design") === d); });
     var name = DESIGNS.filter(function (x) { return x[0] === d; })[0][1];
-    swToggle.textContent = "Design: " + name.replace(/^\d · /, "") + (sw.classList.contains("open") ? " ▾" : " ▴");
-    if (remember) save("dg-design", d);
+    // the folded button stays short ("Design 5") so it covers as little as possible; its tooltip has the full name
+    swToggle.textContent = "Design " + d.slice(1) + (sw.classList.contains("open") ? " ▾" : " ▴");
+    swToggle.title = "Design: " + name.replace(/^\d · /, "");
+    if (remember) save("dg-design-pick", d);
     msg.textContent = "";
     applyColorEdits();
     updateFeedbackLink();
@@ -373,18 +378,23 @@
       if (track) track.setAttribute("aria-live", run ? "off" : "polite");
     };
     if (ctrls) {
-      ctrls.insertAdjacentHTML("beforeend", '<button type="button" data-pause aria-pressed="false">Pause</button>');
+      ctrls.insertAdjacentHTML("beforeend", '<button type="button" data-pause>Pause</button>');
       pause = ctrls.querySelector("[data-pause]");
       pause.addEventListener("click", function () {
         stopped = !stopped;
+        if (!stopped) { hovering = false; focused = false; } // Play means play, even with the pointer or focus here
         pause.textContent = stopped ? "Play" : "Pause";
-        pause.setAttribute("aria-pressed", stopped);
         sync();
       });
     }
     car.addEventListener("mouseenter", function () { hovering = true; sync(); });
     car.addEventListener("mouseleave", function () { hovering = false; sync(); });
-    car.addEventListener("focusin", function () { focused = true; sync(); });
+    // keyboard focus waits; a mouse click on an arrow doesn't (the pointer leaving is enough)
+    car.addEventListener("focusin", function (e) {
+      var keyboard = true;
+      try { keyboard = e.target.matches(":focus-visible"); } catch (x) {}
+      if (keyboard) { focused = true; sync(); }
+    });
     car.addEventListener("focusout", function (e) { if (!car.contains(e.relatedTarget)) { focused = false; sync(); } });
     document.addEventListener("visibilitychange", sync);
     if ("IntersectionObserver" in window) {
@@ -422,6 +432,9 @@
         rg.querySelectorAll("td[data-rs-title]").forEach(function (td) {
           var name = RG_LABELS[td.getAttribute("data-rs-title")];
           if (name) td.setAttribute("data-rs-title", name);
+          // Retreat Guru's teacher list reads "with <names>"; under a Teacher heading the names are enough
+          var t = td.getAttribute("data-rs-title") === "Teacher" && td.firstChild;
+          if (t && t.nodeType === 3 && /^with\s/i.test(t.nodeValue)) t.nodeValue = t.nodeValue.replace(/^with\s+/i, "");
         });
       }).observe(rg, { childList: true, subtree: true });
     }

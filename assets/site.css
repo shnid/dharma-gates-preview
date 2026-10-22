@@ -277,6 +277,7 @@ form.stack input, form.stack textarea { width: 100%; padding: 12px 14px; border:
 .rbg-table a { color: var(--sage) !important; }
 .rbg-table th, .rbg-table td { padding: 8px 10px !important; text-align: left !important; }
 .rbg-table td a { white-space: nowrap; }
+@media (min-width: 701px) { .rbg-table td[data-rs-title="Dates"] { white-space: nowrap; } }
 /* every second row shaded (DG, 2026-10-21), from the alternate-blocks slot so it follows each design */
 .rbg-table tbody tr:nth-child(even) { background: color-mix(in srgb, var(--paper-2) 70%, var(--surface)) !important; }
 /* Retreats page list (classSelector mode): the embed's own colors are fixed when it loads, so follow the slots */
