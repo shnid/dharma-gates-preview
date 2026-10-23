@@ -10,227 +10,201 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<!-- picks the remembered design version before first paint, so the page doesn't flash another palette -->
-<script>(function(){var d;try{d=new URLSearchParams(location.search).get("design")||localStorage.getItem("dg-design-pick")}catch(e){}document.documentElement.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5")})()</script>
+<!-- before the first paint: the remembered design version and switcher states (Impact in the menu, Mission, DG notes, Text width), so nothing flashes -->
+<script>(function(){var h=document.documentElement,q,l=function(k){try{return localStorage.getItem(k)}catch(e){return null}};try{q=new URLSearchParams(location.search)}catch(e){q={get:function(){return null}}}var d=q.get("design")||l("dg-design-pick");h.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5");var i=q.get("impact");if(i!=="on"&&i!=="off")i=l("dg-impact-page");h.setAttribute("data-impact",i==="on"?"on":"off");var m=q.get("mission");if(m!=="text"&&m!=="photo")m=l("dg-mission");h.setAttribute("data-mission",m==="photo"?"photo":"text");h.setAttribute("data-notes",l("dg-show-notes")==="off"?"off":"on");var w=q.get("measure");if(w!=="wide"&&w!=="comfortable")w=l("dg-measure");h.setAttribute("data-measure",w==="comfortable"?"comfortable":"wide");h.classList.add("js")})()</script>
 </head>
 <body data-page="index.html" data-nav="a">
+<main id="main">
 
-<!-- HERO · full-bleed media with text on top + scroll cue (The Returning); bobbing mark (a grounded take on Three Jewels' floating smiley).
-     The still photo is the fallback; a muted ~5s loop from Lyndsey's fundraiser video fades in over it once the page has loaded (site.js). -->
+<!-- HERO · full-bleed media with text on top + scroll cue (The Returning). The header overlays it, transparent until
+     the page scrolls. The still photo is the fallback; a muted ~5s loop from Lyndsey's fundraiser video fades in over it
+     once the page has loaded (site.js). -->
 <section class="hero bleed">
   <div class="media">
     <picture>
       <source media="(max-width: 700px)" srcset="assets/img/forest-circle-portrait.jpg" width="720" height="1080">
-      <img src="assets/img/forest-circle-1600.jpg" srcset="assets/img/forest-circle-1280.jpg 1280w, assets/img/forest-circle-1600.jpg 1600w" sizes="100vw" width="1600" height="1200" fetchpriority="high" alt="Retreat participants meditating in a circle in a forest clearing">
+      <img src="assets/img/forest-circle-1600.jpg" srcset="assets/img/forest-circle-1280.jpg 1280w, assets/img/forest-circle-1600.jpg 1600w, assets/img/forest-circle.jpg 1920w" sizes="100vw" width="1600" height="1200" fetchpriority="high" style="--focus: 45% 60%" alt="Retreat participants meditating in a circle in a forest clearing">
     </picture>
     <video class="hero-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
   </div>
-  <div class="mark-float" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="eyebrow">Donation-based meditation retreats · ages 18–35</div>
     <h1>Opening Buddhist Traditions to the Next Generation</h1>
     <p class="lead">We connect young practitioners to Buddhist teachers and practice centers, and remove the conceptual, logistical, and financial barriers that keep people from going deep.</p>
+    <p class="dg-note">Lyndsey is rewording this blurb. The removed tag said “donation-based” and “ages 18–35”, which help search and tell newcomers and donors who DG is for. Should the blurb keep them?</p>
     <div class="cta-row">
-      <a class="btn" href="retreats.html">See upcoming retreats</a>
-      <a class="btn ghost" href="monastic-advising.html">Monastic advising</a>
+      <a class="btn" href="retreats.html">See Upcoming Retreats</a>
+      <a class="btn ghost" href="monastic-advising.html">Monastic Advising</a>
     </div>
   </div>
-  <div class="scroll-cue" aria-hidden="true">scroll ↓</div>
-  <button type="button" class="video-toggle">Pause video</button>
+  <div class="scroll-cue" aria-hidden="true">Scroll ↓</div>
+  <button type="button" class="video-toggle">Pause Video</button>
 </section>
 
-<!-- MISSION · one clear statement (Hemera-style restraint), now wider with a photo beside it -->
-<section>
-  <div class="wrap two center">
-    <div>
-      <div class="eyebrow">Mission</div>
-      <h2>A grassroots nonprofit for deep practice</h2>
+<!-- MISSION · a text-only statement by default (R11); the switcher's Mission row shows the photo version -->
+<section id="mission" class="mission band-calm" data-variant="text">
+  <div class="wrap">
+    <div class="mission-text">
+      <h2>A Grassroots Nonprofit for Deep Practice</h2>
       <p>Dharma Gates is a grassroots nonprofit dedicated to opening pathways into formal meditation practice for young adults. We connect young practitioners to a variety of Buddhist teachers and practice centers, working to eliminate conceptual, logistical, and financial barriers to practice. We foster connections through which practitioners can cultivate compassion, resilience, and clarity to meet the unique challenges of our times.</p>
+      <p class="dg-note">DG’s homepage now says “501(c)(3) nonprofit” where this says “grassroots nonprofit”. Which should it say? Lyndsey may send a group photo for the photo version. Once DG’s logo is final, it can sit with this statement (10/22).</p>
     </div>
-    <figure class="split-photo" style="margin:0"><img src="assets/img/gassho-closeup-1280.jpg" srcset="assets/img/gassho-closeup-640.jpg 640w, assets/img/gassho-closeup-1280.jpg 1280w" sizes="(max-width: 900px) 100vw, 50vw" width="1280" height="960" loading="lazy" alt="A retreat participant smiling with palms joined, others kneeling on cushions behind"></figure>
+    <figure class="mission-photo frame" style="--focus: 40% 30%"><img src="assets/img/gassho-closeup-1280.jpg" srcset="assets/img/gassho-closeup-640.jpg 640w, assets/img/gassho-closeup-1280.jpg 1280w, assets/img/gassho-closeup.jpg 1920w" sizes="(min-width: 1024px) 560px, 100vw" width="1280" height="960" loading="lazy" alt="A retreat participant smiling with palms joined, others kneeling on cushions behind"></figure>
   </div>
 </section>
 
-<!-- UPCOMING · within a few scrolls of the top, with the register/dana CTA right there (The Returning's UPCOMING block) -->
-<section class="alt bg-garden" id="upcoming">
+<!-- RETREATS · the next three programs, live from Retreat Guru (site.js) -->
+<section id="upcoming" class="alt bg-garden">
   <div class="wrap">
-    <div class="eyebrow">Upcoming</div>
-    <h2>Retreats &amp; events</h2>
-    <p class="lead">Entered once in Retreat Guru, shown here automatically.</p>
-
-    <!-- Live data: Retreat Guru table embed -->
-    <div class="rg-frame" data-rbg-src="https://s3.amazonaws.com/rbgconnect.retreat.guru/public/rbg-connect.min.js"><div class="rbg-table"></div></div>
-
-    <!-- Target look for each row once the WordPress plugin renders programs as real pages. Static example, clearly labelled. -->
-    <p style="margin:26px 0 6px" class="eyebrow">Target row style <span class="todo">static example — real data comes from the embed above</span></p>
-    <div class="event-row">
-      <div class="when">Oct<small>15–19 · 2026</small></div>
-      <div><h3>Awakening Through the Body — a five-day residential retreat</h3><div class="meta">Corey Hess · Hudson Valley, NY · Retreat · offered by donation · 3 spaces left</div></div>
-      <div><a class="btn" href="retreats.html">Register</a></div>
-    </div>
-    <div class="event-row">
-      <div class="when">Nov<small>monthly · online</small></div>
-      <div><h3>Dharma Office Hours</h3><div class="meta">Sit together, then group Q&amp;A · Zoom · free, by donation</div></div>
-      <div><a class="btn ghost" href="https://dharma-gates.secure.retreat.guru/program/office-hours" rel="noopener">Register</a></div>
-    </div>
-    <p style="margin-top:18px"><a class="btn ghost" href="retreats.html">All retreats, immersions &amp; workshops →</a></p>
+    <div class="heading-row"><h2>Retreats &amp; Events</h2><a class="more-link" href="retreats.html">All Retreats →</a></div>
+    <p class="lead">Every program is offered freely, by donation.</p>
+    <p class="dg-note">Rows come from Retreat Guru: DG enters a program there once and it shows here.</p>
+    <ol class="rg-rows" data-rg-rows data-rg-limit="3" aria-busy="true"><li class="rg-loading">Loading upcoming retreats…</li></ol>
+    <noscript><p class="rg-fallback">Upcoming retreats are listed on Retreat Guru. <a href="https://dharma-gates.secure.retreat.guru/programs/" rel="noopener">See All Retreats on Retreat Guru →</a></p></noscript>
   </div>
 </section>
 
-<!-- THREE PILLARS · Deep Practice, Sangha, Dana (DG, 2026-10-21); DG is writing the new copy -->
-<section>
+<!-- PILLARS · Deep Practice, Sangha, Dana (R13): three plain geometric arcs, placeholder art only. The names are the
+     tab buttons; each arc acts as its name's button (site.js). Without scripts the three show side by side. -->
+<section id="pillars">
   <div class="wrap">
-    <div class="grid cols-3">
-      <div class="card">
-        <img class="card-img" src="assets/img/circle-hall-640.jpg" srcset="assets/img/circle-hall-640.jpg 640w, assets/img/circle-hall-1280.jpg 1280w" sizes="(max-width: 900px) 100vw, 33vw" width="640" height="480" loading="lazy" alt="Retreat participants seated in a circle on cushions in a meditation hall">
-        <div class="eyebrow">Practice</div>
-        <h3>Deep Practice</h3>
-        <p>Dharma Gates offers young adults (18–35) a range of immersive introductory experiences to meditation practice in a variety of Buddhist traditions — in person and online, with a wide breadth of facilitators and teachers, emphasizing accessibility, diverse perspectives, and depth of training. <span class="todo">DG is writing new copy</span></p>
+    <h2>Our Three Pillars</h2>
+    <p class="dg-note">Names to confirm: Deep Practice, Sangha, Dana (10/21 notes) or Practice, Sangha, Dharma (said on the call).</p>
+    <p class="dg-note">Placeholder copy and art: Lyndsey is writing the pillar copy; where the pillars link is a team question (DECISIONS #66).</p>
+    <div class="pillars" data-pillars>
+      <div class="pillar-nav">
+        <svg class="pillar-arcs" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+          <g data-for="pillar-tab-practice"><path class="halo" d="M27.50 133.81A80 80 0 0 1 93.03 20.30"/><path class="arc" d="M27.50 133.81A80 80 0 0 1 93.03 20.30"/><path class="hit" d="M27.50 133.81A80 80 0 0 1 93.03 20.30"/></g>
+          <g data-for="pillar-tab-sangha"><path class="halo" d="M106.97 20.30A80 80 0 0 1 172.50 133.81"/><path class="arc" d="M106.97 20.30A80 80 0 0 1 172.50 133.81"/><path class="hit" d="M106.97 20.30A80 80 0 0 1 172.50 133.81"/></g>
+          <g data-for="pillar-tab-dana"><path class="halo" d="M165.53 145.89A80 80 0 0 1 34.47 145.89"/><path class="arc" d="M165.53 145.89A80 80 0 0 1 34.47 145.89"/><path class="hit" d="M165.53 145.89A80 80 0 0 1 34.47 145.89"/></g>
+        </svg>
+        <div class="pillar-tabs" role="tablist" aria-label="Our three pillars">
+          <button type="button" class="pillar-name" role="tab" id="pillar-tab-practice" aria-controls="pillar-practice" aria-selected="true" data-pos="upper-left">Deep Practice</button>
+          <button type="button" class="pillar-name" role="tab" id="pillar-tab-sangha" aria-controls="pillar-sangha" aria-selected="false" tabindex="-1" data-pos="upper-right">Sangha</button>
+          <button type="button" class="pillar-name" role="tab" id="pillar-tab-dana" aria-controls="pillar-dana" aria-selected="false" tabindex="-1" data-pos="bottom">Dana</button>
+        </div>
       </div>
-      <div class="card">
-        <img class="card-img" src="assets/img/porch-table-640.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w" sizes="(max-width: 900px) 100vw, 33vw" width="480" height="640" loading="lazy" alt="Retreat participants smiling around a long table on a covered porch">
-        <div class="eyebrow">Connect</div>
-        <h3>Sangha</h3>
-        <p>Informal gatherings and relational practices that connect practitioners with each other and with teachers, so practice doesn't end when the retreat does. <span class="todo">DG is writing new copy</span></p>
-      </div>
-      <div class="card">
-        <img class="card-img" src="assets/img/kitchen-team-640.jpg" srcset="assets/img/kitchen-team-640.jpg 640w, assets/img/kitchen-team-1280.jpg 1280w" sizes="(max-width: 900px) 100vw, 33vw" width="640" height="427" loading="lazy" alt="Volunteers cooking together in a retreat kitchen">
-        <div class="eyebrow">Engage</div>
-        <h3>Dana</h3>
-        <p>We support young adults in developing the compassion and resilience that formal meditation training cultivates, so they can serve skillfully in a world that needs it. <span class="todo">DG is writing new copy</span></p>
+      <div class="pillar-panels">
+        <div class="pillar-panel is-shown" role="tabpanel" id="pillar-practice" aria-labelledby="pillar-tab-practice" tabindex="0">
+          <h3>Deep Practice</h3>
+          <p>Dharma Gates offers young adults (18–35) a range of immersive introductory experiences to meditation practice in a variety of Buddhist traditions — in person and online, with a wide breadth of facilitators and teachers, emphasizing accessibility, diverse perspectives, and depth of training.</p>
+          <div class="pillar-photos">
+            <figure class="frame" style="--focus: 50% 55%"><img src="assets/img/circle-hall-640.jpg" srcset="assets/img/circle-hall-640.jpg 640w, assets/img/circle-hall-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Retreat participants seated in a circle on cushions in a meditation hall"></figure>
+            <figure class="frame" style="--focus: 50% 55%"><img src="assets/img/sitting-temple-garden-640.jpg" srcset="assets/img/sitting-temple-garden-640.jpg 640w, assets/img/sitting-temple-garden-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Rows of young adults meditating outdoors on mats in a temple garden"></figure>
+          </div>
+        </div>
+        <div class="pillar-panel" role="tabpanel" id="pillar-sangha" aria-labelledby="pillar-tab-sangha" tabindex="0">
+          <h3>Sangha</h3>
+          <p>Informal gatherings and relational practices that connect practitioners with each other and with teachers, so practice doesn’t end when the retreat does.</p>
+          <div class="pillar-photos">
+            <figure class="frame" style="--focus: 50% 52%"><img src="assets/img/porch-table-640.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w" sizes="(min-width: 1024px) 330px, 50vw" width="480" height="640" loading="lazy" alt="Retreat participants smiling around a long table on a covered porch"></figure>
+            <figure class="frame" style="--focus: 50% 28%"><img src="assets/img/three-sitters-lawn-640.jpg" srcset="assets/img/three-sitters-lawn-640.jpg 640w, assets/img/three-sitters-lawn-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Three young practitioners in Zen T-shirts sitting cross-legged on a lawn, smiling"></figure>
+          </div>
+        </div>
+        <div class="pillar-panel" role="tabpanel" id="pillar-dana" aria-labelledby="pillar-tab-dana" tabindex="0">
+          <h3>Dana</h3>
+          <p>We support young adults in developing the compassion and resilience that formal meditation training cultivates, so they can serve skillfully in a world that needs it.</p>
+          <div class="pillar-photos">
+            <figure class="frame" style="--focus: 50% 47%"><img src="assets/img/group-hillside-640.jpg" srcset="assets/img/group-hillside-640.jpg 640w, assets/img/group-hillside-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="A group of retreat participants and a monk gathered on a green hillside"></figure>
+            <figure class="frame" style="--focus: 50% 55%"><img src="assets/img/group-hall-monastics-640.jpg" srcset="assets/img/group-hall-monastics-640.jpg 640w, assets/img/group-hall-monastics-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Retreat participants with palms joined beside monastic teachers in a meditation hall"></figure>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- IMPACT · dark full-bleed band, counters count up on scroll (The Returning) -->
-<section class="dark bg-hillside" id="impact">
+<!-- IMPACT · a dark textured strip; the real numbers are in the HTML and count up on scroll (site.js) -->
+<section id="impact" class="dark bg-forest band-compact">
   <div class="wrap">
-    <div class="eyebrow">So far, Dharma Gates has…</div>
-    <div class="grid cols-4">
-      <div class="stat"><b data-count="1500" data-suffix="+">0</b><span>young adults given the opportunity to practice</span></div>
-      <div class="stat"><b data-count="35" data-suffix="+">0</b><span>multi-day retreats hosted</span></div>
-      <div class="stat"><b data-count="60" data-suffix="+">0</b><span>workshops organized</span></div>
-      <div class="stat"><b data-count="125" data-suffix="+">0</b><span>people guided toward residential monastic practice</span></div>
+    <h2>So Far, Dharma Gates Has…</h2>
+    <div class="stats">
+      <div class="stat"><b data-count>2,000+</b><span>young adults given the opportunity to practice meditation</span></div>
+      <div class="stat"><b data-count>39</b><span>multi-day retreats organized and hosted</span></div>
+      <div class="stat"><b data-count>60+</b><span>daylong programs and workshops</span></div>
+      <div class="stat"><b data-count>160+</b><span>people guided toward residential monastic practice and other retreat opportunities</span></div>
     </div>
-    <p style="text-align:center;margin-top:12px"><a href="about.html#impact">Read the 2025 Annual Report →</a> <span class="todo">numbers from current Impact page — refresh</span></p>
+    <p class="stats-links"><a href="https://drive.google.com/file/d/1kafeKZ0UKrEHHXqKRH3snNZaPnFQyqST/view?usp=sharing" rel="noopener">Read the 2025 Annual Report →</a><a href="impact.html" data-impact-only>See Our Impact →</a></p>
   </div>
 </section>
 
-<!-- STORIES · one-at-a-time testimonial carousel, "1 of N" (The Returning); turns by itself every 6.5 s (site.js) -->
-<section id="stories" class="alt bg-lawn">
-  <div class="wrap narrow">
-    <div class="eyebrow">Participant experiences</div>
-    <h2>In their words</h2>
+<!-- PARTICIPANT EXPERIENCES · one quote at a time on a solid band, crossfading; each stays 5–15 s by length (R5, site.js) -->
+<section id="stories" class="alt band-calm stories">
+  <div class="wrap">
+    <h2>Participant Experiences</h2>
     <div class="carousel" data-carousel role="region" aria-roledescription="carousel" aria-label="Participant experiences">
       <div class="track" aria-live="polite">
-        <div class="slide on"><blockquote>“Incredible. It cracked my heart open.”<footer>— Nomi, retreat participant</footer></blockquote></div>
-        <div class="slide"><blockquote>“One of the most transformational weeks of my life.”<footer>— retreat participant</footer></blockquote></div>
-        <div class="slide"><blockquote>“This retreat felt like holy medicine.”<footer>— Rachel, retreat participant</footer></blockquote></div>
-        <div class="slide"><blockquote>“It brought me home to who I've always been.”<footer>— Michaela, retreat participant</footer></blockquote></div>
-        <div class="slide"><blockquote>“Never knew how powerful it is to sit with community in silence.”<footer>— Toni, retreat participant</footer></blockquote></div>
-        <div class="slide"><blockquote>“Would not be accessible without the low cost — grateful for the opportunity.”<footer>— Rebecca, retreat participant</footer></blockquote></div>
+        <figure class="slide on"><blockquote><p>“Incredible. It cracked my heart open.”</p></blockquote><figcaption>— Nomi, retreat participant</figcaption></figure>
+        <figure class="slide"><blockquote><p>“One of the most transformational weeks of my life.”</p></blockquote><figcaption>— retreat participant</figcaption></figure>
+        <figure class="slide"><blockquote><p>“This retreat felt like holy medicine.”</p></blockquote><figcaption>— Rachel, retreat participant</figcaption></figure>
+        <figure class="slide"><blockquote><p>“It brought me home to who I’ve always been.”</p></blockquote><figcaption>— Michaela, retreat participant</figcaption></figure>
+        <figure class="slide"><blockquote><p>“Never knew how powerful it is to sit with community in silence.”</p></blockquote><figcaption>— Toni, retreat participant</figcaption></figure>
+        <figure class="slide"><blockquote><p>“Would not be accessible without the low cost — grateful for the opportunity.”</p></blockquote><figcaption>— Rebecca, retreat participant</figcaption></figure>
       </div>
-      <div class="ctrls"><button type="button" data-prev aria-label="Previous">←</button><span data-counter>1 of 6</span><button type="button" data-next aria-label="Next">→</button></div>
+      <div class="progress" aria-hidden="true"><span></span></div>
+      <div class="ctrls"><button type="button" data-prev aria-label="Previous quote">←</button><span data-counter>1 of 6</span><button type="button" data-next aria-label="Next quote">→</button></div>
     </div>
-    <p style="margin-top:16px"><span class="todo">~40 full quotes on the current Testimonials page; these are abbreviated</span></p>
+    <p class="dg-note">These six quotes are shortened from DG’s Testimonials page. Lyndsey is sending longer ones from DG’s bank.</p>
   </div>
 </section>
 
 <!-- WATCH · the full video from DG's YouTube channel (2026-10-21). Nothing loads from YouTube until play is pressed;
      then site.js swaps the poster for the youtube-nocookie.com player. The .MOV never goes on the site. -->
-<section id="watch">
-  <div class="wrap two center">
-    <div>
-      <div class="eyebrow">Watch</div>
-      <h2>A glimpse into Dharma Gates: how young people feel about our retreats</h2>
-      <p class="lead">Participants share, in their own words, what they found on retreat. <span class="todo">draft copy</span></p>
-      <p class="small"><a href="https://www.youtube.com/watch?v=c-C923ScoNA" rel="noopener">Watch on YouTube →</a></p>
-    </div>
+<section id="watch" class="dark bg-hall band-calm watch">
+  <div class="wrap">
+    <h2>A Glimpse into Dharma Gates: How Young People Feel About Our Retreats</h2>
+    <p class="lead">Participants share, in their own words, what they found on retreat.</p>
+    <p class="dg-note">Draft copy.</p>
     <div class="video-slot" data-youtube-id="c-C923ScoNA" data-title="A Glimpse into Dharma Gates: How Young People Feel About Our Retreats">
       <img src="assets/video/fundraiser-poster.jpg" width="1280" height="720" loading="lazy" alt="Retreat participants gathered for a group photo on a lawn">
       <button type="button" class="play" aria-label="Play the video: A Glimpse into Dharma Gates">▶</button>
     </div>
+    <p><a class="more-link" href="https://www.youtube.com/watch?v=c-C923ScoNA" rel="noopener">Watch on YouTube →</a></p>
   </div>
 </section>
 
-<!-- FAQ · accordion, good for SEO -->
-<section id="faq" class="alt bg-hall">
-  <div class="wrap narrow">
-    <div class="eyebrow">FAQ</div>
-    <h2>More About Dharma Gates</h2>
-    <details open>
-      <summary>What does Dharma Gates do?</summary>
-      <p>Dharma Gates offers donation-based Buddhist meditation retreats, classes, and events to young adults 18–35. We partner with authorized teachers and facilitators from a wide breadth of Buddhist traditions to allow for a diversity of perspective. We currently offer around 13 multi-day retreats per year around the USA, an ongoing monthly online practice support session, and several immersive daylong events annually.</p>
-    </details>
-    <details>
-      <summary>Why do you offer retreats exclusively for young adults?</summary>
-      <p>To create the most welcoming environment possible: spaces where young people can practice among peers who share similar life questions and concerns. We also recognize the economic insecurities young adults often face, so we dedicate our resources to eliminating those financial barriers to practice.</p>
-    </details>
-    <details>
-      <summary>How much do your retreats cost?</summary>
-      <p>All retreats are offered by donation — <em>dana</em>, a Pali word for generosity — so cost is not a barrier to practice. <a href="about.html#values">How our dana model works →</a></p>
-    </details>
-    <details>
-      <summary>Is Dharma Gates affiliated with a particular teacher, lineage, or tradition?</summary>
-      <p>No. Our advisory board includes teachers from various branches of Buddhism, chosen deliberately for diversity so participants can discover what works best for them.</p>
-    </details>
-    <details>
-      <summary>I've never attended a meditation retreat before. What's it like?</summary>
-      <p>A warm peer environment with a structured schedule: 3–8 hours of daily meditation, talks, vegan meals, periods of silence, reduced technology use — and often, experiences of increased peace and loving-kindness. <a href="retreats.html">See upcoming retreats →</a></p>
-    </details>
-    <p class="note" style="margin-top:18px">FAQ answers here are condensed from the live FAQ page; the WordPress build will carry the full text plus FAQ schema markup for search.</p>
-  </div>
-</section>
-
-<!-- NEWSLETTER · the bottom-of-page signup every inspiration site shares -->
-<section class="dark bg-kitchen" id="newsletter">
-  <div class="wrap two">
-    <div>
-      <div class="eyebrow">Newsletter</div>
-      <h2>Twice a month: retreats, offerings, and Dharma resources</h2>
-      <p class="sub">One form for the whole site, wired to Mailchimp. <span class="todo">frequency: homepage says monthly, newsletter page says twice per month</span></p>
+<!-- FAQ · DG's six questions, word for word from dharma-gates.org/faq (2026-10-23) -->
+<section id="faq" class="faq">
+  <div class="wrap">
+    <div class="faq-head"><h2>More About Dharma Gates</h2></div>
+    <div class="faq-list">
+      <details open>
+        <summary>What does Dharma Gates do?</summary>
+        <p>Dharma Gates offers donation-based Buddhist meditation retreats, classes, and events to young adults 18-35. Dharma Gates partners with authorized teachers and facilitators from a wide breadth of Buddhist traditions to allow for a diversity of perspectives. Dharma Gates currently offers around 13 multi-day retreats per year around the USA and several immersive daylong events annually. <a href="retreats.html">Click here to check out upcoming retreats and offerings!</a></p>
+      </details>
+      <details>
+        <summary>Why does Dharma Gates offer retreats and programs exclusively for young adults?</summary>
+        <p>Dharma Gates believes in creating the most welcoming environment possible to invite young adults into deep practice. That means creating spaces where young people can practice among peers who share similar life questions and concerns as them. Dharma Gates also recognizes the economic insecurities young adults often face, which can make it difficult to attend a meditation retreat, which is why the organization offers retreats by donation to young people.</p>
+      </details>
+      <details>
+        <summary>Where can I find an affordable meditation retreat?</summary>
+        <p>All meditation retreats run by Dharma Gates are entirely donation-based. The mission of Dharma Gates is to create financially-accessible, high quality meditation offerings for young adults 18-35. All retreats and programs by Dharma Gates are offered by <em>dana</em>, which is a Pali word for generosity. For more information about our dana-culture, <a href="about.html#dana">click here.</a></p>
+      </details>
+      <details>
+        <summary>Is Dharma Gates affiliated with a particular teacher, lineage, or tradition?</summary>
+        <p>Dharma Gates is a Buddhist organization, but is not affiliated with one particular teacher, lineage, or specific Buddhist tradition. The Advisory Board of Dharma Gates is comprised of teachers from a number of different branches of Buddhism, and meditation retreats are offered within a variety of Buddhist styles and lineages to allow our participants to discover what works best for them.</p>
+      </details>
+      <details>
+        <summary>Do I need to be Buddhist to go on a meditation retreat with Dharma Gates?</summary>
+        <p>Although all Dharma Gates retreats are run by Buddhist teachers, participants do not need to identify as Buddhist to attend retreat. Dharma Gates welcomes young adult practitioners from all backgrounds and walks of life.</p>
+      </details>
+      <details>
+        <summary>I’ve never attended a meditation retreat before. What’s it like?</summary>
+        <p>Every retreat Dharma Gates offers is unique, and varies depending on the teacher, their tradition, and the intention of that particular program. But here are common threads between all Dharma Gates meditation retreats that one can expect to experience:</p>
+        <ul>
+          <li>A warm and friendly peer-led environment. Dharma Gates retreat managers are fellow young adult practitioners who are experienced in facilitation and are there to help you feel safe and comfortable.</li>
+          <li>A schedule to follow that includes elements like meditation periods, talks given by the teacher, meal times, cleaning periods, and break times. Schedules are posted around the venue so you know where to be, and when.</li>
+          <li>Full-time silence or partial silence. Many Dharma Gates retreats are held in “noble silence”, which means participants do not speak unless they’re prompted to by the teacher in a Q&amp;A or 1-on-1 interview, or when it’s necessary to accomplish a task (i.e. asking for instructions when helping in the kitchen). This supports participants to go deeper into practice, and allows them to be free of some of the relational conventions and distractions of everyday life.</li>
+          <li>Taking a break from tech use. Retreat managers invite participants to hand in their phones at the beginning of retreats. Phones, laptops, and other connective devices are not allowed to be used during retreat times. Retreat managers will have phone access throughout retreats in case of emergencies, and emergency contact numbers will be provided so that participants can give them to loved ones.</li>
+          <li>Lots of meditating! Depending on the type of retreat, participants will be in meditation anywhere between three and eight hours per day. Often meditation is seated, but sometimes teachers instruct participants in walking meditation, standing meditation, or laying down meditation. Chairs and meditation props may be used for support with seated practice.</li>
+          <li>Delicious vegan meals. Dharma Gates works with cooks who nourish retreat participants with freshly-made plant-based meals, with a focus on local and organic ingredients. Retreat cooks are able to accommodate most dietary allergies with enough advance notice.</li>
+          <li>Leaving feeling more at peace within your own mind, more loving toward others and the world around you, and more attuned to your environment. These aren’t lofty aspirations, they’re just what usually <em>happens</em>! Retreat offers us a wonderful opportunity to transform our relationship to life.</li>
+        </ul>
+      </details>
     </div>
-    <form class="stack" onsubmit="event.preventDefault();alert('Prototype: this will post to Mailchimp.')">
-      <div class="grid cols-2" style="gap:10px"><input type="text" placeholder="First name" aria-label="First name"><input type="text" placeholder="Last name" aria-label="Last name"></div>
-      <input type="email" placeholder="Email" aria-label="Email">
-      <button class="btn" type="submit">Subscribe</button>
-    </form>
   </div>
 </section>
 
+</main>
 <script src="assets/site.js"></script>
-<!-- Retreat Guru generic embed (table view). Configure BEFORE loading rbg-connect.min.js.
-     Docs: https://help.retreat.guru/knowledge/integrate-retreat-booking-guru-with-any-website -->
-<script>
-  // tableSettings must be an object of true/false columns, not a comma-separated string: rbg-connect.min.js
-  // checks `"title" in tableSettings`, which throws on a string. title, dates, spaces and spacesWords default
-  // to on, so spaces and spacesWords are switched off explicitly. The table's button text is tableSettings.registerLink.
-  // Columns per DG (2026-10-21): Retreat · Teacher · Dates. The first header is retreatType; site.js renames the
-  // embed's fixed "Hosts" and "Available Dates" headers, and every second row is shaded in site.css.
-  // moreLink stays off: with it on, the embed takes over the page's #hash for its own detail views, which
-  // breaks every #anchor link on the page (index.html#faq from the footer). Register links straight to Retreat Guru.
-  // Colors follow the design version on screen (read from the color slots in site.css).
-  var rbgCss = getComputedStyle(document.documentElement);
-  var rbgOptions = {
-    customer: "dharma-gates",
-    retreatType: "Retreat",
-    font: "Inter",
-    color: rbgCss.getPropertyValue("--ink").trim() || "#624129",
-    highlightColor: rbgCss.getPropertyValue("--accent").trim() || "#995626",
-    registerLink: "Register",
-    tableSettings: {
-      title: true,
-      dates: true,
-      teachers: true,
-      location: false,
-      spaces: false,
-      spacesWords: false,
-      moreLink: false,
-      registerLink: "Register"
-    }
-  };
-</script>
-<!-- rbg-connect.min.js itself is loaded by site.js when this section nears the screen (data-rbg-src), so it and the eight fonts it pulls in don't slow the first view -->
 </body>
 </html>

@@ -10,54 +10,59 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<!-- picks the remembered design version before first paint, so the page doesn't flash another palette -->
-<script>(function(){var d;try{d=new URLSearchParams(location.search).get("design")||localStorage.getItem("dg-design-pick")}catch(e){}document.documentElement.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5")})()</script>
+<!-- before the first paint: the remembered design version and switcher states (Impact in the menu, Mission, DG notes, Text width), so nothing flashes -->
+<script>(function(){var h=document.documentElement,q,l=function(k){try{return localStorage.getItem(k)}catch(e){return null}};try{q=new URLSearchParams(location.search)}catch(e){q={get:function(){return null}}}var d=q.get("design")||l("dg-design-pick");h.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5");var i=q.get("impact");if(i!=="on"&&i!=="off")i=l("dg-impact-page");h.setAttribute("data-impact",i==="on"?"on":"off");var m=q.get("mission");if(m!=="text"&&m!=="photo")m=l("dg-mission");h.setAttribute("data-mission",m==="photo"?"photo":"text");h.setAttribute("data-notes",l("dg-show-notes")==="off"?"off":"on");var w=q.get("measure");if(w!=="wide"&&w!=="comfortable")w=l("dg-measure");h.setAttribute("data-measure",w==="comfortable"?"comfortable":"wide");h.classList.add("js")})()</script>
 </head>
 <body data-page="retreats.html" data-nav="a">
+<main id="main">
 
-<section class="hero" style="padding-bottom:32px">
-  <div class="wrap" style="grid-template-columns:1fr">
-    <div class="narrow">
-      <div class="eyebrow">Young adult meditation retreats &amp; events</div>
-      <h1>Upcoming retreats</h1>
-      <p class="lead">Every program is offered freely, by donation. Dates, availability, and registration come straight from Retreat Guru — staff update it in one place and it appears here.</p>
+<section class="page-head has-photo">
+  <div class="wrap">
+    <div>
+      <h1>Upcoming Retreats</h1>
+      <p class="lead">Every program is offered freely, by donation.</p>
+      <p class="dg-note">Dates and registration come straight from Retreat Guru; staff update them in one place.</p>
     </div>
-    <figure class="photo-band"><img src="assets/img/sitting-temple-garden-1280.jpg" srcset="assets/img/sitting-temple-garden-640.jpg 640w, assets/img/sitting-temple-garden-1280.jpg 1280w, assets/img/sitting-temple-garden.jpg 2000w" sizes="100vw" width="1280" height="960" fetchpriority="high" style="object-position:50% 60%" alt="Rows of young adults meditating outdoors on mats in a temple garden"></figure>
+    <figure class="frame" style="--focus: 50% 55%"><img src="assets/img/sitting-temple-garden-1280.jpg" srcset="assets/img/sitting-temple-garden-640.jpg 640w, assets/img/sitting-temple-garden-1280.jpg 1280w, assets/img/sitting-temple-garden.jpg 2000w" sizes="(min-width: 1024px) 474px, 100vw" width="1280" height="960" fetchpriority="high" alt="Rows of young adults meditating outdoors on mats in a temple garden"></figure>
   </div>
 </section>
 
-<section id="upcoming" style="padding-top:0">
+<!-- every upcoming program, live from Retreat Guru (site.js) -->
+<section id="upcoming">
   <div class="wrap">
-    <div class="rg-frame" data-rbg-src="https://s3.amazonaws.com/rbgconnect.retreat.guru/public/rbg-connect.min.js"><div class="rbg-list"></div></div>
-    <p class="note" style="margin-top:14px">Integration note for the demo: this is Retreat Guru's <em>generic embed</em> (what Squarespace uses today). In WordPress we'll test the official plugin first — it renders the same programs as real pages with better styling and search visibility — and keep this embed as the fallback. Direct link, always: <a href="https://dharma-gates.secure.retreat.guru/" rel="noopener">dharma-gates.secure.retreat.guru</a>.</p>
+    <h2 class="visually-hidden">Upcoming Programs</h2>
+    <ol class="rg-rows" data-rg-rows aria-busy="true"><li class="rg-loading">Loading upcoming retreats…</li></ol>
+    <noscript><p class="rg-fallback">Upcoming retreats are listed on Retreat Guru. <a href="https://dharma-gates.secure.retreat.guru/programs/" rel="noopener">See All Retreats on Retreat Guru →</a></p></noscript>
+    <p class="more-link-row"><a class="more-link" href="https://dharma-gates.secure.retreat.guru/programs/" rel="noopener">See Them on Retreat Guru →</a></p>
+    <p class="dg-note">Fix in Retreat Guru: add a location to the two November programs, correct “Zen Mountain Monestary”, fix the casing of “…Practices To Help Heal A Burning World”, and fix the venue field on the program list, which shows “Bell’s Mountain Dharma Center” and “Retreat Center Name” (research/14 A3).</p>
+    <p class="dg-note">Some programs take a $50 refundable deposit at registration. Should the rows or this page’s lead say so, so “by donation” isn’t contradicted at checkout?</p>
   </div>
 </section>
 
 <section class="alt bg-hall" id="dana">
-  <div class="wrap narrow">
-    <div class="eyebrow">Cost</div>
-    <h2>Every program is a gift</h2>
+  <div class="wrap">
+    <h2>Every Program Is a Gift</h2>
     <p>Inspired by the Buddha's teachings on <em>sila</em> (morality) and his emphasis on generosity as a spiritual practice, we have chosen not to require any charges or suggest specific payment amounts for our retreats. We fully cover all expenses related to the retreat, including meals, housing, rental costs, and any teacher fees. Rather than offering a sliding scale or suggested donations, we offer all retreats and programs as a gift, freely accessible to all participants, without obligation of payment.</p>
-    <p><a href="about.html#values">How the dana model works →</a> · <a href="donate.html">Support future participants →</a></p>
+    <p class="link-pair"><a class="more-link" href="about.html#dana">How the Dana Model Works →</a><a class="more-link" href="donate.html">Support Future Participants →</a></p>
   </div>
 </section>
 
+<!-- JOIN OUR RETREAT TEAM (R14) · moved here from About's Work With Us band. Volunteering is never framed as dana. -->
+<section id="join-our-retreat-team">
+  <div class="wrap">
+    <h2>Join Our Retreat Team</h2>
+    <p>Our multi-day retreat offerings are growing. We work with retreat managers and head cooks on a by-retreat basis at retreats across the United States.</p>
+    <div class="grid cols-3">
+      <div class="card"><h3>Retreat Managers</h3><p>Fellow young adult practitioners, experienced in facilitation, who help participants feel safe and comfortable.</p></div>
+      <div class="card"><h3>Head Cooks</h3><p>Professional cooks, paid for each retreat, who make fresh plant-based meals.</p></div>
+      <div class="card"><h3>Volunteers</h3><p>Help in the retreat kitchen. Volunteering is always welcome and never expected.</p></div>
+    </div>
+    <div class="cta-row"><a class="btn" href="https://www.dharma-gates.org/work-with-us" rel="noopener">See Current Openings</a></div>
+    <p class="dg-note">DG’s Work With Us page now lists only Lead Cook (contract) and Volunteer Assistant Cook. Confirm these three roles and the wording.</p>
+  </div>
+</section>
+
+</main>
 <script src="assets/site.js"></script>
-<!-- Retreat Guru generic embed (list view). Configure BEFORE loading rbg-connect.min.js. -->
-<script>
-  // classSelector mode renders the list into .rbg-list without the embed's hash router, which would otherwise
-  // break this page's #anchors (retreats.html#dana). Colors follow the design version on screen.
-  var rbgCss = getComputedStyle(document.documentElement);
-  var rbgOptions = {
-    customer: "dharma-gates",
-    retreatType: "Retreat",
-    font: "Inter",
-    buttonColor: rbgCss.getPropertyValue("--accent").trim() || "#995626",
-    highlightColor: rbgCss.getPropertyValue("--accent").trim() || "#995626",
-    defaultRoute: "",
-    classSelector: "rbg-list"
-  };
-</script>
-<!-- rbg-connect.min.js itself is loaded by site.js when this section nears the screen (data-rbg-src), so it and the eight fonts it pulls in don't slow the first view -->
 </body>
 </html>

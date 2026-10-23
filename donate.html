@@ -10,69 +10,74 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<!-- picks the remembered design version before first paint, so the page doesn't flash another palette -->
-<script>(function(){var d;try{d=new URLSearchParams(location.search).get("design")||localStorage.getItem("dg-design-pick")}catch(e){}document.documentElement.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5")})()</script>
+<!-- before the first paint: the remembered design version and switcher states (Impact in the menu, Mission, DG notes, Text width), so nothing flashes -->
+<script>(function(){var h=document.documentElement,q,l=function(k){try{return localStorage.getItem(k)}catch(e){return null}};try{q=new URLSearchParams(location.search)}catch(e){q={get:function(){return null}}}var d=q.get("design")||l("dg-design-pick");h.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5");var i=q.get("impact");if(i!=="on"&&i!=="off")i=l("dg-impact-page");h.setAttribute("data-impact",i==="on"?"on":"off");var m=q.get("mission");if(m!=="text"&&m!=="photo")m=l("dg-mission");h.setAttribute("data-mission",m==="photo"?"photo":"text");h.setAttribute("data-notes",l("dg-show-notes")==="off"?"off":"on");var w=q.get("measure");if(w!=="wide"&&w!=="comfortable")w=l("dg-measure");h.setAttribute("data-measure",w==="comfortable"?"comfortable":"wide");h.classList.add("js")})()</script>
 </head>
 <body data-page="donate.html" data-nav="a">
+<main id="main">
 
-<section class="hero">
+<section class="page-head has-photo">
   <div class="wrap">
     <div>
-      <div class="eyebrow">Donate</div>
-      <h1>Support young people in practice</h1>
+      <h1>Support Young People in Practice</h1>
       <p class="lead">Every retreat has already been paid for by past participants and donors. Your gift pays for the next person's seat.</p>
       <div class="cta-row">
-        <a class="btn" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Give now</a>
-        <a class="btn ghost" href="#recurring">Give monthly</a>
+        <a class="btn" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Give Now</a>
+        <a class="btn ghost" href="#ways-to-give">Give Monthly</a>
       </div>
-      <p style="font-size:.9rem;color:var(--muted);margin-top:14px">Dharma Gates, Inc. · EIN 84-4831330 · A registered 501(c)(3) nonprofit. Donations are tax-deductible to the extent allowed by law.</p>
+      <p class="small-print">Dharma Gates, Inc. · EIN 84-4831330 · A registered 501(c)(3) nonprofit. Donations are tax-deductible to the extent allowed by law.</p>
     </div>
-    <div class="art"><img src="assets/img/group-hillside-1280.jpg" srcset="assets/img/group-hillside-640.jpg 640w, assets/img/group-hillside-1280.jpg 1280w, assets/img/group-hillside.jpg 2000w" sizes="(max-width: 900px) 100vw, 45vw" width="1280" height="960" fetchpriority="high" alt="A group of retreat participants and a monk gathered on a green hillside"></div>
+    <figure class="frame" style="--focus: 50% 47%"><img src="assets/img/group-hillside-1280.jpg" srcset="assets/img/group-hillside-640.jpg 640w, assets/img/group-hillside-1280.jpg 1280w, assets/img/group-hillside.jpg 2000w" sizes="(min-width: 1024px) 474px, 100vw" width="1280" height="960" fetchpriority="high" alt="A group of retreat participants and a monk gathered on a green hillside"></figure>
   </div>
 </section>
 
-<section>
+<section id="why">
   <div class="wrap two">
     <div>
-      <div class="eyebrow">Why it matters</div>
-      <h2>The future depends on the minds of younger generations</h2>
+      <h2>The Future Depends on the Minds of Younger Generations</h2>
       <p>Do they have the inner resources necessary to navigate the increasingly turbulent and precarious times we are in? Dharma Gates exists to make sure deep practice is within reach for any young person who is called toward it — regardless of what they can pay.</p>
       <p>Inspired by the Buddha's teachings on generosity as a spiritual practice, we don't charge for retreats or suggest amounts. We fully cover all expenses — meals, housing, rental costs, and any teacher fees — and offer every program as a gift.</p>
+      <p>At Dharma Gates, 80% of our funding goes directly into our programs. Last year, we were able to organize 13 multi-day meditation retreats, creating the opportunity for 283 young adult participants to join us for deep immersive Buddhist practice. We’d love your help to keep the momentum going.</p>
+      <p class="dg-note">From DG’s homepage: confirm the year and figures.</p>
     </div>
-    <div class="card">
-      <div class="eyebrow">What a retreat costs</div>
-      <div class="grid cols-3" style="gap:8px">
-        <div class="stat"><b>$18,000</b><span>average cost of a six-day retreat*</span></div>
-        <div class="stat"><b>30</b><span>average participants</span></div>
-        <div class="stat"><b>$600</b><span>average cost per participant</span></div>
+    <div>
+      <div class="card">
+        <h3>What a Retreat Costs</h3>
+        <div class="stats small">
+          <div class="stat"><b>$18,000</b><span>average cost of a six-day retreat*</span></div>
+          <div class="stat"><b>30</b><span>average participants</span></div>
+          <div class="stat"><b>$600</b><span>average cost per participant</span></div>
+        </div>
+        <p class="small-print">*Does not include Dharma Gates retreat staff labor or administrative costs.</p>
       </div>
-      <p style="font-size:.85rem;color:var(--muted)">*Does not include Dharma Gates retreat staff labor or administrative costs. <span class="todo">figures from current Retreat Cost page — reconcile with Dana page ($550 / 7 days)</span></p>
+      <p class="dg-note">Figures from DG’s Retreat Cost page. They differ from the dana policy’s $550 per participant for 7 days; DG to reconcile.</p>
     </div>
   </div>
 </section>
 
-<section class="alt bg-hall" id="recurring">
+<section class="alt bg-hall" id="ways-to-give">
   <div class="wrap">
-    <div class="eyebrow">Ways to give</div>
-    <h2>Choose what fits</h2>
+    <h2>Choose What Fits</h2>
     <div class="grid cols-3">
-      <div class="card"><h3>One-time gift</h3><p>Any amount, by card or bank, through Every.org. Depending on one's life situation, this could be $3 or $3,000.</p><a class="btn" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Give once</a></div>
-      <div class="card"><h3>Supporting Sangha (monthly)</h3><p>A critically helpful way to support our programming and its longevity. Recurring gifts let us plan retreats a year out.</p><a class="btn" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Give monthly</a><p style="font-size:.85rem;margin-top:10px"><span class="todo">current site sends Supporting Sangha to Kindful (dharmagates-bloom.kindful.com) — confirm which platform is canonical</span></p></div>
-      <div class="card"><h3>Pay it forward</h3><p>If you've sat with us: our retreats typically cost about $100 per participant per day. Covering a day — or a week — for someone else is a beautiful way to give back.</p><a class="btn ghost" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Sponsor a day</a></div>
+      <div class="card"><h3>One-Time Gift</h3><p>Any amount, by card or bank, through Every.org. Depending on one's life situation, this could be $3 or $3,000.</p><a class="btn" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Give Once</a></div>
+      <div class="card"><h3>Supporting Sangha (Monthly)</h3><p>A critically helpful way to support our programming and its longevity. Recurring gifts let us plan retreats a year out.</p><a class="btn" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Give Monthly</a></div>
+      <div class="card"><h3>Pay It Forward</h3><p>If you've sat with us: our retreats typically cost about $100 per participant per day. Covering a day — or a week — for someone else is a beautiful way to give back.</p><a class="btn ghost" href="https://www.every.org/dharma-gates-inc#/donate/card" rel="noopener">Sponsor a Day</a></div>
     </div>
-    <p class="note" style="margin-top:16px">The current site has three thin donation pages (one-time, one-time copy, recurring) with embedded forms plus a header button that skips them all and goes to Every.org. Proposal: one page, one processor, plus this context. Owner: Aaron.</p>
+    <p class="dg-note">DG’s current site sends Supporting Sangha to Kindful (dharmagates-bloom.kindful.com). Confirm which platform is canonical.</p>
+    <p class="dg-note">DG’s current site has three thin donation pages (one-time, a copy of one-time, recurring) with embedded forms, plus a header button that goes straight to Every.org. Proposal: one page, one processor, plus this context. Owner: Aaron.</p>
   </div>
 </section>
 
-<section>
-  <div class="wrap narrow">
-    <div class="eyebrow">Other ways to help</div>
-    <h2>Generosity isn't only money</h2>
+<section id="other-ways">
+  <div class="wrap">
+    <h2>Generosity Isn't Only Money</h2>
     <p>Let your friends and family know about our work, share Dharma Gates programs on social media, help clean up after a retreat, or volunteer your time in another way; each contribution enables the sustainability of our donation-based offerings. We are grateful for all forms of support.</p>
-    <p><a href="about.html#work">Volunteer or work with us →</a> · <a href="connect.html">Join the newsletter →</a></p>
+    <p class="link-pair"><a class="more-link" href="retreats.html#join-our-retreat-team">Volunteer or Work with Us →</a><a class="more-link" href="#footer-signup">Join the Newsletter →</a></p>
+    <p class="dg-note">This paragraph is DG’s dana-policy text and lists volunteering among ways to give. On 10/22 Lyndsey called volunteering delicate and never expected, and head cooks are paid professionals. Keep it as is or reword? (Lyndsey and Aaron)</p>
   </div>
 </section>
 
+</main>
 <script src="assets/site.js"></script>
 </body>
 </html>

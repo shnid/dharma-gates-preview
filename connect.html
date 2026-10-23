@@ -6,101 +6,89 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="dg-preview" content="1">
 <title>Connect With Us — Dharma Gates</title>
-<meta name="description" content="Newsletter, Substack, podcast, monthly online practice, and how to reach the Dharma Gates team.">
+<meta name="description" content="Podcast, Substack, monthly online practice, and how to reach the Dharma Gates team.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<!-- picks the remembered design version before first paint, so the page doesn't flash another palette -->
-<script>(function(){var d;try{d=new URLSearchParams(location.search).get("design")||localStorage.getItem("dg-design-pick")}catch(e){}document.documentElement.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5")})()</script>
+<!-- before the first paint: the remembered design version and switcher states (Impact in the menu, Mission, DG notes, Text width), so nothing flashes -->
+<script>(function(){var h=document.documentElement,q,l=function(k){try{return localStorage.getItem(k)}catch(e){return null}};try{q=new URLSearchParams(location.search)}catch(e){q={get:function(){return null}}}var d=q.get("design")||l("dg-design-pick");h.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5");var i=q.get("impact");if(i!=="on"&&i!=="off")i=l("dg-impact-page");h.setAttribute("data-impact",i==="on"?"on":"off");var m=q.get("mission");if(m!=="text"&&m!=="photo")m=l("dg-mission");h.setAttribute("data-mission",m==="photo"?"photo":"text");h.setAttribute("data-notes",l("dg-show-notes")==="off"?"off":"on");var w=q.get("measure");if(w!=="wide"&&w!=="comfortable")w=l("dg-measure");h.setAttribute("data-measure",w==="comfortable"?"comfortable":"wide");h.classList.add("js")})()</script>
 </head>
 <body data-page="connect.html" data-nav="a">
+<main id="main">
 
-<section class="hero" style="padding-bottom:32px">
-  <div class="wrap" style="grid-template-columns:1fr">
-    <div class="narrow">
-      <div class="eyebrow">Connect with us</div>
-      <h1>Stay close to the practice</h1>
+<!-- Lyndsey reviews Connect next, so round 2 keeps its sections and order (A7). The newsletter signup now lives
+     only in the footer. -->
+<section class="page-head has-photo">
+  <div class="wrap">
+    <div>
+      <h1>Stay Close to the Practice</h1>
       <p class="lead">Between retreats there's a newsletter, a podcast, writing on Substack, and a monthly online sit. Pick what fits.</p>
     </div>
-    <figure class="photo-band"><img src="assets/img/porch-table-1280.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w, assets/img/porch-table.jpg 1500w" sizes="100vw" width="960" height="1280" fetchpriority="high" style="object-position:50% 62%" alt="Retreat participants smiling around a long table on a covered porch"></figure>
-  </div>
-</section>
-
-<section id="newsletter">
-  <div class="wrap two">
-    <div>
-      <div class="eyebrow">Newsletter</div>
-      <h2>Twice a month, the latest offerings</h2>
-      <p>Receive the latest updates on upcoming events, resources, and more. <span class="todo">homepage says monthly, newsletter page says twice per month — pick one</span></p>
-    </div>
-    <form class="stack card" onsubmit="event.preventDefault();alert('Prototype: this will post to Mailchimp.')">
-      <div class="grid cols-2" style="gap:10px"><input type="text" placeholder="First name" aria-label="First name"><input type="text" placeholder="Last name" aria-label="Last name"></div>
-      <input type="email" placeholder="Email" aria-label="Email">
-      <button class="btn" type="submit">Subscribe</button>
-      <small style="color:var(--muted)">Powered by Mailchimp (current provider). One signup form for the whole site — today it appears twice on the homepage and not at all on the Newsletter page.</small>
-    </form>
+    <figure class="frame" style="--focus: 50% 58%"><img src="assets/img/porch-table-1280.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w, assets/img/porch-table.jpg 1500w" sizes="(min-width: 1024px) 474px, 100vw" width="960" height="1280" fetchpriority="high" alt="Retreat participants smiling around a long table on a covered porch"></figure>
   </div>
 </section>
 
 <section class="alt bg-forest" id="podcast">
-  <div class="wrap narrow">
-    <div class="eyebrow">Podcast</div>
+  <div class="wrap">
     <h2>Dharma Gates Podcast</h2>
     <p class="lead">Sharing wisdom from various Buddhist traditions, inviting listeners into a world of practice, and engaging in dialogue to illuminate the Buddhist path.</p>
     <!-- the three most recent episodes only, title + guest (DG, 2026-10-21); the full archive lives on Spotify and YouTube -->
-    <h3 style="margin-top:24px">Latest episodes</h3>
+    <h3>Latest Episodes</h3>
     <ul class="linklist">
       <li>Dana, Renunciation, and Finding One's Gift <small>Beth Upton</small></li>
       <li>Ordaining as a Zen Monk <small>Roshi Geoffrey Shugen Arnold</small></li>
       <li>Ordaining as a Buddhist Monk in the Theravada Tradition <small>Nisabho Bhikkhu</small></li>
     </ul>
-    <p class="small" style="margin-top:8px"><span class="todo">the top three on the current Podcast page, which shows no dates; confirm they're the newest</span></p>
-    <p style="margin-top:20px"><a class="btn" href="https://open.spotify.com/show/427lma0OzQA8UViWCgsLKZ" rel="noopener">Listen on Spotify</a> &nbsp; <a class="btn ghost" href="https://www.youtube.com/playlist?list=PLQ_lUNRUza902U64uvdYqaE_VFoE8xjVS" rel="noopener">Watch on YouTube</a></p>
+    <p class="dg-note">These are the top three on DG’s current Podcast page, which shows no dates. Confirm they’re the newest.</p>
+    <div class="cta-row"><a class="btn" href="https://open.spotify.com/show/427lma0OzQA8UViWCgsLKZ" rel="noopener">Listen on Spotify</a><a class="btn ghost" href="https://www.youtube.com/playlist?list=PLQ_lUNRUza902U64uvdYqaE_VFoE8xjVS" rel="noopener">Watch on YouTube</a></div>
   </div>
 </section>
 
 <section id="sit">
   <div class="wrap">
+    <h2 class="visually-hidden">Practice and Writing Between Retreats</h2>
     <div class="grid cols-2">
       <div class="card">
-        <div class="eyebrow">Monthly · online</div>
         <h3>Dharma Office Hours</h3>
         <p>A monthly online space to practice with sangha and bring your questions — meditate together, then group Q&amp;A.</p>
-        <a class="btn" href="https://dharma-gates.secure.retreat.guru/program/office-hours" rel="noopener">Register on Retreat Guru</a>
+        <a class="btn" href="https://www.dharma-gates.org/dharma-office-hours" rel="noopener">Learn More</a>
       </div>
       <div class="card">
-        <div class="eyebrow">Writing</div>
         <h3>Dharma Gates on Substack</h3>
-        <p>Essays and updates from the team. Five earlier long-form pieces (2020–2023) live in the site's legacy blog — see <a href="more.html#blog">Everything else</a>.</p>
+        <p>Essays and updates from the team. Five earlier long-form pieces (2020–2023) live in the site's legacy blog — see <a href="more.html#blog">Everything Else</a>.</p>
         <a class="btn ghost" href="https://substack.com/@dharmagates" rel="noopener">Read on Substack</a>
       </div>
     </div>
+    <p class="dg-note">Does Dharma Office Hours continue? Its teachers are no longer on the Team page, and DG’s Office Hours page still links a dead Retreat Guru page.</p>
   </div>
 </section>
 
 <section class="alt bg-garden" id="contact">
   <div class="wrap two">
     <div>
-      <div class="eyebrow">Contact</div>
-      <h2>Let's connect</h2>
+      <h2>Let's Connect</h2>
       <p>We'd love to hear from you — fill out the form and we'll get back to you as soon as we can.</p>
       <ul class="linklist">
         <li>Programs &amp; retreats<small><a href="mailto:offerings@dharma-gates.org">offerings@dharma-gates.org</a></small></li>
         <li>Everything else<small><a href="mailto:team@dharma-gates.org">team@dharma-gates.org</a></small></li>
         <li>Mail<small>242 Main Street #363, Beacon, NY 12508</small></li>
-        <li>Social<small><a href="#" title="URL needed">Instagram</a> · <a href="#" title="URL needed">Facebook</a> · <a href="#" title="URL needed">YouTube</a></small></li>
+        <li>Social<small><a href="https://www.instagram.com/dharma.gates/" rel="noopener">Instagram</a> · <a href="https://www.facebook.com/Dharma-Gates-113102010040319/" rel="noopener">Facebook</a> · <a href="https://www.youtube.com/channel/UC3pp_BDfrUPFB3jfsSUmE_A" rel="noopener">YouTube</a></small></li>
       </ul>
     </div>
-    <form class="stack card" onsubmit="event.preventDefault();alert('Prototype only — nothing is sent.')">
-      <input type="text" placeholder="Name" aria-label="Name">
-      <input type="email" placeholder="Email" aria-label="Email">
-      <textarea rows="5" placeholder="Message" aria-label="Message"></textarea>
-      <button class="btn" type="submit">Send</button>
-      <small style="color:var(--muted)">Replaces the Squarespace contact form. Need to find where today's submissions go (email notification vs. stored in Squarespace).</small>
-    </form>
+    <div>
+      <form class="stack card" data-stub="contact">
+        <div class="field"><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name"></div>
+        <div class="field"><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email"></div>
+        <div class="field"><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="5"></textarea></div>
+        <button class="btn" type="submit">Send</button>
+        <div class="form-status" role="status"></div>
+      </form>
+      <p class="dg-note">This replaces the Squarespace contact form. DG to confirm where today’s submissions go (an email notification, or stored in Squarespace).</p>
+    </div>
   </div>
 </section>
 
+</main>
 <script src="assets/site.js"></script>
 </body>
 </html>
