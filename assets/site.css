@@ -19,6 +19,16 @@
   --radius: 14px;
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;  /* the switcher, DG notes and the edit tools */
+
+  /* Font roles ("Edit fonts live", BRIEF B3). The editor changes only these; the two stacks above stay fixed.
+     One role a line: tools/apply_edits.py rewrites these lines. */
+  --role-heading: var(--font-display); --weight-heading: 500;  /* h1–h4, the brand, team names */
+  --role-body: var(--font-body); --weight-body: 400;           /* running text */
+  --role-quote: var(--font-display); --weight-quote: 400;      /* testimonials */
+  --role-number: var(--font-display); --weight-number: 500;    /* impact numbers, retreat dates */
+  --role-label: var(--font-body); --weight-label: 500;         /* navigation, form labels, captions, counters */
+  --role-button: var(--font-body); --weight-button: 600;       /* buttons, tabs, carousel controls */
 }
 
 /* ---------- Spacing, measure and type tokens (round 2) ---------- */
@@ -131,14 +141,14 @@ html[data-design="v3"] {
 html { scroll-behavior: smooth; }
 body {
   margin: 0; background: var(--paper); color: var(--ink);
-  font-family: var(--font-body); font-size: var(--step-0); line-height: var(--lh-body);
+  font-family: var(--role-body); font-weight: var(--weight-body); font-size: var(--step-0); line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; height: auto; display: block; object-position: var(--focus, 50% 30%); }
 a { color: var(--sage); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 a:hover { color: var(--accent-ink); }
 h1, h2, h3, h4 {
-  font-family: var(--font-display); font-weight: 500; line-height: var(--lh-heading); margin: 0 0 var(--stack-heading);
+  font-family: var(--role-heading); font-weight: var(--weight-heading); line-height: var(--lh-heading); margin: 0 0 var(--stack-heading);
   letter-spacing: var(--track-display); text-wrap: balance; max-inline-size: var(--measure-heading);
 }
 h1 { font-size: var(--step-5); }
@@ -178,7 +188,7 @@ main > section:last-child { padding-block-end: var(--section-y-calm); }
    The textures are faceless crops from the top of three photos (A1.3), so no band ever shows a face; the veil is an
    inset shadow over the photo, strong enough for AA text contrast over any of them. Phones load the 640px crop,
    701–1280px the 1280px one, and wider screens the full-width one, so desktop bands are never upscaled in width. */
-html:is([data-design="v4"], [data-design="v5"]) section:is(.bg-forest, .bg-garden, .bg-hall) { background-size: cover; background-position: var(--focus, 50% 50%); }
+html:is([data-design="v4"], [data-design="v5"]) section:is(.bg-forest, .bg-garden, .bg-hall) { background-size: cover; background-position: var(--slot-pos, 50% 50%); }
 html:is([data-design="v4"], [data-design="v5"]) section.alt:is(.bg-forest, .bg-garden, .bg-hall) { box-shadow: inset 0 0 0 200vmax var(--veil-light); }
 html:is([data-design="v4"], [data-design="v5"]) section.dark:is(.bg-forest, .bg-garden, .bg-hall) { box-shadow: inset 0 0 0 200vmax var(--veil-dark); }
 html:is([data-design="v4"], [data-design="v5"]) section.bg-forest { background-image: url("img/texture-forest-1280.jpg"); }
@@ -194,11 +204,23 @@ html:is([data-design="v4"], [data-design="v5"]) section.bg-hall { background-ima
   html:is([data-design="v4"], [data-design="v5"]) section.bg-garden { background-image: url("img/texture-temple.jpg"); }
   html:is([data-design="v4"], [data-design="v5"]) section.bg-hall { background-image: url("img/texture-hall.jpg"); }
 }
+/* A photo picked for a band with "Change photo" (BRIEF B4): the band's style attribute names it in three widths,
+   --slot-bg (1280px), --slot-bg-sm (640px) and --slot-bg-lg (full), plus --slot-pos (the focal point; not --focus,
+   which photos inside the band would inherit) and, for "Show whole photo", --slot-fit: contain. Still only in V4 and V5.
+   tools/apply_edits.py writes the same choices as plain rules at the end of this file. */
+html:is([data-design="v4"], [data-design="v5"]) section[data-photo-kind="background"][style*="--slot-bg"] {
+  background-image: var(--slot-bg); background-size: var(--slot-fit, cover); background-position: var(--slot-pos, 50% 50%); background-repeat: no-repeat; }
+@media (max-width: 700px) {
+  html:is([data-design="v4"], [data-design="v5"]) section[data-photo-kind="background"][style*="--slot-bg-sm"] { background-image: var(--slot-bg-sm); }
+}
+@media (min-width: 1281px) {
+  html:is([data-design="v4"], [data-design="v5"]) section[data-photo-kind="background"][style*="--slot-bg-lg"] { background-image: var(--slot-bg-lg); }
+}
 
 /* ---------- DG notes (R6): internal to-dos, visibly not live. Fixed look, outside the color slots. ---------- */
 .dg-note { display: block; width: fit-content; max-inline-size: 60ch; margin-block: var(--space-xs);
   padding: 6px 10px; border: 1.5px dashed #b45309; border-radius: 6px; background: #fff7e0; color: #5b3400;
-  font: 400 13px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font: 400 13px/1.45 var(--font-ui);
   letter-spacing: 0; text-transform: none; text-shadow: none; text-align: left; }
 .dg-note::before { content: "DG note"; display: inline-block; margin-right: 8px; padding: 0 6px; border-radius: 4px;
   background: #b45309; color: #fff; font-weight: 700; font-size: 11px; line-height: 18px; }
@@ -209,6 +231,8 @@ html[data-notes="off"] .dg-note, html[data-notes="off"] [data-notes-only] { disp
 
 /* switcher toggles that show or hide parts of the page; set in each page's head script, so nothing flashes */
 html:not([data-impact="on"]) [data-impact-only] { display: none !important; }
+/* the testimonial bank (BRIEF B5): a band whose quotes are all hidden isn't shown to visitors */
+html:not(.dg-editing) section[data-bank-empty] { display: none; }
 html[data-impact="on"] [data-impact-off-only] { display: none !important; }
 
 /* ---------- Utilities ---------- */
@@ -246,14 +270,14 @@ html[data-impact="on"] [data-impact-off-only] { display: none !important; }
 /* ---------- Header (R8) ---------- */
 header.site { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--paper) 92%, white); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .nav-row { display: flex; align-items: center; gap: 16px; height: 68px; }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-family: var(--font-display); font-size: 1.3rem; white-space: nowrap; margin-right: auto; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-family: var(--role-heading); font-size: 1.3rem; white-space: nowrap; margin-right: auto; }
 /* The logo's one swappable spot (see LOGO in site.js). Until DG's logo is final it's a plain placeholder. */
 .logo-slot { width: 34px; height: 34px; border-radius: 50%; flex: none; background: var(--accent); box-shadow: inset 0 0 0 3px var(--paper), 0 0 0 1px var(--accent); }
 .logo-slot img, .logo-slot svg { width: 100%; height: 100%; object-fit: contain; }
 .logo-slot:has(img, svg) { background: none; box-shadow: none; border-radius: 0; width: auto; }
 nav.primary ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; align-items: center; }
 nav.primary li { max-inline-size: none; }
-nav.primary a { text-decoration: none; color: var(--ink); padding: 8px 12px; border-radius: 999px; font-weight: 500; font-size: 0.95rem; letter-spacing: 0.01em; white-space: nowrap; }
+nav.primary a { text-decoration: none; color: var(--ink); padding: 8px 12px; border-radius: 999px; font-family: var(--role-label); font-weight: var(--weight-label); font-size: 0.95rem; letter-spacing: 0.01em; white-space: nowrap; }
 nav.primary a.btn { padding: 8px 18px; }
 @media (min-width: 901px) and (max-width: 1060px) {
   nav.primary ul { gap: 0; }
@@ -288,7 +312,7 @@ body[data-page="index.html"] header.site:not(.is-solid) .logo-slot { box-shadow:
 /* ---------- Buttons (A1.13) ---------- */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px 24px;
   background: var(--accent); color: var(--on-accent) !important; text-decoration: none; border-radius: 999px; border: 1.5px solid transparent;
-  font: inherit; font-size: var(--step-0); font-weight: 600; line-height: 1.2; text-align: center; cursor: pointer; }
+  font: inherit; font-family: var(--role-button); font-size: var(--step-0); font-weight: var(--weight-button); line-height: 1.2; text-align: center; cursor: pointer; }
 .btn:hover { background: var(--accent-hover); }
 .btn.small { min-height: 40px; padding: 8px 18px; font-size: var(--step--1); }
 .btn.ghost { background: transparent; color: var(--ink) !important; border-color: var(--ink); }
@@ -395,8 +419,8 @@ html:not([data-mission="photo"]) .mission-photo { display: none; }
 .rg-row:first-child { border-top: 0; padding-top: 0; }
 .rg-row:last-child { padding-bottom: 0; }
 .rg-when { display: flex; flex-direction: column; align-items: center; min-width: 4.5rem; line-height: 1; }
-.rg-month { font-size: var(--step--1); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--accent-ink); }
-.rg-day { font-family: var(--font-display); font-size: var(--step-3); margin-top: var(--space-3xs); }
+.rg-month { font-family: var(--role-label); font-size: var(--step--1); font-weight: 600; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--accent-ink); }
+.rg-day { font-family: var(--role-number); font-size: var(--step-3); margin-top: var(--space-3xs); }
 .rg-title { font-size: var(--step-2); max-inline-size: var(--measure); margin: 0 0 var(--space-2xs); }
 .rg-meta { display: flex; flex-wrap: wrap; margin: 0; font-size: var(--step--1); color: var(--muted); max-inline-size: none; } /* one line on desktop; wraps at its dots on phones */
 .rg-meta dd { margin: 0; display: inline; }
@@ -429,7 +453,7 @@ html:not(.js) .rg-loading { display: none; }
 .pillar-arcs .arc, .pillar-arcs .halo { transition: stroke .2s ease; }
 .pillar-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2xs); }
 .pillar-name { min-height: 44px; padding: 0 var(--space-s); border: 0; border-radius: 999px; background: transparent; color: var(--ink);
-  font: inherit; font-size: var(--step-0); font-weight: 400; cursor: pointer; }
+  font: inherit; font-family: var(--role-button); font-size: var(--step-0); font-weight: 400; cursor: pointer; }
 .pillar-name:hover, .pillar-name.is-hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
 .pillar-name[aria-selected="true"] { font-weight: 600; color: var(--accent-ink); }
 .pillar-panels { display: grid; }
@@ -457,7 +481,7 @@ html:not(.js) .pillar-nav { display: none; }
 .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--grid-gap); }
 @media (min-width: 900px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .stat { text-align: center; }
-.stat b { display: block; font-family: var(--font-display); font-weight: 500; font-size: var(--step-5); line-height: var(--lh-display); color: var(--accent-ink); margin-bottom: var(--space-2xs); font-variant-numeric: tabular-nums; }
+.stat b { display: block; font-family: var(--role-number); font-weight: var(--weight-number); font-size: var(--step-5); line-height: var(--lh-display); color: var(--accent-ink); margin-bottom: var(--space-2xs); font-variant-numeric: tabular-nums; }
 .stat span { display: block; color: var(--muted); font-size: var(--step-0); max-inline-size: 22ch; margin-inline: auto; }
 .dark .stat b { color: var(--on-dark); }
 .dark .stat span { color: var(--on-dark-muted); }
@@ -474,10 +498,10 @@ html:not(.js) .pillar-nav { display: none; }
 .carousel .track { display: grid; }
 .carousel .slide { grid-area: 1 / 1; margin: 0; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s linear .6s; }
 .carousel .slide.on { opacity: 1; visibility: visible; transition: opacity .6s ease; }
-.carousel blockquote { margin: 0 auto; padding: 0; border: 0; background: transparent; color: inherit; font-family: var(--font-display); font-size: var(--step-4); line-height: 1.25; max-inline-size: var(--measure-statement); text-wrap: balance; }
+.carousel blockquote { margin: 0 auto; padding: 0; border: 0; background: transparent; color: inherit; font-family: var(--role-quote); font-weight: var(--weight-quote); font-size: var(--step-4); line-height: 1.25; max-inline-size: var(--measure-statement); text-wrap: balance; }
 .carousel blockquote p { margin: 0; max-inline-size: none; }
 .carousel .slide.long blockquote { font-size: var(--step-3); }
-.carousel figcaption { margin-top: var(--space-s); font-size: var(--step-0); color: var(--muted); }
+.carousel figcaption { margin-top: var(--space-s); font-family: var(--role-label); font-size: var(--step-0); color: var(--muted); }
 .dark .carousel figcaption { color: var(--on-dark-muted); }
 .carousel .slide > .dg-note { margin-inline: auto; }
 .carousel .progress { width: min(12rem, 60%); height: 2px; margin: var(--space-m) auto 0; background: color-mix(in srgb, currentColor 18%, transparent); overflow: hidden; }
@@ -485,8 +509,8 @@ html:not(.js) .pillar-nav { display: none; }
 .carousel .progress span.run { animation: car-progress var(--dwell, 6s) linear forwards; }
 .carousel.is-paused .progress span.run { animation-play-state: paused; }
 @keyframes car-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.carousel .ctrls { display: flex; gap: var(--space-xs); align-items: center; justify-content: center; margin-top: var(--space-m); font-size: var(--step--1); }
-.carousel .ctrls button { min-width: 44px; min-height: 44px; border: 1.5px solid currentColor; background: transparent; color: inherit; border-radius: 999px; cursor: pointer; font: inherit; font-size: var(--step-0); }
+.carousel .ctrls { font-family: var(--role-label); display: flex; gap: var(--space-xs); align-items: center; justify-content: center; margin-top: var(--space-m); font-size: var(--step--1); }
+.carousel .ctrls button { min-width: 44px; min-height: 44px; border: 1.5px solid currentColor; background: transparent; color: inherit; border-radius: 999px; cursor: pointer; font: inherit; font-family: var(--role-button); font-size: var(--step-0); }
 .carousel .ctrls button[data-pause] { padding: 0 var(--space-s); font-size: var(--step--1); font-weight: 600; }
 .carousel.single .ctrls, .carousel.single .progress { display: none; }
 @media (max-width: 600px) {
@@ -496,7 +520,7 @@ html:not(.js) .pillar-nav { display: none; }
 
 /* ---------- Watch ---------- */
 .video-slot { position: relative; width: min(960px, 100%); margin: var(--stack-content) auto 0; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; background: var(--dark-bg); color: var(--on-dark); }
-.video-slot img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; opacity: .55; }
+.video-slot img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 50% 50%); opacity: .55; }
 .video-slot.ready img { opacity: .85; }
 .video-slot button.play { position: absolute; inset: 0; margin: auto; width: 76px; height: 76px; border-radius: 50%; border: 0; background: var(--on-dark); color: var(--ink); font-size: 1.6rem; cursor: pointer; }
 .video-slot button.play[disabled] { opacity: .6; cursor: default; }
@@ -509,7 +533,7 @@ details summary { min-height: 56px; display: flex; align-items: center; justify-
   cursor: pointer; font-weight: 600; font-size: var(--step-0); list-style: none; }
 details summary::-webkit-details-marker { display: none; }
 details summary::after { content: "+"; color: var(--accent); font-size: var(--step-1); line-height: 1; flex: none; }
-details[open] summary::after { content: "–"; }
+details[open] > summary::after { content: "–"; }
 details > :not(summary) { margin-top: 0; margin-bottom: var(--space-s); color: var(--muted); }
 details ul { padding-inline-start: 1.25em; }
 details li + li { margin-top: var(--space-2xs); }
@@ -523,7 +547,7 @@ details li + li { margin-top: var(--space-2xs); }
 /* ---------- Forms ---------- */
 form.stack { display: grid; gap: var(--space-s); }
 .field { display: grid; gap: var(--space-3xs); }
-.field label, .field-label { font-weight: 600; font-size: var(--step--1); }
+.field label, .field-label { font-family: var(--role-label); font-weight: 600; font-size: var(--step--1); }
 .req { color: var(--accent-ink); }
 form.stack input:not([type="checkbox"]), form.stack textarea, form.stack select {
   width: 100%; min-height: 48px; padding: var(--space-xs) var(--space-s); border: 1px solid color-mix(in srgb, var(--ink) 30%, var(--line)); border-radius: 10px;
@@ -542,9 +566,11 @@ form.stack .btn { justify-self: start; }
   background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; cursor: pointer; font: inherit; }
 .person .ph { aspect-ratio: 4/5; background: color-mix(in srgb, var(--paper-2) 70%, var(--surface)); }
 .person .ph img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 50% 25%); }
-.person .initials, .bio-photo .initials { display: grid; place-items: center; width: 100%; height: 100%; font-family: var(--font-display); font-size: var(--step-4); color: var(--accent-ink); letter-spacing: 0.04em; }
+.person .initials, .bio-photo .initials { display: grid; place-items: center; width: 100%; height: 100%; font-family: var(--role-heading); font-size: var(--step-4); color: var(--accent-ink); letter-spacing: 0.04em; }
+/* a photo picked in the editor (BRIEF B4) takes the initials' place */
+.person .ph img[data-picked] ~ .initials, .bio-photo img[data-picked] ~ .initials { display: none; }
 .person .who { display: flex; flex-direction: column; gap: var(--space-3xs); padding: var(--space-s) var(--space-s) var(--space-m); flex: 1; }
-.person .name { font-family: var(--font-display); font-size: var(--step-1); line-height: var(--lh-heading); }
+.person .name { font-family: var(--role-heading); font-size: var(--step-1); line-height: var(--lh-heading); }
 .person .role { font-size: var(--step--1); color: var(--muted); }
 .person .read { margin-top: auto; padding-top: var(--space-2xs); font-size: var(--step--1); color: var(--sage); text-decoration: underline; text-underline-offset: 3px; }
 .person:hover .read { color: var(--accent-ink); }
@@ -596,7 +622,7 @@ footer.site li { margin: 0 0 var(--space-2xs); }
   .footer-cols > :last-child { grid-column: auto; }
 }
 footer.site .signup { display: grid; gap: var(--space-2xs); margin-top: var(--space-s); }
-footer.site .signup label { font-weight: 600; font-size: var(--step--1); }
+footer.site .signup label { font-family: var(--role-label); font-weight: 600; font-size: var(--step--1); }
 footer.site .signup .row { display: flex; gap: var(--space-2xs); flex-wrap: wrap; }
 footer.site input { flex: 1 1 14rem; min-width: 0; min-height: 48px; padding: var(--space-xs) var(--space-s); border-radius: 10px; font: inherit;
   border: 1px solid color-mix(in srgb, var(--footer-ink) 55%, transparent); background: color-mix(in srgb, var(--footer-bg) 70%, #000); color: var(--footer-ink); }
@@ -607,7 +633,7 @@ footer.site .fine { border-top: 1px solid color-mix(in srgb, var(--footer-ink) 3
 footer.site .fine p { margin: 0; max-inline-size: none; }
 
 /* ---------- Design + navigation switcher: prototype tooling, deliberately neutral so it never reads as part of a design ---------- */
-.switcher { position: fixed; right: 16px; bottom: 16px; z-index: 60; background: #fff; color: #1d1d1d; border: 1px solid #d9d9d9; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.16); font: 500 .82rem/1.3 var(--font-body); max-width: calc(100vw - 32px); }
+.switcher { position: fixed; right: 16px; bottom: 16px; z-index: 60; background: #fff; color: #1d1d1d; border: 1px solid #d9d9d9; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.16); font: 500 .82rem/1.3 var(--font-ui); max-width: calc(100vw - 32px); }
 .switcher .sw-toggle { display: block; width: 100%; text-align: left; padding: 9px 14px; }
 .switcher:not(.open) .sw-panel { display: none; }
 .switcher.open { width: 410px; max-height: calc(100dvh - 32px); overflow-y: auto; }
@@ -631,6 +657,16 @@ footer.site .fine p { margin: 0; max-inline-size: none; }
 .switcher .sw-actions { display: flex; gap: 6px; margin-top: 8px; }
 .switcher .sw-actions button { border: 1px solid #ccc; font-weight: 500; padding: 5px 10px; }
 .switcher .sw-msg { color: #2d6a2d; font-size: .78rem; min-height: 1em; }
+.switcher .sw-msg.warn { color: #8a4b00; }
+/* round 2 PR B: three groups, View (never exported), Site settings and Edit (both saved in "my edits") */
+.switcher .sw-group { display: grid; gap: 6px; }
+.switcher .sw-group + .sw-group { border-top: 1px solid #ececec; padding-top: 8px; margin-top: 2px; }
+.switcher .sw-head { color: #5b5b5b; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.switcher .sw-hint { color: #5b5b5b; font-weight: 400; font-size: .76rem; margin: 0; }
+.switcher .sw-edits { display: flex; flex-wrap: wrap; gap: 4px; }
+.switcher .sw-edits button { border: 1px solid #ccc; font-weight: 500; padding: 5px 10px; }
+.switcher .sw-unsaved { color: #8a4b00; font-weight: 600; }
+.switcher .sw-fonts { margin-top: 6px; }
 
 /* ---------- Phones and tablets: about half of visitors are on phones ---------- */
 @media (max-width: 900px) {
@@ -644,6 +680,12 @@ footer.site .fine p { margin: 0; max-inline-size: none; }
   nav.primary .nav-donate { display: none; }  /* Donate shows once: in the header, beside the menu button */
   .switcher { right: 8px; bottom: 8px; border-radius: 14px; font-size: .78rem; }
   .switcher.open { width: 410px; }
+}
+/* phones: the open switcher is a bottom sheet; folded, it's still one small button */
+@media (max-width: 600px) {
+  .switcher.open { left: 0; right: 0; bottom: 0; width: auto; max-width: none; max-height: 78dvh; border-radius: 16px 16px 0 0; border-bottom: 0; }
+  .switcher.open .sw-toggle { border-radius: 16px 16px 0 0; }
+  .switcher .sw-row { grid-template-columns: 88px minmax(0, 1fr); }
 }
 @media (max-width: 400px) {
   .nav-row { gap: 8px; }

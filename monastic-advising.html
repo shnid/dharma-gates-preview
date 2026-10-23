@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<!-- before the first paint: the remembered design version and switcher states (Impact in the menu, Mission, DG notes, Text width), so nothing flashes -->
-<script>(function(){var h=document.documentElement,q,l=function(k){try{return localStorage.getItem(k)}catch(e){return null}};try{q=new URLSearchParams(location.search)}catch(e){q={get:function(){return null}}}var d=q.get("design")||l("dg-design-pick");h.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5");var i=q.get("impact");if(i!=="on"&&i!=="off")i=l("dg-impact-page");h.setAttribute("data-impact",i==="on"?"on":"off");var m=q.get("mission");if(m!=="text"&&m!=="photo")m=l("dg-mission");h.setAttribute("data-mission",m==="photo"?"photo":"text");h.setAttribute("data-notes",l("dg-show-notes")==="off"?"off":"on");var w=q.get("measure");if(w!=="wide"&&w!=="comfortable")w=l("dg-measure");h.setAttribute("data-measure",w==="comfortable"?"comfortable":"wide");h.classList.add("js")})()</script>
+<!-- before the first paint: the design version, switcher states and the colors and fonts from "my edits", so nothing flashes -->
+<script src="assets/boot.js"></script>
 </head>
 <body data-page="monastic-advising.html" data-nav="a">
 <main id="main">
@@ -20,27 +20,27 @@
 <section class="page-head has-photo">
   <div class="wrap">
     <div>
-      <h1>Are You Considering Deeper Practice?</h1>
-      <p class="lead">Dharma Gates offers a donation-based advising service for people in any stage of life who seek to deepen their practice or are considering entering residential training or monastic life.</p>
-      <div class="cta-row"><a class="btn" href="#interest">Request a Conversation</a></div>
+      <h1 data-edit="advising.head.title">Are You Considering Deeper Practice?</h1>
+      <p data-edit="advising.head.lead" class="lead">Dharma Gates offers a donation-based advising service for people in any stage of life who seek to deepen their practice or are considering entering residential training or monastic life.</p>
+      <div class="cta-row"><a data-edit="advising.head.button" class="btn" href="#interest">Request a Conversation</a></div>
       <p class="dg-note">Draft copy adapted from DG’s current advising page. Naming: the nav says Monastic Advising; DG’s page says “Our Advising Program”.</p>
     </div>
-    <figure class="frame" style="--focus: 50% 55%"><img src="assets/img/group-hall-monastics-1280.jpg" srcset="assets/img/group-hall-monastics-640.jpg 640w, assets/img/group-hall-monastics-1280.jpg 1280w, assets/img/group-hall-monastics.jpg 2000w" sizes="(min-width: 1024px) 474px, 100vw" width="1280" height="960" fetchpriority="high" alt="Retreat participants with palms joined beside monastic teachers in a meditation hall"></figure>
+    <figure data-photo-slot="advising.head" data-aspect-desktop="467/350" data-aspect-phone="4/3" class="frame" style="--focus: 50% 55%"><img src="assets/img/group-hall-monastics-1280.jpg" srcset="assets/img/group-hall-monastics-640.jpg 640w, assets/img/group-hall-monastics-1280.jpg 1280w, assets/img/group-hall-monastics.jpg 2000w" sizes="(min-width: 1024px) 474px, 100vw" width="1280" height="960" fetchpriority="high" alt="Retreat participants with palms joined beside monastic teachers in a meditation hall"></figure>
   </div>
 </section>
 
 <section id="how">
   <div class="wrap">
-    <h2>How Advising Works</h2>
+    <h2 data-edit="advising.how.title">How Advising Works</h2>
     <div class="split">
       <div>
-        <p>It starts with an open, one-on-one conversation with a member of our team. We listen first: what you want from practice, where you are in life, and what kind of residential setting interests you. Then we connect you to resources and help you discern which factors matter most to you.</p>
-        <p>If residential training fits, we recommend one or several practice centers: only centers we know to be trustworthy and compatible with your background, aims, and interests, drawing on our staff and advisory board.</p>
-        <p>Advising is offered by donation, like everything we do.</p>
-        <p class="lead">Not sure you’re ready? That’s what the conversation is for.</p>
+        <p data-edit="advising.how.body.1">It starts with an open, one-on-one conversation with a member of our team. We listen first: what you want from practice, where you are in life, and what kind of residential setting interests you. Then we connect you to resources and help you discern which factors matter most to you.</p>
+        <p data-edit="advising.how.body.2">If residential training fits, we recommend one or several practice centers: only centers we know to be trustworthy and compatible with your background, aims, and interests, drawing on our staff and advisory board.</p>
+        <p data-edit="advising.how.body.3">Advising is offered by donation, like everything we do.</p>
+        <p data-edit="advising.how.lead" class="lead">Not sure you’re ready? That’s what the conversation is for.</p>
         <p class="dg-note">Draft intro adapted from DG’s Advising page and the 10/22 call. Written as prose because DG removed the three-step How it works on 10/21. The readiness line is a draft for Lyndsey (research/11 §4).</p>
       </div>
-      <figure class="frame" style="--frame: 4/5; --focus: 50% 52%"><img src="assets/img/porch-table-1280.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w, assets/img/porch-table.jpg 1500w" sizes="(min-width: 1024px) 474px, 100vw" width="960" height="1280" loading="lazy" alt="Retreat participants smiling around a long table on a covered porch"></figure>
+      <figure data-photo-slot="advising.how" data-aspect-desktop="467/583" data-aspect-phone="348/434" class="frame" style="--frame: 4/5; --focus: 50% 52%"><img src="assets/img/porch-table-1280.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w, assets/img/porch-table.jpg 1500w" sizes="(min-width: 1024px) 474px, 100vw" width="960" height="1280" loading="lazy" alt="Retreat participants smiling around a long table on a covered porch"></figure>
     </div>
   </div>
 </section>
@@ -49,9 +49,9 @@
      with "Show DG notes" off this band hides. Never write a quote here. -->
 <section id="stories" class="dark stories" data-notes-only>
   <div class="wrap">
-    <h2>Advising Stories</h2>
+    <h2 data-edit="advising.stories.title">Advising Stories</h2>
     <p class="dg-note">Heading to confirm: Advising Stories or Where Advising Led.</p>
-    <div class="carousel" data-carousel role="region" aria-roledescription="carousel" aria-label="Advising stories">
+    <div data-placement="advising" class="carousel" data-carousel role="region" aria-roledescription="carousel" aria-label="Advising stories">
       <div class="track" aria-live="polite">
         <div class="slide on"><p class="dg-note">Advising story goes here: a 20–40-word quote, a first name or first name and initial, what they went on to do, and the year. Lyndsey is collecting these with written consent.</p></div>
         <div class="slide"><p class="dg-note">Advising story goes here: a 20–40-word quote, a first name or first name and initial, what they went on to do, and the year. Lyndsey is collecting these with written consent.</p></div>
@@ -66,21 +66,21 @@
 <section id="interest" class="alt">
   <div class="wrap two">
     <div>
-      <h2>Request a Conversation</h2>
-      <p>We'll read it and reach out to set up a conversation.</p>
+      <h2 data-edit="advising.interest.title">Request a Conversation</h2>
+      <p data-edit="advising.interest.body">We'll read it and reach out to set up a conversation.</p>
       <p class="dg-note">These are the questions on DG’s live form. In WordPress this becomes a real form (plugin to pick, DECISIONS #18), sending to the advising team. research/11 §5 suggests a shorter form; DG decides.</p>
     </div>
     <form class="stack card" data-stub="advising" data-success="Thank you for your inquiry! Somebody from our team will be in touch with you shortly.">
-      <p class="small-print">Required fields are marked <span class="req" aria-hidden="true">*</span><span class="visually-hidden">as required</span>.</p>
-      <div class="field"><label for="adv-name">Name <span class="req" aria-hidden="true">*</span></label><input id="adv-name" name="name" type="text" autocomplete="name" required></div>
-      <div class="field"><label for="adv-email">Email <span class="req" aria-hidden="true">*</span></label><input id="adv-email" name="email" type="email" autocomplete="email" required></div>
-      <div class="field"><label for="adv-background">Please include a brief description of your background in practice. <span class="req" aria-hidden="true">*</span></label><textarea id="adv-background" name="background" rows="4" required></textarea></div>
-      <div class="field"><label for="adv-calling">What’s calling you towards deeper practice? How does this fit in the broader view of your life? <span class="req" aria-hidden="true">*</span></label><textarea id="adv-calling" name="calling" rows="4" required></textarea></div>
-      <div class="field"><label for="adv-community">What are you specifically looking for in a residential community? <span class="req" aria-hidden="true">*</span></label><textarea id="adv-community" name="community" rows="4" required></textarea></div>
-      <div class="field"><label for="adv-college">Are you enrolled in a college or university? If so, where? When will you graduate? (optional)</label><input id="adv-college" name="college" type="text"></div>
-      <div class="field"><label for="adv-source">How did you find out about Dharma Gates? (optional)</label><input id="adv-source" name="source" type="text"></div>
-      <div class="check"><input id="adv-waiver" name="waiver" type="checkbox" required><label for="adv-waiver">I have read and consent to Dharma Gates’ <a href="https://www.dharma-gates.org/dg-advising-liability-waiver" rel="noopener">Advising Liability Waiver</a>. <span class="req" aria-hidden="true">*</span></label></div>
-      <button class="btn" type="submit">Send</button>
+      <p class="small-print"><span data-edit="advising.interest.form.body">Required fields are marked</span> <span class="req" aria-hidden="true">*</span><span class="visually-hidden">as required</span>.</p>
+      <div class="field"><label for="adv-name"><span data-edit="advising.interest.form.name.label">Name</span> <span class="req" aria-hidden="true">*</span></label><input id="adv-name" name="name" type="text" autocomplete="name" required></div>
+      <div class="field"><label for="adv-email"><span data-edit="advising.interest.form.email.label">Email</span> <span class="req" aria-hidden="true">*</span></label><input id="adv-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="adv-background"><span data-edit="advising.interest.form.background.label">Please include a brief description of your background in practice.</span> <span class="req" aria-hidden="true">*</span></label><textarea id="adv-background" name="background" rows="4" required></textarea></div>
+      <div class="field"><label for="adv-calling"><span data-edit="advising.interest.form.calling.label">What’s calling you towards deeper practice? How does this fit in the broader view of your life?</span> <span class="req" aria-hidden="true">*</span></label><textarea id="adv-calling" name="calling" rows="4" required></textarea></div>
+      <div class="field"><label for="adv-community"><span data-edit="advising.interest.form.community.label">What are you specifically looking for in a residential community?</span> <span class="req" aria-hidden="true">*</span></label><textarea id="adv-community" name="community" rows="4" required></textarea></div>
+      <div class="field"><label data-edit="advising.interest.form.college.label" for="adv-college">Are you enrolled in a college or university? If so, where? When will you graduate? (optional)</label><input id="adv-college" name="college" type="text"></div>
+      <div class="field"><label data-edit="advising.interest.form.source.label" for="adv-source">How did you find out about Dharma Gates? (optional)</label><input id="adv-source" name="source" type="text"></div>
+      <div class="check"><input id="adv-waiver" name="waiver" type="checkbox" required><label for="adv-waiver"><span data-edit="advising.interest.form.waiver.label.1">I have read and consent to Dharma Gates’</span> <a data-edit="advising.interest.form.waiver.label.2" href="https://www.dharma-gates.org/dg-advising-liability-waiver" rel="noopener">Advising Liability Waiver</a>. <span class="req" aria-hidden="true">*</span></label></div>
+      <button data-edit="advising.interest.form.button" class="btn" type="submit">Send</button>
       <div class="form-status" role="status"></div>
     </form>
   </div>
@@ -88,21 +88,21 @@
 
 <section id="partners">
   <div class="wrap">
-    <h2>Monasteries &amp; Centers We've Partnered With</h2>
-    <p>Dharma Gates has held retreats with these communities. Where a center offers residency or training, we link straight to it.</p>
+    <h2 data-edit="advising.partners.title">Monasteries &amp; Centers We've Partnered With</h2>
+    <p data-edit="advising.partners.body.1">Dharma Gates has held retreats with these communities. Where a center offers residency or training, we link straight to it.</p>
     <p class="dg-note">Draft intro line. DG’s homepage lists six of these under “Monasteries &amp; Centers We’ve Partnered With”. Padma Samye Ling, Tallahassee Chan Center and Woljeongsa Temple appear in its donation section. Should all nine be here?</p>
     <div class="partners">
-      <div class="card"><h3>Zen Mountain Monastery</h3><p class="place">Mt Tremper, NY</p><a href="https://zmm.org/about-zmm-residency/" rel="noopener">Residency<span class="visually-hidden"> at Zen Mountain Monastery</span> <span aria-hidden="true">↗</span></a></div>
-      <div class="card"><h3>Natural Dharma Fellowship</h3><p class="place">Wonderwell Mountain Refuge, NH</p><a href="https://naturaldharma.org/" rel="noopener">Website<span class="visually-hidden">: Natural Dharma Fellowship</span> <span aria-hidden="true">↗</span></a></div>
-      <div class="card"><h3>Drikung Dharmakirti / Urban Dharma</h3><p class="dg-note">Link and location to confirm.</p></div>
-      <div class="card"><h3>Barre Center for Buddhist Studies</h3><p class="place">MA</p><a href="https://www.buddhistinquiry.org/classes/?filter=residential" rel="noopener">Residential Courses<span class="visually-hidden"> at Barre Center for Buddhist Studies</span> <span aria-hidden="true">↗</span></a></div>
-      <div class="card"><h3>Great Vow Zen Monastery</h3><p class="place">Clatskanie, OR</p><a href="https://zendust.org/great-vow-zen-monastery/residential-monastic-program/" rel="noopener">Residential Program<span class="visually-hidden"> at Great Vow Zen Monastery</span> <span aria-hidden="true">↗</span></a></div>
-      <div class="card"><h3>Boulder Zen Center</h3><p class="place">CO</p><p class="dg-note">Link to confirm (research found boulderzen.org/residency).</p></div>
-      <div class="card"><h3>Padma Samye Ling</h3><p class="place">NY</p><a href="https://www.padmasambhava.org/volunteer-dharma-skills-program" rel="noopener">Residential Program<span class="visually-hidden"> at Padma Samye Ling</span> <span aria-hidden="true">↗</span></a></div>
-      <div class="card"><h3>Tallahassee Chan Center</h3><p class="place">FL</p><a href="https://tallahasseechan.org/" rel="noopener">Website<span class="visually-hidden">: Tallahassee Chan Center</span> <span aria-hidden="true">↗</span></a></div>
-      <div class="card"><h3>Woljeongsa Temple</h3><p class="place">Pyeongchang, Korea</p><a href="http://www.woljeongsa.org/" rel="noopener">Website<span class="visually-hidden">: Woljeongsa Temple</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="card"><h3 data-edit="advising.partners.card.1.title">Zen Mountain Monastery</h3><p data-edit="advising.partners.card.1.place" class="place">Mt Tremper, NY</p><a href="https://zmm.org/about-zmm-residency/" rel="noopener"><span data-edit="advising.partners.card.1.link">Residency</span><span class="visually-hidden"> at Zen Mountain Monastery</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="card"><h3 data-edit="advising.partners.card.2.title">Natural Dharma Fellowship</h3><p data-edit="advising.partners.card.2.place" class="place">Wonderwell Mountain Refuge, NH</p><a href="https://naturaldharma.org/" rel="noopener"><span data-edit="advising.partners.card.2.link">Website</span><span class="visually-hidden">: Natural Dharma Fellowship</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="card"><h3 data-edit="advising.partners.card.3.title">Drikung Dharmakirti / Urban Dharma</h3><p class="dg-note">Link and location to confirm.</p></div>
+      <div class="card"><h3 data-edit="advising.partners.card.4.title">Barre Center for Buddhist Studies</h3><p data-edit="advising.partners.card.4.place" class="place">MA</p><a href="https://www.buddhistinquiry.org/classes/?filter=residential" rel="noopener"><span data-edit="advising.partners.card.4.link">Residential Courses</span><span class="visually-hidden"> at Barre Center for Buddhist Studies</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="card"><h3 data-edit="advising.partners.card.5.title">Great Vow Zen Monastery</h3><p data-edit="advising.partners.card.5.place" class="place">Clatskanie, OR</p><a href="https://zendust.org/great-vow-zen-monastery/residential-monastic-program/" rel="noopener"><span data-edit="advising.partners.card.5.link">Residential Program</span><span class="visually-hidden"> at Great Vow Zen Monastery</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="card"><h3 data-edit="advising.partners.card.6.title">Boulder Zen Center</h3><p data-edit="advising.partners.card.6.place" class="place">CO</p><p class="dg-note">Link to confirm (research found boulderzen.org/residency).</p></div>
+      <div class="card"><h3 data-edit="advising.partners.card.7.title">Padma Samye Ling</h3><p data-edit="advising.partners.card.7.place" class="place">NY</p><a href="https://www.padmasambhava.org/volunteer-dharma-skills-program" rel="noopener"><span data-edit="advising.partners.card.7.link">Residential Program</span><span class="visually-hidden"> at Padma Samye Ling</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="card"><h3 data-edit="advising.partners.card.8.title">Tallahassee Chan Center</h3><p data-edit="advising.partners.card.8.place" class="place">FL</p><a href="https://tallahasseechan.org/" rel="noopener"><span data-edit="advising.partners.card.8.link">Website</span><span class="visually-hidden">: Tallahassee Chan Center</span> <span aria-hidden="true">↗</span></a></div>
+      <div class="card"><h3 data-edit="advising.partners.card.9.title">Woljeongsa Temple</h3><p data-edit="advising.partners.card.9.place" class="place">Pyeongchang, Korea</p><a href="http://www.woljeongsa.org/" rel="noopener"><span data-edit="advising.partners.card.9.link">Website</span><span class="visually-hidden">: Woljeongsa Temple</span> <span aria-hidden="true">↗</span></a></div>
     </div>
-    <p class="more-link-row">Not sure which fits? <a class="more-link" href="#interest">Request a Conversation</a></p>
+    <p class="more-link-row"><span data-edit="advising.partners.body.2.1">Not sure which fits?</span> <a data-edit="advising.partners.body.2.2" class="more-link" href="#interest">Request a Conversation</a></p>
   </div>
 </section>
 

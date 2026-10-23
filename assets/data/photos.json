@@ -1,0 +1,410 @@
+{
+ "asOf": "2026-10-23",
+ "note": "The photo library for the image picker (BRIEF B4). tools/build_photo_library.py appends new photos; every src listed here is copied into preview/. Never add logo concepts.",
+ "photos": [
+  {
+   "id": "forest-circle",
+   "alt": "Retreat participants meditating in a circle in a forest clearing",
+   "w": 1920,
+   "h": 1440,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/forest-circle-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/forest-circle-1280.jpg",
+     "w": 1280
+    },
+    "1600": {
+     "src": "assets/img/forest-circle-1600.jpg",
+     "w": 1600
+    },
+    "full": {
+     "src": "assets/img/forest-circle.jpg",
+     "w": 1920
+    }
+   },
+   "focal": {
+    "x": 0.45,
+    "y": 0.6
+   },
+   "tags": [
+    "group",
+    "outdoors",
+    "meditation"
+   ]
+  },
+  {
+   "id": "forest-circle-portrait",
+   "alt": "Retreat participants meditating in a circle in a forest clearing",
+   "w": 720,
+   "h": 1080,
+   "orientation": "portrait",
+   "src": {
+    "full": {
+     "src": "assets/img/forest-circle-portrait.jpg",
+     "w": 720
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.6
+   },
+   "tags": [
+    "group",
+    "outdoors",
+    "meditation"
+   ]
+  },
+  {
+   "id": "gassho-closeup",
+   "alt": "A retreat participant smiling with palms joined, others kneeling on cushions behind",
+   "w": 1920,
+   "h": 1440,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/gassho-closeup-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/gassho-closeup-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/gassho-closeup.jpg",
+     "w": 1920
+    }
+   },
+   "focal": {
+    "x": 0.4,
+    "y": 0.3
+   },
+   "tags": [
+    "person",
+    "indoors"
+   ]
+  },
+  {
+   "id": "circle-hall",
+   "alt": "Retreat participants seated in a circle on cushions in a meditation hall",
+   "w": 1920,
+   "h": 1440,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/circle-hall-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/circle-hall-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/circle-hall.jpg",
+     "w": 1920
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.55
+   },
+   "tags": [
+    "group",
+    "indoors",
+    "meditation"
+   ]
+  },
+  {
+   "id": "sitting-temple-garden",
+   "alt": "Rows of young adults meditating outdoors on mats in a temple garden",
+   "w": 2000,
+   "h": 1500,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/sitting-temple-garden-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/sitting-temple-garden-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/sitting-temple-garden.jpg",
+     "w": 2000
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.55
+   },
+   "tags": [
+    "group",
+    "outdoors",
+    "meditation"
+   ]
+  },
+  {
+   "id": "porch-table",
+   "alt": "Retreat participants smiling around a long table on a covered porch",
+   "w": 1500,
+   "h": 2000,
+   "orientation": "portrait",
+   "src": {
+    "640": {
+     "src": "assets/img/porch-table-640.jpg",
+     "w": 480
+    },
+    "1280": {
+     "src": "assets/img/porch-table-1280.jpg",
+     "w": 960
+    },
+    "full": {
+     "src": "assets/img/porch-table.jpg",
+     "w": 1500
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.52
+   },
+   "tags": [
+    "group",
+    "outdoors",
+    "community"
+   ]
+  },
+  {
+   "id": "three-sitters-lawn",
+   "alt": "Three young practitioners in Zen T-shirts sitting cross-legged on a lawn, smiling",
+   "w": 2000,
+   "h": 1500,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/three-sitters-lawn-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/three-sitters-lawn-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/three-sitters-lawn.jpg",
+     "w": 2000
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.3
+   },
+   "tags": [
+    "people",
+    "outdoors",
+    "community"
+   ]
+  },
+  {
+   "id": "group-hillside",
+   "alt": "A group of retreat participants and a monk gathered on a green hillside",
+   "w": 2000,
+   "h": 1500,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/group-hillside-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/group-hillside-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/group-hillside.jpg",
+     "w": 2000
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.47
+   },
+   "tags": [
+    "group",
+    "outdoors",
+    "community"
+   ]
+  },
+  {
+   "id": "group-hall-monastics",
+   "alt": "Retreat participants with palms joined beside monastic teachers in a meditation hall",
+   "w": 2000,
+   "h": 1500,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/group-hall-monastics-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/group-hall-monastics-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/group-hall-monastics.jpg",
+     "w": 2000
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.55
+   },
+   "tags": [
+    "group",
+    "indoors",
+    "teachers"
+   ]
+  },
+  {
+   "id": "kitchen-team",
+   "alt": "People cooking together in a retreat kitchen",
+   "w": 1920,
+   "h": 1280,
+   "orientation": "landscape",
+   "src": {
+    "640": {
+     "src": "assets/img/kitchen-team-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/kitchen-team-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/kitchen-team.jpg",
+     "w": 1920
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.4
+   },
+   "tags": [
+    "group",
+    "indoors",
+    "community"
+   ]
+  },
+  {
+   "id": "texture-forest",
+   "alt": "",
+   "w": 1920,
+   "h": 648,
+   "orientation": "panorama",
+   "src": {
+    "640": {
+     "src": "assets/img/texture-forest-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/texture-forest-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/texture-forest.jpg",
+     "w": 1920
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "tags": [
+    "texture",
+    "faceless"
+   ]
+  },
+  {
+   "id": "texture-temple",
+   "alt": "",
+   "w": 2000,
+   "h": 600,
+   "orientation": "panorama",
+   "src": {
+    "640": {
+     "src": "assets/img/texture-temple-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/texture-temple-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/texture-temple.jpg",
+     "w": 2000
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "tags": [
+    "texture",
+    "faceless"
+   ]
+  },
+  {
+   "id": "texture-hall",
+   "alt": "",
+   "w": 1920,
+   "h": 475,
+   "orientation": "panorama",
+   "src": {
+    "640": {
+     "src": "assets/img/texture-hall-640.jpg",
+     "w": 640
+    },
+    "1280": {
+     "src": "assets/img/texture-hall-1280.jpg",
+     "w": 1280
+    },
+    "full": {
+     "src": "assets/img/texture-hall.jpg",
+     "w": 1920
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "tags": [
+    "texture",
+    "faceless"
+   ]
+  },
+  {
+   "id": "fundraiser-poster",
+   "alt": "Retreat participants gathered for a group photo on a lawn",
+   "w": 1280,
+   "h": 720,
+   "orientation": "landscape",
+   "src": {
+    "1280": {
+     "src": "assets/video/fundraiser-poster.jpg",
+     "w": 1280
+    }
+   },
+   "focal": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "tags": [
+    "group",
+    "outdoors",
+    "video"
+   ]
+  }
+ ]
+}

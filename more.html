@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<!-- before the first paint: the remembered design version and switcher states (Impact in the menu, Mission, DG notes, Text width), so nothing flashes -->
-<script>(function(){var h=document.documentElement,q,l=function(k){try{return localStorage.getItem(k)}catch(e){return null}};try{q=new URLSearchParams(location.search)}catch(e){q={get:function(){return null}}}var d=q.get("design")||l("dg-design-pick");h.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5");var i=q.get("impact");if(i!=="on"&&i!=="off")i=l("dg-impact-page");h.setAttribute("data-impact",i==="on"?"on":"off");var m=q.get("mission");if(m!=="text"&&m!=="photo")m=l("dg-mission");h.setAttribute("data-mission",m==="photo"?"photo":"text");h.setAttribute("data-notes",l("dg-show-notes")==="off"?"off":"on");var w=q.get("measure");if(w!=="wide"&&w!=="comfortable")w=l("dg-measure");h.setAttribute("data-measure",w==="comfortable"?"comfortable":"wide");h.classList.add("js")})()</script>
+<!-- before the first paint: the design version, switcher states and the colors and fonts from "my edits", so nothing flashes -->
+<script src="assets/boot.js"></script>
 </head>
 <body data-page="more.html" data-nav="a">
 <main id="main">
@@ -19,7 +19,7 @@
 <section class="page-head">
   <div class="wrap">
     <div>
-      <h1>Everything Else</h1>
+      <h1 data-edit="more.head.title">Everything Else</h1>
       <p class="dg-note">Lyndsey’s brief was “don’t delete, de-emphasize.” These pages keep their content and their search traffic; they just stop crowding the top navigation. Links to dharma-gates.org open today’s live pages.</p>
     </div>
   </div>
@@ -30,34 +30,34 @@
 <section id="guides">
   <div class="wrap two">
     <div>
-      <h2>Guides</h2>
+      <h2 data-edit="more.guides.title">Guides</h2>
       <ul class="linklist">
-        <li><a href="index.html#faq">FAQ</a></li>
-        <li><a href="about.html#ethics-inclusion">Skillful Use of Technology</a><span class="dg-note">Partner: From Love. Confirm it’s still active.</span></li>
-        <li><a href="https://www.dharma-gates.org/blog/how-to-find-amp-vet-a-buddhist-teacher" rel="noopener">How to Find (&amp; Vet) a Buddhist Teacher</a></li>
+        <li><a data-edit="more.guides.link.1" href="index.html#faq">FAQ</a></li>
+        <li><a data-edit="more.guides.link.2" href="about.html#ethics-inclusion">Skillful Use of Technology</a><span class="dg-note">Partner: From Love. Confirm it’s still active.</span></li>
+        <li><a data-edit="more.guides.link.3" href="https://www.dharma-gates.org/blog/how-to-find-amp-vet-a-buddhist-teacher" rel="noopener">How to Find (&amp; Vet) a Buddhist Teacher</a></li>
       </ul>
     </div>
   </div>
 </section>
 
-<section class="alt bg-hall" id="policies">
+<section data-photo-slot="more.policies.bg" data-aspect-desktop="1440/508" data-aspect-phone="390/698" data-photo-kind="background" class="alt bg-hall" id="policies">
   <div class="wrap two">
     <div>
-      <h2>Values &amp; Policies</h2>
+      <h2 data-edit="more.policies.title">Values &amp; Policies</h2>
       <ul class="linklist">
-        <li><a href="about.html#dana">Dana</a></li>
-        <li><a href="https://www.dharma-gates.org/ethics" rel="noopener">Ethics &amp; Safety</a></li>
-        <li><a href="about.html#ethics-inclusion">Inclusion</a></li>
-        <li><a href="https://www.dharma-gates.org/dg-advising-liability-waiver" rel="noopener">Advising Liability Waiver</a></li>
+        <li><a data-edit="more.policies.link.1" href="about.html#dana">Dana</a></li>
+        <li><a data-edit="more.policies.link.2" href="https://www.dharma-gates.org/ethics" rel="noopener">Ethics &amp; Safety</a></li>
+        <li><a data-edit="more.policies.link.3" href="about.html#ethics-inclusion">Inclusion</a></li>
+        <li><a data-edit="more.policies.link.4" href="https://www.dharma-gates.org/dg-advising-liability-waiver" rel="noopener">Advising Liability Waiver</a></li>
       </ul>
     </div>
     <div>
-      <h2>Impact &amp; Support</h2>
+      <h2 data-edit="more.policies.heading">Impact &amp; Support</h2>
       <ul class="linklist">
-        <li><a href="impact.html">Our Impact &amp; Annual Reports</a></li>
-        <li><a href="https://www.dharma-gates.org/testimonials" rel="noopener">Participant Experiences</a></li>
-        <li><a href="about.html#supported-by">Supported By</a></li>
-        <li><a href="retreats.html#join-our-retreat-team">Join Our Retreat Team</a></li>
+        <li><a data-edit="more.policies.link.5" href="impact.html">Our Impact &amp; Annual Reports</a></li>
+        <li><a data-edit="more.policies.link.6" href="https://www.dharma-gates.org/testimonials" rel="noopener">Participant Experiences</a></li>
+        <li><a data-edit="more.policies.link.7" href="about.html#supported-by">Supported By</a></li>
+        <li><a data-edit="more.policies.link.8" href="retreats.html#join-our-retreat-team">Join Our Retreat Team</a></li>
       </ul>
     </div>
   </div>
@@ -66,15 +66,15 @@
 <section id="blog">
   <div class="wrap two">
     <div>
-      <h2>Legacy Blog (2020–2023)</h2>
-      <p>Five long-form pieces. New writing happens on <a href="https://substack.com/@dharmagates" rel="noopener">Substack</a>.</p>
+      <h2 data-edit="more.blog.title">Legacy Blog (2020–2023)</h2>
+      <p><span data-edit="more.blog.body.1.1">Five long-form pieces. New writing happens on</span> <a data-edit="more.blog.body.1.2" href="https://substack.com/@dharmagates" rel="noopener">Substack</a>.</p>
       <p class="dg-note">Decision needed: import these five into WordPress (URLs unchanged) or redirect /blog to Substack.</p>
       <ul class="linklist">
-        <li><a href="https://www.dharma-gates.org/blog/trusting-in-generosity-what-it-means-for-organizations-to-run-on-dna" rel="noopener">Trusting in Generosity: What it Means for Organizations to Run on Dāna</a><small>Aaron Stryker · 2023</small></li>
-        <li><a href="https://www.dharma-gates.org/blog/how-to-find-amp-vet-a-buddhist-teacher" rel="noopener">How to Find (&amp; Vet) a Buddhist Teacher</a><small>Sophie Jacobs · 2022/23</small></li>
-        <li><a href="https://www.dharma-gates.org/blog/meet-the-sangha-genryo-jones" rel="noopener">Meet the Sangha: Genryo Jones</a><small>2021</small></li>
-        <li><a href="https://www.dharma-gates.org/blog/connecting-young-people-to-deep-practice" rel="noopener">Connecting Young People to Deep Practice</a><small>Aaron Stryker · 2020</small></li>
-        <li><a href="https://www.dharma-gates.org/blog/softening-views-on-practice" rel="noopener">Softening Views on Practice</a><small>2020</small></li>
+        <li><a data-edit="more.blog.link.1" href="https://www.dharma-gates.org/blog/trusting-in-generosity-what-it-means-for-organizations-to-run-on-dna" rel="noopener">Trusting in Generosity: What it Means for Organizations to Run on Dāna</a><small data-edit="more.blog.body.2">Aaron Stryker · 2023</small></li>
+        <li><a data-edit="more.blog.link.2" href="https://www.dharma-gates.org/blog/how-to-find-amp-vet-a-buddhist-teacher" rel="noopener">How to Find (&amp; Vet) a Buddhist Teacher</a><small data-edit="more.blog.body.3">Sophie Jacobs · 2022/23</small></li>
+        <li><a data-edit="more.blog.link.3" href="https://www.dharma-gates.org/blog/meet-the-sangha-genryo-jones" rel="noopener">Meet the Sangha: Genryo Jones</a><small data-edit="more.blog.body.4">2021</small></li>
+        <li><a data-edit="more.blog.link.4" href="https://www.dharma-gates.org/blog/connecting-young-people-to-deep-practice" rel="noopener">Connecting Young People to Deep Practice</a><small data-edit="more.blog.body.5">Aaron Stryker · 2020</small></li>
+        <li><a data-edit="more.blog.link.5" href="https://www.dharma-gates.org/blog/softening-views-on-practice" rel="noopener">Softening Views on Practice</a><small data-edit="more.blog.body.6">2020</small></li>
       </ul>
     </div>
     <div class="dg-note">Retired, private or redirected pages: the redirect plan lives in inventory/redirect_map.csv; it’s settled with the WordPress launch.</div>

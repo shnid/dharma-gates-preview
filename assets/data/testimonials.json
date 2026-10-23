@@ -1,0 +1,682 @@
+{
+ "rev": 1,
+ "secondsPerQuote": "auto",
+ "note": "Seed for the testimonial carousels. Lyndsey's changes are an overlay in her edits file; tools/apply_edits.py merges them here and bumps rev. Quotes marked hide are DG's full quotes, word for word; the six shown are shortened.",
+ "items": [
+  {
+   "id": "p-13-lumin",
+   "quote": "“Dharma Gates is, without a doubt, changing lives across this country — and I am one of them. When I arrived at the retreat, which was my first ever weeklong silent retreat, I was in a state of complete burnout: emotionally drained, spiritually disconnected, and relentlessly self-critical. By the end of the retreat, the teachings had found a lasting home in my heart. The constant irritation with external distractions softened, and for the first time in months, I slept deeply and restfully. Meditation became something I eagerly anticipated each day. Through the service of Dharma Gates, I have received real, embodied transmissions of Peace, Compassion, and Devotion.”",
+   "name": "Lumin",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Creating Conditions for Transformation"
+  },
+  {
+   "id": "hp-grace",
+   "quote": "“It was beautiful to practice with people my age - a rare thing it is! I can tell how much care is put into putting this on, which of course includes effort, and it's inspiring -- the Dharma Gates mission and efforts. THANK YOU.”",
+   "name": "Grace",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's homepage",
+   "source": "dharma-gates.org homepage, 2026-10-23 (In Their Own Words)",
+   "theme": ""
+  },
+  {
+   "id": "hp-tony",
+   "quote": "“Dharma Gates is a rare and wonderful gift to the world, and it's teachers are genuine, kind, caring, and committed to the students. That the organization operates by dana is a tribute to their integrity and a testimony to their commitment to making a positive difference in the world. “",
+   "name": "Tony",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's homepage",
+   "source": "dharma-gates.org homepage, 2026-10-23 (In Their Own Words)",
+   "theme": ""
+  },
+  {
+   "id": "p-14-em",
+   "quote": "“I feel safety is much more possible in this world. It was such a relief, scary, overwhelming, soothing, the safety line I've been longing for. I feel like I've been hearing bits of a song wondering through different rooms of a house all my life but I didn't know the song was Dharma and I started to hear the song finally now. I am so grateful!”",
+   "name": "Em",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Creating Conditions for Transformation"
+  },
+  {
+   "id": "h-nomi",
+   "quote": "“Incredible. It cracked my heart open.”",
+   "name": "Nomi",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "show",
+   "consent": "on DG's Testimonials page",
+   "source": "abbreviated from /testimonials",
+   "theme": ""
+  },
+  {
+   "id": "h-anonymous-weeks",
+   "quote": "“One of the most transformational weeks of my life.”",
+   "name": "",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "show",
+   "consent": "on DG's Testimonials page",
+   "source": "abbreviated from /testimonials",
+   "theme": ""
+  },
+  {
+   "id": "h-rachel",
+   "quote": "“This retreat felt like holy medicine.”",
+   "name": "Rachel",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "show",
+   "consent": "on DG's Testimonials page",
+   "source": "abbreviated from /testimonials",
+   "theme": ""
+  },
+  {
+   "id": "h-michaela",
+   "quote": "“It brought me home to who I’ve always been.”",
+   "name": "Michaela",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "show",
+   "consent": "on DG's Testimonials page",
+   "source": "abbreviated from /testimonials",
+   "theme": ""
+  },
+  {
+   "id": "h-toni",
+   "quote": "“Never knew how powerful it is to sit with community in silence.”",
+   "name": "Toni",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "show",
+   "consent": "on DG's Testimonials page",
+   "source": "abbreviated from /testimonials",
+   "theme": ""
+  },
+  {
+   "id": "h-rebecca",
+   "quote": "“Would not be accessible without the low cost — grateful for the opportunity.”",
+   "name": "Rebecca",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "show",
+   "consent": "on DG's Testimonials page",
+   "source": "abbreviated from /testimonials",
+   "theme": ""
+  },
+  {
+   "id": "p-01-nomi",
+   "quote": "“Incredible. It cracked my heart open. I feel so grateful for the opportunity. I can't afford most meditation retreats and I would not have gotten this opportunity otherwise. I feel a fresh sense of determination and deeper understanding of why I want meditation to be a central part of my time in this body on earth.”",
+   "name": "Nomi",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": ""
+  },
+  {
+   "id": "p-02-zach",
+   "quote": "“This retreat was illuminating. For the first time I can remember, I'm confident I can find love within myself here and now. I learned to practice meditation with ease instead of holding tensely on to a desired goal.”",
+   "name": "Zach",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": ""
+  },
+  {
+   "id": "p-03-anonymous",
+   "quote": "“Heart-opening, expansive, challenging: exactly how I want to be living these precious moments of life. Deep gratitude for everyone who made this possible.”",
+   "name": "Anonymous",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": ""
+  },
+  {
+   "id": "p-04-anonymous",
+   "quote": "“Incredibly deep, I feel strongly committed to deepening my practice and increasingly living the teachings of Dharma. This was one of the most transformational weeks of my life.”",
+   "name": "Anonymous",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": ""
+  },
+  {
+   "id": "p-05-ryan",
+   "quote": "“The people behind Dharma Gates display an inspiring amount of concentrated and compassionate effort to this cause. Dharma Gates is helping people, and thus the world, right at their roots. They bring together beautiful environments and excellent teachers that in turn offer truly awesome opportunities for people like me to reflect on our conditions at the deepest level. My time at Dharma Gates retreats has had major impacts on my wellbeing. And it further helps people around me.”",
+   "name": "Ryan",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-06-anonymous",
+   "quote": "“Thank you!!! This retreat was so well-held. I felt so much openness and warmth from the retreat managers and teachers. Thank you for your care, support, time and energy”",
+   "name": "Anonymous",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-07-chris",
+   "quote": "“Incredible. I feel a great amount of confidence was built. All the retreat managers were highly supportive. This was my first retreat and it was amazing.”",
+   "name": "Chris",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-08-erin",
+   "quote": "“The organization, thoughtfulness, and care that Dharma Gates put into this retreat was felt every step of the way. I feel supported, connected, and grateful for this experience. Nikki (the teacher) was AMAZING--so kind, thoughtful, caring. I will be exploring future offerings with her and Dharma Gates.”",
+   "name": "Erin",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23 (checked word for word against the live page by Anid, 2026-10-23)",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-09-zach",
+   "quote": "“Incredible. Great spaceholding from Dharma Gates staff, amazing teachings that were transformative - THANK YOU!!”",
+   "name": "Zach",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-10-ash",
+   "quote": "“It was hard and it was beautiful. The retreat managers and kitchen staff were so helpful in creating and maintaining a safe container. I appreciate so deeply your care and support.”",
+   "name": "Ash",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-11-rebecca",
+   "quote": "“I felt deeply inspired by the teachings and encouragement of this retreat. My practice and trust in my capacity to develop as a spiritual practitioner deepened so much. The care and love that Jogen (the teacher), the cooks and retreat managers poured into the container were so powerful and palpable. I feel deeply grateful.”",
+   "name": "Rebecca",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-12-toni",
+   "quote": "“I so appreciate the flexibility and responsiveness of the retreat managers.”",
+   "name": "Toni",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23 (checked word for word against the live page by Anid, 2026-10-23)",
+   "theme": "Offering a Safe Group Container"
+  },
+  {
+   "id": "p-15-haley",
+   "quote": "“I gleaned a clearer perspective on how to live my life. I feel I'm more devoted to my path.”",
+   "name": "Haley",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Creating Conditions for Transformation"
+  },
+  {
+   "id": "p-16-rachel",
+   "quote": "“This retreat felt like holy medicine. It was very difficult for me, but I feel my life has changed because of it.”",
+   "name": "Rachel",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Creating Conditions for Transformation"
+  },
+  {
+   "id": "p-17-paige",
+   "quote": "“I knew I needed to change my lifestyle and figure out something. This helped me answer that yearning. It was life-changing.”",
+   "name": "Paige",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Creating Conditions for Transformation"
+  },
+  {
+   "id": "p-18-theo",
+   "quote": "“I feel like a layer of crust has started to slough off what felt like my corroded heart. I see that my heart is still there, shining, full of potential, that I can still feel deeply, still be genuinely and pleasantly surprised by life.”",
+   "name": "Theo",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Creating Conditions for Transformation"
+  },
+  {
+   "id": "p-19-michaela",
+   "quote": "“In the most cliché phrase - it changed my life, but maybe not even that. It brought me home to who I've always been & who I will always be, This retreat brought me home ❤“",
+   "name": "Michaela",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23 (checked word for word against the live page by Anid, 2026-10-23)",
+   "theme": "Creating Conditions for Transformation"
+  },
+  {
+   "id": "p-20-karina",
+   "quote": "“Attending a retreat at a monastery was a true immersion in not only the practice of meditation but the teachings. I learned as much at this retreat as I did in the past year, and have a growing sense of what the tradition means to me and what role it has in my life.”",
+   "name": "Karina",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-21-stephanie",
+   "quote": "“This retreat really supported me in deepening my understanding of the lineages... specifically the progression of early Buddhist Metta to Mahayana compassion, all supporting the entry into Tantra/Vajryana practice and beyond. I feel much more situated in the philosophy and have more clarity on what practices can meet me in my life today and support me, as I continue to take flawed but wholehearted effort to be of benefit.”",
+   "name": "Stephanie",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-22-melina",
+   "quote": "“Thank you for an amazing retreat Nicky. I feel like one of the luckiest people in the world to share the last week with you guys.”",
+   "name": "Melina",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-23-alice",
+   "quote": "“It was a beautiful opportunity to dive inward, learning from Guo Gu was such a privilege, the wisdom and guidance I will always carry with me. This retreat has taught me how to meditate and has shown me the value of making this practice a priority in life.”",
+   "name": "Alice",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-24-nate",
+   "quote": "“This retreat reminded me of the beauty and awe of life and the effectiveness of dharma practice as a tool to understand that.”",
+   "name": "Nate",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-25-valerie",
+   "quote": "“I didn't have an actual baseline understanding of what it meant to meditate, not truly. This retreat has really helped to bolster a sense of deep understanding. There is great value in deep meditation practice.”",
+   "name": "Valerie",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-26-joe",
+   "quote": "“It renewed my love for meditation and Dharma practice, and it gave me the sense that they are accessible in my life. It was restorative, challenging, supportive, fun, beautiful.”",
+   "name": "Joe",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-27-josie",
+   "quote": "“Seeing how Dharma can be applicable in my life even though I don't consider myself Buddhist. I loved feeling the group energy and power of being together to practice compassion.”",
+   "name": "Josie",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Catalyzing deep encounters with Dharma"
+  },
+  {
+   "id": "p-28-sophie",
+   "quote": "“To feel spiritual friendship and camraderie was an enormous support to my practice. I am so grateful for all the causes and conditions that made this happen.”",
+   "name": "Sophie",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Sparking Community"
+  },
+  {
+   "id": "p-29-david",
+   "quote": "“My first meditation retreat experience in community with other young people - I found it refreshing, inspiring, invigorating and hopeful.”",
+   "name": "David",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Sparking Community"
+  },
+  {
+   "id": "p-30-spencer",
+   "quote": "“The most notable aspect, aside from experiences in my personal practice, was the community. It is enriching and invigorating to have an age & culturally relevant community to practice with. I didn't know how important this was to me until now. I had sort of given up on merging social, friend, and everyday community with spiritual community. This is where I want to be.”",
+   "name": "Spencer",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Sparking Community"
+  },
+  {
+   "id": "p-31-anonymous",
+   "quote": "“The supportive and loving container of community uplifted me and gave me hope after the isolation of the pandemic. This is the best meditation community I've found—it is truly a unique, compassionate, and thoughtful space.”",
+   "name": "Anonymous",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Sparking Community"
+  },
+  {
+   "id": "p-32-willem",
+   "quote": "\"It was beautiful. It truly touched and spoke to my heart. I definitely have grown as a person both spiritually and emotionally. Before this I did not have much of a previous background on Buddhist teachings, I mostly practiced meditation on my own. The community setting really eased some of the emotional discomfort I normally feel during practice.”",
+   "name": "Willem",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23 (checked word for word against the live page by Anid, 2026-10-23)",
+   "theme": "Sparking Community"
+  },
+  {
+   "id": "p-33-toni",
+   "quote": "“Truly magical. Historically, I have practiced meditation solo, I never knew how powerful it could be to sit with a community and how close I could feel with others through silence.”",
+   "name": "Toni",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Sparking Community"
+  },
+  {
+   "id": "p-34-rebecca",
+   "quote": "“I feel very grateful to have recieved this opportunity that would not have been accessible for me if there were a cost. I can and am honored to take the lessons I received and now go out and share them with those I serve.”",
+   "name": "Rebecca",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Accessibility & Generosity"
+  },
+  {
+   "id": "p-35-anonymous",
+   "quote": "“What a gift. I am SO grateful. I hope I can earn more money so that I can support this work when I \"grow up.\" I feel more nourished, connected to myself & others and more hopeful. I am so inspired by the other participants. I have done other retreats but the community of exclusively young people and the financial accessibility of Dharma Gates is a game-changer.”",
+   "name": "Anonymous",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Accessibility & Generosity"
+  },
+  {
+   "id": "p-36-taia",
+   "quote": "I never even thought about retreats before this because of how expensive they were. This changed my life, and will continue to change it.”",
+   "name": "Taia",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Accessibility & Generosity"
+  },
+  {
+   "id": "p-37-aleks",
+   "quote": "“The financial support and how this retreat was framed attracted a lot of young folks who otherwise wouldn’t be able to spend their week in this way”",
+   "name": "Aleks",
+   "role": "retreat participant",
+   "program": "",
+   "year": null,
+   "placements": [
+    "home"
+   ],
+   "status": "hide",
+   "consent": "on DG's Testimonials page",
+   "source": "dharma-gates.org/testimonials, 2026-10-23",
+   "theme": "Accessibility & Generosity"
+  }
+ ]
+}

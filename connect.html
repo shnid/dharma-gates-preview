@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<!-- before the first paint: the remembered design version and switcher states (Impact in the menu, Mission, DG notes, Text width), so nothing flashes -->
-<script>(function(){var h=document.documentElement,q,l=function(k){try{return localStorage.getItem(k)}catch(e){return null}};try{q=new URLSearchParams(location.search)}catch(e){q={get:function(){return null}}}var d=q.get("design")||l("dg-design-pick");h.setAttribute("data-design",/^v[1-5]$/.test(d||"")?d:"v5");var i=q.get("impact");if(i!=="on"&&i!=="off")i=l("dg-impact-page");h.setAttribute("data-impact",i==="on"?"on":"off");var m=q.get("mission");if(m!=="text"&&m!=="photo")m=l("dg-mission");h.setAttribute("data-mission",m==="photo"?"photo":"text");h.setAttribute("data-notes",l("dg-show-notes")==="off"?"off":"on");var w=q.get("measure");if(w!=="wide"&&w!=="comfortable")w=l("dg-measure");h.setAttribute("data-measure",w==="comfortable"?"comfortable":"wide");h.classList.add("js")})()</script>
+<!-- before the first paint: the design version, switcher states and the colors and fonts from "my edits", so nothing flashes -->
+<script src="assets/boot.js"></script>
 </head>
 <body data-page="connect.html" data-nav="a">
 <main id="main">
@@ -21,26 +21,26 @@
 <section class="page-head has-photo">
   <div class="wrap">
     <div>
-      <h1>Stay Close to the Practice</h1>
-      <p class="lead">Between retreats there's a newsletter, a podcast, writing on Substack, and a monthly online sit. Pick what fits.</p>
+      <h1 data-edit="connect.head.title">Stay Close to the Practice</h1>
+      <p data-edit="connect.head.lead" class="lead">Between retreats there's a newsletter, a podcast, writing on Substack, and a monthly online sit. Pick what fits.</p>
     </div>
-    <figure class="frame" style="--focus: 50% 58%"><img src="assets/img/porch-table-1280.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w, assets/img/porch-table.jpg 1500w" sizes="(min-width: 1024px) 474px, 100vw" width="960" height="1280" fetchpriority="high" alt="Retreat participants smiling around a long table on a covered porch"></figure>
+    <figure data-photo-slot="connect.head" data-aspect-desktop="467/350" data-aspect-phone="4/3" class="frame" style="--focus: 50% 58%"><img src="assets/img/porch-table-1280.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w, assets/img/porch-table.jpg 1500w" sizes="(min-width: 1024px) 474px, 100vw" width="960" height="1280" fetchpriority="high" alt="Retreat participants smiling around a long table on a covered porch"></figure>
   </div>
 </section>
 
-<section class="alt bg-forest" id="podcast">
+<section data-photo-slot="connect.podcast.bg" data-aspect-desktop="45/26" data-aspect-phone="26/61" data-photo-kind="background" class="alt bg-forest" id="podcast">
   <div class="wrap">
-    <h2>Dharma Gates Podcast</h2>
-    <p class="lead">Sharing wisdom from various Buddhist traditions, inviting listeners into a world of practice, and engaging in dialogue to illuminate the Buddhist path.</p>
+    <h2 data-edit="connect.podcast.title">Dharma Gates Podcast</h2>
+    <p data-edit="connect.podcast.lead" class="lead">Sharing wisdom from various Buddhist traditions, inviting listeners into a world of practice, and engaging in dialogue to illuminate the Buddhist path.</p>
     <!-- the three most recent episodes only, title + guest (DG, 2026-10-21); the full archive lives on Spotify and YouTube -->
-    <h3>Latest Episodes</h3>
+    <h3 data-edit="connect.podcast.heading">Latest Episodes</h3>
     <ul class="linklist">
-      <li>Dana, Renunciation, and Finding One's Gift <small>Beth Upton</small></li>
-      <li>Ordaining as a Zen Monk <small>Roshi Geoffrey Shugen Arnold</small></li>
-      <li>Ordaining as a Buddhist Monk in the Theravada Tradition <small>Nisabho Bhikkhu</small></li>
+      <li><span data-edit="connect.podcast.list.1.1">Dana, Renunciation, and Finding One's Gift</span> <small data-edit="connect.podcast.list.1.2">Beth Upton</small></li>
+      <li><span data-edit="connect.podcast.list.2.1">Ordaining as a Zen Monk</span> <small data-edit="connect.podcast.list.2.2">Roshi Geoffrey Shugen Arnold</small></li>
+      <li><span data-edit="connect.podcast.list.3.1">Ordaining as a Buddhist Monk in the Theravada Tradition</span> <small data-edit="connect.podcast.list.3.2">Nisabho Bhikkhu</small></li>
     </ul>
     <p class="dg-note">These are the top three on DG’s current Podcast page, which shows no dates. Confirm they’re the newest.</p>
-    <div class="cta-row"><a class="btn" href="https://open.spotify.com/show/427lma0OzQA8UViWCgsLKZ" rel="noopener">Listen on Spotify</a><a class="btn ghost" href="https://www.youtube.com/playlist?list=PLQ_lUNRUza902U64uvdYqaE_VFoE8xjVS" rel="noopener">Watch on YouTube</a></div>
+    <div class="cta-row"><a data-edit="connect.podcast.button.1" class="btn" href="https://open.spotify.com/show/427lma0OzQA8UViWCgsLKZ" rel="noopener">Listen on Spotify</a><a data-edit="connect.podcast.button.2" class="btn ghost" href="https://www.youtube.com/playlist?list=PLQ_lUNRUza902U64uvdYqaE_VFoE8xjVS" rel="noopener">Watch on YouTube</a></div>
   </div>
 </section>
 
@@ -49,38 +49,38 @@
     <h2 class="visually-hidden">Practice and Writing Between Retreats</h2>
     <div class="grid cols-2">
       <div class="card">
-        <h3>Dharma Office Hours</h3>
-        <p>A monthly online space to practice with sangha and bring your questions — meditate together, then group Q&amp;A.</p>
-        <a class="btn" href="https://www.dharma-gates.org/dharma-office-hours" rel="noopener">Learn More</a>
+        <h3 data-edit="connect.sit.card.1.title">Dharma Office Hours</h3>
+        <p data-edit="connect.sit.card.1.body">A monthly online space to practice with sangha and bring your questions — meditate together, then group Q&amp;A.</p>
+        <a data-edit="connect.sit.card.1.button" class="btn" href="https://www.dharma-gates.org/dharma-office-hours" rel="noopener">Learn More</a>
       </div>
       <div class="card">
-        <h3>Dharma Gates on Substack</h3>
-        <p>Essays and updates from the team. Five earlier long-form pieces (2020–2023) live in the site's legacy blog — see <a href="more.html#blog">Everything Else</a>.</p>
-        <a class="btn ghost" href="https://substack.com/@dharmagates" rel="noopener">Read on Substack</a>
+        <h3 data-edit="connect.sit.card.2.title">Dharma Gates on Substack</h3>
+        <p><span data-edit="connect.sit.card.2.body.1">Essays and updates from the team. Five earlier long-form pieces (2020–2023) live in the site's legacy blog — see</span> <a data-edit="connect.sit.card.2.body.2" href="more.html#blog">Everything Else</a>.</p>
+        <a data-edit="connect.sit.card.2.button" class="btn ghost" href="https://substack.com/@dharmagates" rel="noopener">Read on Substack</a>
       </div>
     </div>
     <p class="dg-note">Does Dharma Office Hours continue? Its teachers are no longer on the Team page, and DG’s Office Hours page still links a dead Retreat Guru page.</p>
   </div>
 </section>
 
-<section class="alt bg-garden" id="contact">
+<section data-photo-slot="connect.contact.bg" data-aspect-desktop="1440/898" data-aspect-phone="390/1191" data-photo-kind="background" class="alt bg-garden" id="contact">
   <div class="wrap two">
     <div>
-      <h2>Let's Connect</h2>
-      <p>We'd love to hear from you — fill out the form and we'll get back to you as soon as we can.</p>
+      <h2 data-edit="connect.contact.title">Let's Connect</h2>
+      <p data-edit="connect.contact.body">We'd love to hear from you — fill out the form and we'll get back to you as soon as we can.</p>
       <ul class="linklist">
-        <li>Programs &amp; retreats<small><a href="mailto:offerings@dharma-gates.org">offerings@dharma-gates.org</a></small></li>
-        <li>Everything else<small><a href="mailto:team@dharma-gates.org">team@dharma-gates.org</a></small></li>
-        <li>Mail<small>242 Main Street #363, Beacon, NY 12508</small></li>
-        <li>Social<small><a href="https://www.instagram.com/dharma.gates/" rel="noopener">Instagram</a> · <a href="https://www.facebook.com/Dharma-Gates-113102010040319/" rel="noopener">Facebook</a> · <a href="https://www.youtube.com/channel/UC3pp_BDfrUPFB3jfsSUmE_A" rel="noopener">YouTube</a></small></li>
+        <li><span data-edit="connect.contact.list.1.1">Programs &amp; retreats</span><small><a href="mailto:offerings@dharma-gates.org">offerings@dharma-gates.org</a></small></li>
+        <li><span data-edit="connect.contact.list.2.1">Everything else</span><small><a href="mailto:team@dharma-gates.org">team@dharma-gates.org</a></small></li>
+        <li><span data-edit="connect.contact.list.3.1">Mail</span><small data-edit="connect.contact.list.3.2">242 Main Street #363, Beacon, NY 12508</small></li>
+        <li><span data-edit="connect.contact.list.4.1">Social</span><small><a href="https://www.instagram.com/dharma.gates/" rel="noopener">Instagram</a> · <a href="https://www.facebook.com/Dharma-Gates-113102010040319/" rel="noopener">Facebook</a> · <a href="https://www.youtube.com/channel/UC3pp_BDfrUPFB3jfsSUmE_A" rel="noopener">YouTube</a></small></li>
       </ul>
     </div>
     <div>
       <form class="stack card" data-stub="contact">
-        <div class="field"><label for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name"></div>
-        <div class="field"><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email"></div>
-        <div class="field"><label for="contact-message">Message</label><textarea id="contact-message" name="message" rows="5"></textarea></div>
-        <button class="btn" type="submit">Send</button>
+        <div class="field"><label data-edit="connect.contact.form.name.label" for="contact-name">Name</label><input id="contact-name" name="name" type="text" autocomplete="name"></div>
+        <div class="field"><label data-edit="connect.contact.form.email.label" for="contact-email">Email</label><input id="contact-email" name="email" type="email" autocomplete="email"></div>
+        <div class="field"><label data-edit="connect.contact.form.message.label" for="contact-message">Message</label><textarea id="contact-message" name="message" rows="5"></textarea></div>
+        <button data-edit="connect.contact.form.button" class="btn" type="submit">Send</button>
         <div class="form-status" role="status"></div>
       </form>
       <p class="dg-note">This replaces the Squarespace contact form. DG to confirm where today’s submissions go (an email notification, or stored in Squarespace).</p>
