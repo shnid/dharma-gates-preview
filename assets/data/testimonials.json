@@ -1,7 +1,7 @@
 {
- "rev": 1,
+ "rev": 2,
  "secondsPerQuote": "auto",
- "note": "Seed for the testimonial carousels. Lyndsey's changes are an overlay in her edits file; tools/apply_edits.py merges them here and bumps rev. Quotes marked hide are DG's full quotes, word for word; the six shown are shortened.",
+ "note": "Seed for the testimonial carousels. Lyndsey's changes are an overlay in her edits file; tools/apply_edits.py merges them here and bumps rev. Since rev 2, Home shows eight of DG's full quotes, word for word; the shortened quotes stay in the bank, hidden.",
  "items": [
   {
    "id": "p-13-lumin",
@@ -73,7 +73,7 @@
    "placements": [
     "home"
    ],
-   "status": "show",
+   "status": "hide",
    "consent": "on DG's Testimonials page",
    "source": "abbreviated from /testimonials",
    "theme": ""
@@ -88,7 +88,7 @@
    "placements": [
     "home"
    ],
-   "status": "show",
+   "status": "hide",
    "consent": "on DG's Testimonials page",
    "source": "abbreviated from /testimonials",
    "theme": ""
@@ -97,13 +97,13 @@
    "id": "h-rachel",
    "quote": "“This retreat felt like holy medicine.”",
    "name": "Rachel",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "show",
+   "status": "hide",
    "consent": "on DG's Testimonials page",
    "source": "abbreviated from /testimonials",
    "theme": ""
@@ -112,43 +112,43 @@
    "id": "h-michaela",
    "quote": "“It brought me home to who I’ve always been.”",
    "name": "Michaela",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "show",
+   "status": "hide",
    "consent": "on DG's Testimonials page",
    "source": "abbreviated from /testimonials",
    "theme": ""
   },
   {
    "id": "h-toni",
-   "quote": "“Never knew how powerful it is to sit with community in silence.”",
+   "quote": "“I never knew how powerful it is to sit with community in silence.”",
    "name": "Toni",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "show",
+   "status": "hide",
    "consent": "on DG's Testimonials page",
    "source": "abbreviated from /testimonials",
    "theme": ""
   },
   {
    "id": "h-rebecca",
-   "quote": "“Would not be accessible without the low cost — grateful for the opportunity.”",
+   "quote": "“This would not be accessible to me without the low cost — I'm grateful for the opportunity.”",
    "name": "Rebecca",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "show",
+   "status": "hide",
    "consent": "on DG's Testimonials page",
    "source": "abbreviated from /testimonials",
    "theme": ""
@@ -157,7 +157,7 @@
    "id": "p-01-nomi",
    "quote": "“Incredible. It cracked my heart open. I feel so grateful for the opportunity. I can't afford most meditation retreats and I would not have gotten this opportunity otherwise. I feel a fresh sense of determination and deeper understanding of why I want meditation to be a central part of my time in this body on earth.”",
    "name": "Nomi",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
@@ -352,7 +352,7 @@
    "id": "p-16-rachel",
    "quote": "“This retreat felt like holy medicine. It was very difficult for me, but I feel my life has changed because of it.”",
    "name": "Rachel",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
@@ -382,28 +382,28 @@
    "id": "p-18-theo",
    "quote": "“I feel like a layer of crust has started to slough off what felt like my corroded heart. I see that my heart is still there, shining, full of potential, that I can still feel deeply, still be genuinely and pleasantly surprised by life.”",
    "name": "Theo",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23",
    "theme": "Creating Conditions for Transformation"
   },
   {
    "id": "p-19-michaela",
-   "quote": "“In the most cliché phrase - it changed my life, but maybe not even that. It brought me home to who I've always been & who I will always be, This retreat brought me home ❤“",
+   "quote": "“In the most cliché phrase - it changed my life, but maybe not even that. It brought me home to who I've always been & who I will always be. This retreat brought me home.“",
    "name": "Michaela",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23 (checked word for word against the live page by Anid, 2026-10-23)",
    "theme": "Creating Conditions for Transformation"
@@ -472,13 +472,13 @@
    "id": "p-24-nate",
    "quote": "“This retreat reminded me of the beauty and awe of life and the effectiveness of dharma practice as a tool to understand that.”",
    "name": "Nate",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23",
    "theme": "Catalyzing deep encounters with Dharma"
@@ -487,13 +487,13 @@
    "id": "p-25-valerie",
    "quote": "“I didn't have an actual baseline understanding of what it meant to meditate, not truly. This retreat has really helped to bolster a sense of deep understanding. There is great value in deep meditation practice.”",
    "name": "Valerie",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23",
    "theme": "Catalyzing deep encounters with Dharma"
@@ -547,13 +547,13 @@
    "id": "p-29-david",
    "quote": "“My first meditation retreat experience in community with other young people - I found it refreshing, inspiring, invigorating and hopeful.”",
    "name": "David",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23",
    "theme": "Sparking Community"
@@ -562,7 +562,7 @@
    "id": "p-30-spencer",
    "quote": "“The most notable aspect, aside from experiences in my personal practice, was the community. It is enriching and invigorating to have an age & culturally relevant community to practice with. I didn't know how important this was to me until now. I had sort of given up on merging social, friend, and everyday community with spiritual community. This is where I want to be.”",
    "name": "Spencer",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
@@ -607,13 +607,13 @@
    "id": "p-33-toni",
    "quote": "“Truly magical. Historically, I have practiced meditation solo, I never knew how powerful it could be to sit with a community and how close I could feel with others through silence.”",
    "name": "Toni",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23",
    "theme": "Sparking Community"
@@ -622,13 +622,13 @@
    "id": "p-34-rebecca",
    "quote": "“I feel very grateful to have recieved this opportunity that would not have been accessible for me if there were a cost. I can and am honored to take the lessons I received and now go out and share them with those I serve.”",
    "name": "Rebecca",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23",
    "theme": "Accessibility & Generosity"
@@ -652,13 +652,13 @@
    "id": "p-36-taia",
    "quote": "I never even thought about retreats before this because of how expensive they were. This changed my life, and will continue to change it.”",
    "name": "Taia",
-   "role": "retreat participant",
+   "role": "Retreat Participant",
    "program": "",
    "year": null,
    "placements": [
     "home"
    ],
-   "status": "hide",
+   "status": "show",
    "consent": "on DG's Testimonials page",
    "source": "dharma-gates.org/testimonials, 2026-10-23",
    "theme": "Accessibility & Generosity"

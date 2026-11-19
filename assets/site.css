@@ -124,16 +124,16 @@ html[data-design="v1"], html[data-design="v4"] {
 /* V3 Ink (wildcard): sumi black on cool rice-paper white, one vermilion accent like a seal stamp. No beige. */
 html[data-design="v3"] {
   --paper: #f5f5f3;
-  --paper-2: #e8e8e5;
-  --ink: #141414;
-  --accent-ink: #8f2a17;
+  --paper-2: #e6e5e5;
+  --ink: #344e6f;
+  --accent-ink: #354e6f;
   --muted: #545452;
-  --accent: #b3361f;
+  --accent: #264581;
   --sage: #8f2a17;
   --sage-soft: #f4e4df;
   --line: #dcdcd8;
   --on-dark-label: #f2a690;
-  --footer-bg: #8f2a17;
+  --footer-bg: #354e6f;
 }
 
 /* ---------- Base ---------- */
