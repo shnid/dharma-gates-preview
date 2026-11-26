@@ -318,6 +318,161 @@
     if ("ResizeObserver" in window) new ResizeObserver(setH).observe(bar);
   }
 
+  /* ================= Uploads (ANI-602): her own photos, and her art for the two art slots ================= */
+  // Only JPEG, PNG and WebP, checked by the file's first bytes (never SVG, which can carry scripts). Each picture is
+  // decoded, downscaled and re-encoded here, so nothing from the original file but its pixels is kept (no EXIF, no
+  // GPS), then stored in this browser (site.js uploads, IndexedDB). tools/apply_edits.py has the same limits.
+  var UPLOAD_TYPES = { "image/jpeg": "JPEG", "image/png": "PNG", "image/webp": "WebP" };
+  var MAX_INPUT = 40e6;                           // a photo straight off a phone is well under this
+  var PHOTO_EDGE = 2000, ART_EDGE = 1200, QUALITY = 0.82;
+  var MAX_UPLOAD = 1500000;                       // bytes per stored picture
+  var MAX_UPLOADS = 24;                           // photos in one edits file: about 20, with room to spare
+  var MAX_FILE = 50e6;                            // an edits file with that many photos
+  var UP_ID = /^up-[a-z0-9]{6,40}$/;
+  var ART_NAMES = { "site.logo": "Logo", "home.pillars.art": "Pillars art" };
+  function userError(msg) { var x = new Error(msg); x.user = msg; return x; }
+  function sniff(b) {
+    if (b.length >= 3 && b[0] === 0xFF && b[1] === 0xD8 && b[2] === 0xFF) return "image/jpeg";
+    if (b.length >= 8 && b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4E && b[3] === 0x47 && b[4] === 0x0D && b[5] === 0x0A && b[6] === 0x1A && b[7] === 0x0A) return "image/png";
+    if (b.length >= 12 && String.fromCharCode(b[0], b[1], b[2], b[3]) === "RIFF" && String.fromCharCode(b[8], b[9], b[10], b[11]) === "WEBP") return "image/webp";
+    return "";
+  }
+  function newUploadId() {
+    var a = new Uint8Array(12), chars = "abcdefghijklmnopqrstuvwxyz0123456789", out = "up-";
+    (window.crypto || window.msCrypto).getRandomValues(a);
+    for (var i = 0; i < a.length; i++) out += chars[a[i] % chars.length];
+    return out;
+  }
+  function loadImage(blob) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(blob), img = new Image();
+      img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(userError("That picture couldn't be read. Try saving it again as a JPEG.")); };
+      img.src = url;
+    });
+  }
+  function toBlob(canvas, type, q) { return new Promise(function (resolve) { canvas.toBlob(function (b) { resolve(b); }, type, q); }); }
+  function canvasOf(source, w, h, fill) {
+    var c = document.createElement("canvas");
+    c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h));
+    var g = c.getContext("2d");
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = "high";
+    if (fill) { g.fillStyle = fill; g.fillRect(0, 0, c.width, c.height); }
+    g.drawImage(source, 0, 0, c.width, c.height);
+    return c;
+  }
+  function fitEdge(w, h, edge) { var k = Math.min(1, edge / Math.max(w, h)); return [w * k, h * k]; }
+  // WebP where the browser can write it (smaller, and it keeps art's transparency); JPEG for photos, PNG for art
+  // otherwise. Then smaller until it fits the per-picture cap.
+  function encode(canvas, art) {
+    var tries = art ? [[0.92, 1], [0.92, 0.75], [0.85, 0.56]] : [[QUALITY, 1], [0.72, 1], [0.72, 0.8], [0.65, 0.64]];
+    var i = 0;
+    var next = function () {
+      var t = tries[i++], c = t[1] === 1 ? canvas : canvasOf(canvas, canvas.width * t[1], canvas.height * t[1]);
+      return toBlob(c, "image/webp", t[0]).then(function (b) {
+        return b && b.type === "image/webp" ? b : toBlob(c, art ? "image/png" : "image/jpeg", t[0]);
+      }).then(function (b) {
+        if (!b) throw userError("This browser couldn't prepare the picture. Try another browser.");
+        if (b.size <= MAX_UPLOAD) return { blob: b, w: c.width, h: c.height };
+        if (i >= tries.length) throw userError("That picture is too detailed to store, even made smaller. Try a smaller copy.");
+        return next();
+      });
+    };
+    return next();
+  }
+  // Checks a chosen file and turns it into a stored picture: { id, kind, blob, type, w, h, … }
+  function makeUpload(file, kind) {
+    if (!file) return Promise.reject(userError("No file was chosen."));
+    if (file.size > MAX_INPUT) return Promise.reject(userError("That file is over 40 MB. Pick a smaller copy."));
+    return file.slice(0, 16).arrayBuffer().then(function (buf) {
+      var type = sniff(new Uint8Array(buf));
+      if (!type) {
+        var why = /svg/i.test(file.type + file.name) ? " SVG files can't be uploaded." : /\.hei[cf]$/i.test(file.name) ? " An iPhone HEIC photo needs saving as JPEG first." : "";
+        throw userError("Only JPEG, PNG or WebP pictures can be uploaded." + why);
+      }
+      return loadImage(file.slice(0, file.size, type));
+    }).then(function (img) {
+      var w0 = img.naturalWidth, h0 = img.naturalHeight;
+      if (!w0 || !h0) throw userError("That picture has no size, so it can't be used.");
+      if (kind === "art") {
+        var a = fitEdge(w0, h0, ART_EDGE), orig = canvasOf(img, a[0], a[1]);
+        return toBlob(orig, "image/png").then(function (ob) {
+          if (!ob) throw userError("This browser couldn't prepare the picture. Try another browser.");
+          return { id: newUploadId(), kind: "art", orig: ob, added: nowISO() };
+        });
+      }
+      var s = fitEdge(w0, h0, PHOTO_EDGE);
+      return encode(canvasOf(img, s[0], s[1], "#fff"), false).then(function (r) {
+        return { id: newUploadId(), kind: "photo", blob: r.blob, type: r.blob.type, w: r.w, h: r.h, alt: "", added: nowISO() };
+      });
+    });
+  }
+  // Art (her logo or brushstroke circle, often a screenshot on white): optionally the near-white background made
+  // see-through (white blended edges keep their color, so there's no pale halo), then the empty margin trimmed.
+  function processArt(rec, trim, clear) {
+    return loadImage(rec.orig).then(function (img) {
+      var c = canvasOf(img, img.naturalWidth, img.naturalHeight), g = c.getContext("2d");
+      var d = g.getImageData(0, 0, c.width, c.height), px = d.data, W = c.width, H = c.height, i;
+      if (clear) {
+        for (i = 0; i < px.length; i += 4) {
+          var m = Math.min(px[i], px[i + 1], px[i + 2]);
+          if (m >= 248) px[i + 3] = 0;
+          else if (m > 205) {
+            var t = (248 - m) / 43;
+            for (var ch = 0; ch < 3; ch++) px[i + ch] = Math.max(0, Math.round(255 - (255 - px[i + ch]) / t));
+            px[i + 3] = Math.round(px[i + 3] * t);
+          }
+        }
+        g.putImageData(d, 0, 0);
+      }
+      var out = c;
+      if (trim) {
+        var x0 = W, y0 = H, x1 = -1, y1 = -1;
+        for (var y = 0; y < H; y++) for (var x = 0; x < W; x++) {
+          i = (y * W + x) * 4;
+          if (px[i + 3] < 13 || Math.min(px[i], px[i + 1], px[i + 2]) >= 245) continue;
+          if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y;
+        }
+        if (x1 >= 0) {
+          var pad = Math.round(Math.max(W, H) * 0.02);
+          x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad); x1 = Math.min(W - 1, x1 + pad); y1 = Math.min(H - 1, y1 + pad);
+          out = document.createElement("canvas");
+          out.width = x1 - x0 + 1; out.height = y1 - y0 + 1;
+          out.getContext("2d").drawImage(c, x0, y0, out.width, out.height, 0, 0, out.width, out.height);
+        }
+      }
+      return encode(out, true).then(function (r) {
+        return Object.assign({}, rec, { blob: r.blob, type: r.blob.type, w: r.w, h: r.h });
+      });
+    });
+  }
+  function pickFile(onFile) {
+    var input = el("input", { type: "file", accept: Object.keys(UPLOAD_TYPES).join(",") });
+    input.style.display = "none";
+    input.addEventListener("change", function () { var f = input.files[0]; input.remove(); if (f) onFile(f); });
+    document.body.appendChild(input);
+    input.click();
+  }
+  function storeProblem(err) { return err && err.user ? err.user : S.uploads.problem(err); }
+  function base64Of(blob) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(String(r.result).split(",")[1] || ""); };
+      r.onerror = function () { reject(r.error); };
+      r.readAsDataURL(blob);
+    });
+  }
+  function bytesOf(b64) { // a base64 string from a file, or null
+    if (typeof b64 !== "string" || b64.length > Math.ceil(MAX_UPLOAD / 3) * 4 + 8 || !/^[A-Za-z0-9+/]*={0,2}$/.test(b64)) return null;
+    try {
+      var s = atob(b64), out = new Uint8Array(s.length);
+      for (var i = 0; i < s.length; i++) out[i] = s.charCodeAt(i);
+      return out;
+    } catch (x) { return null; }
+  }
+  function megabytes(n) { return n < 1e6 ? Math.max(1, Math.round(n / 1e3)) + " kB" : (n / 1e6).toFixed(n < 1e7 ? 1 : 0) + " MB"; }
+
   /* ================= Photos (BRIEF B4) ================= */
   var manifest = null;
   function getManifest() {
@@ -347,8 +502,9 @@
   }
   function currentPick(slot) {
     var p = obj(S.readEdits().photos[slot.getAttribute("data-photo-slot")]);
-    return p.photo ? p : null;
+    return p.photo || p.upload ? p : null;
   }
+  function pickKey(p) { return p ? (p.upload ? "u:" + p.upload : "p:" + p.photo) : ""; }
   function slotVisible(slot) {
     var r = slot.getBoundingClientRect();
     if (r.width < 24 || r.height < 24) return false;
@@ -422,7 +578,7 @@
     drawer.appendChild(body);
     document.body.appendChild(drawer);
     root.classList.add("dg-drawer-open");
-    h.focus();
+    h.focus({ preventScroll: true }); // editor.css may still be loading: don't scroll to an unstyled drawer
     return body;
   }
   // Esc closes the drawer wherever the focus is (a re-drawn photo grid can drop it to the page), unless a field,
@@ -460,72 +616,137 @@
     body.appendChild(el("p", { class: "dg-muted" }, slotLabel(slot)));
     var status = el("p", { class: "dg-status", "aria-live": "polite" });
     body.appendChild(status);
-    getManifest().then(function () { photoStep(slot, body, status); }, function () {
-      status.textContent = "The photo library couldn't load. Open the preview from its link (not from a file on disk) to change photos.";
-    });
+    // the library may not load (a page opened from disk); her own uploads still work
+    getManifest().catch(function () { return null; }).then(function (m) { photoStep(slot, body, status, !!m); });
   }
-  function photoStep(slot, body, status) {
+  function photoStep(slot, body, status, haveLibrary) {
     var kind = slot.getAttribute("data-photo-kind") || "inline";
     if (kind === "background") {
       var d = S.design();
       body.appendChild(el("p", { class: "dg-hint" }, "Visible in designs 4 and 5." + (d === "v4" || d === "v5" ? "" : " Switch to design 4 or 5 to see it.")));
     }
     if (slot.hasAttribute("data-photo-missing")) {
-      body.appendChild(el("p", { class: "dg-warn" }, "The photo picked for this spot is no longer in the library, so the page's own photo shows."));
+      body.appendChild(el("p", { class: "dg-warn" }, "The photo picked for this spot is no longer in the library or in this browser, so the page's own photo shows."));
     }
     var missing = S.missingPhotos().length;
     if (missing > 1 || (missing === 1 && !slot.hasAttribute("data-photo-missing"))) {
-      body.appendChild(el("p", { class: "dg-muted" }, missing + (missing === 1 ? " photo" : " photos") + " you picked elsewhere " + (missing === 1 ? "is" : "are") + " no longer in the library."));
+      body.appendChild(el("p", { class: "dg-muted" }, missing + (missing === 1 ? " photo" : " photos") + " you picked elsewhere " + (missing === 1 ? "is" : "are") + " no longer available."));
     }
-    var pick = currentPick(slot), currentId = pick ? pick.photo : defaultPhotoId(slot);
-    // filters: orientation, then tags
-    var filt = { o: "all", tag: "" };
-    var chips = el("div", { class: "dg-chips", role: "group", "aria-label": "Show" });
-    [["all", "All"], ["landscape", "Landscape"], ["portrait", "Portrait"], ["panorama", "Wide"]].forEach(function (o) {
-      var b = button(o[1], { class: "dg-chip", "aria-pressed": o[0] === "all" ? "true" : "false" }, function () {
-        filt.o = o[0];
-        chips.querySelectorAll(".dg-chip").forEach(function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+    var pick = currentPick(slot), current = pick ? pickKey(pick) : (defaultPhotoId(slot) ? "p:" + defaultPhotoId(slot) : "");
+    var choose = function (p, fresh) {
+      current = p.upload ? "u:" + p.id : "p:" + p.id;
+      var f = p.upload && kind === "portrait" ? { x: 0.5, y: 0.3 } : { x: p.focal.x, y: p.focal.y };
+      var next = pickFor(p, f, "cover");
+      return savePick(slot, next).then(function () {
+        drawMine();
         drawGrid();
+        drawFraming(p, next);
+        status.textContent = fresh ? "Your photo is in. Set the framing below." : "Photo changed. Set the framing below.";
+        var again = body.querySelector('.dg-thumb[aria-pressed="true"]');
+        if (again) again.focus();
       });
-      chips.appendChild(b);
-    });
-    body.appendChild(chips);
-    var tags = {};
-    manifest.photos.forEach(function (p) { arr(p.tags).forEach(function (t) { tags[t] = 1; }); });
-    var tagSel = el("select", { "aria-label": "Tag" });
-    tagSel.appendChild(el("option", { value: "" }, "Any tag"));
-    Object.keys(tags).sort().forEach(function (t) { tagSel.appendChild(el("option", { value: t }, t)); });
-    tagSel.addEventListener("change", function () { filt.tag = tagSel.value; drawGrid(); });
-    var tagRow = el("label", { class: "dg-inline" }, "Tag ");
-    tagRow.appendChild(tagSel);
-    body.appendChild(tagRow);
+    };
+    // Upload your own (ANI-602)
+    var upBox = el("div", { class: "dg-upload" });
+    upBox.appendChild(button("Upload your own photo", { class: "dg-btn dg-primary" }, function () {
+      if (photoUploadsBesides(slot) >= MAX_UPLOADS) {
+        upBox.querySelector(".dg-upload-msg").textContent = "You've used " + MAX_UPLOADS + " uploaded photos, the most one saved file can carry. To add another, put a library photo back in one of those spots.";
+        return;
+      }
+      pickFile(function (file) {
+        upBox.querySelector(".dg-upload-msg").textContent = "";
+        status.textContent = "Preparing your photo…";
+        makeUpload(file, "photo").then(function (rec) {
+          return S.uploads.put(rec).then(function () { return S.uploadPhoto(rec.id); });
+        }).then(function (p) {
+          if (!p) throw userError("The photo was stored but couldn't be read back. Try again.");
+          return choose(p, true);
+        }).catch(function (err) { status.textContent = ""; upBox.querySelector(".dg-upload-msg").textContent = storeProblem(err); });
+      });
+    }));
+    upBox.appendChild(el("p", { class: "dg-muted" }, "JPEG, PNG or WebP. It stays in this browser until you save your edits; Anid checks every photo before it goes on the public link."));
+    upBox.appendChild(el("p", { class: "dg-warn dg-upload-msg", "aria-live": "polite" }));
+    body.appendChild(upBox);
+    var mine = el("div", { class: "dg-mine" });
+    body.appendChild(mine);
+    function drawMine() {
+      S.uploads.all().then(function (list) {
+        mine.textContent = "";
+        list = arr(list).filter(function (r) { return r && r.kind === "photo" && r.blob; }).sort(function (a, b) { return a.added < b.added ? 1 : -1; });
+        if (!list.length) return;
+        mine.appendChild(el("h3", { class: "dg-sub" }, "Your uploads (" + list.length + ")"));
+        var g = el("div", { class: "dg-grid", role: "list" });
+        list.forEach(function (r) {
+          var cell = el("div", { role: "listitem", class: "dg-mine-cell" });
+          var on = current === "u:" + r.id;
+          var b = button(null, { class: "dg-thumb", "aria-pressed": on ? "true" : "false", title: r.alt || "Your photo" });
+          b.appendChild(el("img", { src: S.uploads.url(r), alt: "", width: "160", height: String(Math.round(160 * r.h / r.w)) }));
+          b.appendChild(el("span", { class: "visually-hidden" }, (r.alt || "Your uploaded photo") + (on ? " (current)" : "")));
+          b.addEventListener("click", function () { S.uploadPhoto(r.id).then(function (p) { if (p) choose(p, false); }); });
+          cell.appendChild(b);
+          cell.appendChild(button("Delete", { class: "dg-btn dg-mini", "aria-label": "Delete this uploaded photo" }, function () {
+            if (!window.confirm("Delete this photo from this browser? Any spot using it goes back to its own photo.")) return;
+            var e = S.readEdits();
+            Object.keys(e.photos).forEach(function (k) { if (obj(e.photos[k]).upload === r.id) delete e.photos[k]; });
+            S.writeEdits(e);
+            S.uploads.remove(r.id).then(function () {
+              if (current === "u:" + r.id) { current = defaultPhotoId(slot) ? "p:" + defaultPhotoId(slot) : ""; framing.textContent = ""; }
+              S.applyPhotoEdits();
+              drawMine();
+              drawGrid();
+              status.textContent = "Deleted.";
+            });
+          }));
+          g.appendChild(cell);
+        });
+        mine.appendChild(g);
+      }, function (err) { mine.textContent = ""; mine.appendChild(el("p", { class: "dg-muted" }, storeProblem(err))); });
+    }
+    // the library: filters, orientation then tags
+    var filt = { o: "all", tag: "" };
     var grid = el("div", { class: "dg-grid", role: "list" });
-    body.appendChild(grid);
     var framing = el("div", { class: "dg-framing" });
+    if (haveLibrary) {
+      body.appendChild(el("h3", { class: "dg-sub" }, "Photo library"));
+      var chips = el("div", { class: "dg-chips", role: "group", "aria-label": "Show" });
+      [["all", "All"], ["landscape", "Landscape"], ["portrait", "Portrait"], ["panorama", "Wide"]].forEach(function (o) {
+        var b = button(o[1], { class: "dg-chip", "aria-pressed": o[0] === "all" ? "true" : "false" }, function () {
+          filt.o = o[0];
+          chips.querySelectorAll(".dg-chip").forEach(function (c) { c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+          drawGrid();
+        });
+        chips.appendChild(b);
+      });
+      body.appendChild(chips);
+      var tags = {};
+      manifest.photos.forEach(function (p) { arr(p.tags).forEach(function (t) { tags[t] = 1; }); });
+      var tagSel = el("select", { "aria-label": "Tag" });
+      tagSel.appendChild(el("option", { value: "" }, "Any tag"));
+      Object.keys(tags).sort().forEach(function (t) { tagSel.appendChild(el("option", { value: t }, t)); });
+      tagSel.addEventListener("change", function () { filt.tag = tagSel.value; drawGrid(); });
+      var tagRow = el("label", { class: "dg-inline" }, "Tag ");
+      tagRow.appendChild(tagSel);
+      body.appendChild(tagRow);
+      body.appendChild(grid);
+    } else {
+      body.appendChild(el("p", { class: "dg-muted" }, "The photo library couldn't load (open the preview from its link, not from a file on disk). Your own uploads still work."));
+    }
     body.appendChild(framing);
     function drawGrid() {
       grid.textContent = "";
+      if (!haveLibrary) return;
       manifest.photos.filter(function (p) {
         return (filt.o === "all" || p.orientation === filt.o) && (!filt.tag || arr(p.tags).indexOf(filt.tag) > -1);
       }).forEach(function (p) {
         var sizes = S.sizesOf(p);
         if (!sizes.length) return;
         var cell = el("div", { role: "listitem" });
-        var b = button(null, { class: "dg-thumb", "aria-pressed": p.id === currentId ? "true" : "false", title: p.alt || p.id });
+        var on = current === "p:" + p.id;
+        var b = button(null, { class: "dg-thumb", "aria-pressed": on ? "true" : "false", title: p.alt || p.id });
         var img = el("img", { src: sizes[0].src, alt: "", loading: "lazy", width: "160", height: String(Math.round(160 * p.h / p.w)) });
         b.appendChild(img);
-        b.appendChild(el("span", { class: "visually-hidden" }, (p.alt || p.id) + (p.id === currentId ? " (current)" : "")));
-        b.addEventListener("click", function () {
-          currentId = p.id;
-          var next = { photo: p.id, focal: { x: p.focal.x, y: p.focal.y }, fit: "cover" };
-          savePick(slot, next).then(function () {
-            drawGrid();
-            drawFraming(p, next);
-            status.textContent = "Photo changed. Set the framing below.";
-            var again = grid.querySelector('.dg-thumb[aria-pressed="true"]');
-            if (again) again.focus();
-          });
-        });
+        b.appendChild(el("span", { class: "visually-hidden" }, (p.alt || p.id) + (on ? " (current)" : "")));
+        b.addEventListener("click", function () { choose(p, false); });
         cell.appendChild(b);
         grid.appendChild(cell);
       });
@@ -569,9 +790,36 @@
       var wl = el("label", { class: "dg-inline", for: "dg-whole" });
       wl.appendChild(whole); wl.appendChild(document.createTextNode(" Show whole photo (no crop)"));
       framing.appendChild(wl);
+      if (p.upload) { // her own photo: a short description, for people who can't see it (the library's alt text)
+        var altF = el("div", { class: "dg-f" });
+        altF.appendChild(el("label", { for: "dg-alt" }, "Describe the photo"));
+        var altIn = el("input", { type: "text", id: "dg-alt", maxlength: "300", placeholder: "e.g. Retreat participants walking on a forest path" });
+        altIn.value = p.alt || "";
+        altF.appendChild(altIn);
+        altF.appendChild(el("small", { class: "dg-muted" }, kind === "portrait" ? "Optional for team photos: the card already says the name." : "For people who can't see it. Anid can add it too."));
+        framing.appendChild(altF);
+        altIn.addEventListener("change", function () {
+          var v = S.normalize(altIn.value).replace(/\n/g, " ");
+          var problem = textProblem(v);
+          if (problem) { status.textContent = "Not saved: the description " + problem + "."; return; }
+          S.uploads.get(p.id).then(function (rec) {
+            if (!rec) return;
+            rec.alt = v;
+            return S.uploads.put(rec).then(function () {
+              p.alt = v;
+              var e = S.readEdits(); // also in "my edits", so a new description counts as not yet saved to a file
+              e.alts = obj(e.alts);
+              e.alts[p.id] = v;
+              S.writeEdits(e);
+              S.applyPhotoEdits();
+              status.textContent = "Description saved.";
+            });
+          }).catch(function (err) { status.textContent = storeProblem(err); });
+        });
+      }
       var acts = el("div", { class: "dg-acts" });
       acts.appendChild(button("Reset to the page's photo", { class: "dg-btn" }, function () {
-        savePick(slot, null).then(function () { currentId = defaultPhotoId(slot); drawGrid(); framing.textContent = ""; status.textContent = "Back to the page's own photo."; });
+        savePick(slot, null).then(function () { current = defaultPhotoId(slot) ? "p:" + defaultPhotoId(slot) : ""; drawMine(); drawGrid(); framing.textContent = ""; status.textContent = "Back to the page's own photo."; });
       }));
       acts.appendChild(button("Done", { class: "dg-btn dg-primary" }, closeDrawer));
       framing.appendChild(acts);
@@ -590,7 +838,7 @@
         if (persist) {
           clearTimeout(saveT);
           saveT = setTimeout(function () {
-            savePick(slot, { photo: p.id, focal: { x: Math.round(state.x * 1000) / 1000, y: Math.round(state.y * 1000) / 1000 }, fit: state.fit });
+            savePick(slot, pickFor(p, { x: Math.round(state.x * 1000) / 1000, y: Math.round(state.y * 1000) / 1000 }, state.fit));
           }, 150);
         }
       };
@@ -616,8 +864,115 @@
       whole.addEventListener("change", function () { state.fit = whole.checked ? "contain" : "cover"; paint(true); });
       paint(false);
     }
+    drawMine();
     drawGrid();
-    if (pick && photoById(pick.photo)) drawFraming(photoById(pick.photo), pick);
+    if (pick && pick.upload) S.uploadPhoto(pick.upload).then(function (p) { if (p) drawFraming(p, pick); });
+    else if (pick && photoById(pick.photo)) drawFraming(photoById(pick.photo), pick);
+  }
+  function pickFor(p, focal, fit) {
+    var x = p.upload ? { upload: p.id } : { photo: p.id };
+    x.focal = focal;
+    x.fit = fit;
+    return x;
+  }
+
+  /* ---------- Site art (ANI-602, ANI-546): two upload slots, the header logo and the pillar wheel, whose defaults are
+     DG's placeholder files in assets/img/brand/ (DECISIONS 140). Her upload shows here at once, travels in the saved
+     file like her photos, and tools/apply_edits.py writes it over the default file (not cleared until Anid checks it). */
+  function openArtDrawer(slotName, from) {
+    var name = ART_NAMES[slotName];
+    if (!name) return;
+    var body = openDrawer(name, from);
+    body.appendChild(el("p", { class: "dg-muted" }, slotName === "site.logo"
+      ? "The logo in the top bar, on every page. Yours replaces the placeholder and is sized to the bar's height."
+      : "The circle for Our Three Pillars, on Home. Yours replaces the brushstroke, painted in the design's ink, and its three sectors stay clickable."));
+    body.appendChild(el("p", { class: "dg-hint" }, "It travels in your saved file, like your photos. Anid checks it before it goes on the public link."));
+    var status = el("p", { class: "dg-status", "aria-live": "polite" });
+    var stage = el("div", { class: "dg-art-stage" });
+    var opts = el("div", { class: "dg-art-opts" });
+    var mkBox = function (id, text) {
+      var c = el("input", { type: "checkbox", id: id });
+      var l = el("label", { class: "dg-inline", for: id });
+      l.appendChild(c); l.appendChild(document.createTextNode(" " + text));
+      opts.appendChild(l);
+      return c;
+    };
+    var trimBox = mkBox("dg-art-trim", "Trim the empty margin");
+    var clearBox = mkBox("dg-art-clear", "Make the white background see-through");
+    var acts = el("div", { class: "dg-acts" });
+    var upBtn = button("Upload your art", { class: "dg-btn dg-primary" });
+    var rmBtn = button("Remove", { class: "dg-btn" });
+    acts.appendChild(upBtn); acts.appendChild(rmBtn);
+    acts.appendChild(button("Done", { class: "dg-btn" }, closeDrawer));
+    body.appendChild(acts);
+    body.appendChild(el("p", { class: "dg-muted" }, "JPEG, PNG or WebP. A screenshot on white works: the two options below tidy it."));
+    body.appendChild(stage);
+    body.appendChild(opts);
+    body.appendChild(status);
+    var cur = function () { return obj(S.readEdits().art[slotName]); };
+    function draw() {
+      var a = cur();
+      trimBox.checked = a.upload ? a.trim !== false : true;
+      clearBox.checked = a.upload ? a.clear !== false : true;
+      trimBox.disabled = clearBox.disabled = rmBtn.disabled = !a.upload;
+      stage.textContent = "";
+      if (!a.upload) {
+        stage.appendChild(el("img", { src: S.artDefault(slotName), alt: "DG's placeholder " + name.toLowerCase() }));
+        stage.appendChild(el("p", { class: "dg-muted" }, "The page shows DG's placeholder (above) until you upload yours."));
+        return;
+      }
+      S.uploads.get(a.upload).then(function (rec) {
+        var url = S.uploads.url(rec);
+        if (!url) { stage.appendChild(el("p", { class: "dg-warn" }, "This art isn't in this browser any more. Upload it again.")); return; }
+        stage.appendChild(el("img", { src: url, alt: "Your " + name.toLowerCase() + " (preview)" }));
+      }, function (err) { stage.appendChild(el("p", { class: "dg-warn" }, storeProblem(err))); });
+    }
+    function saveArt(a) {
+      var e = S.readEdits();
+      if (a) e.art[slotName] = a; else delete e.art[slotName];
+      S.writeEdits(e);
+      if (S.applyArt) S.applyArt();
+    }
+    function redo() { // the two options re-run on her original picture
+      var a = cur();
+      if (!a.upload) return;
+      status.textContent = "Updating…";
+      S.uploads.get(a.upload).then(function (rec) {
+        if (!rec || !rec.orig) throw userError("This art isn't in this browser any more. Upload it again.");
+        return processArt(rec, trimBox.checked, clearBox.checked);
+      }).then(function (rec) { return S.uploads.put(rec); }).then(function () {
+        saveArt({ upload: a.upload, trim: trimBox.checked, clear: clearBox.checked });
+        status.textContent = "Updated.";
+        draw();
+      }).catch(function (err) { status.textContent = storeProblem(err); });
+    }
+    trimBox.addEventListener("change", redo);
+    clearBox.addEventListener("change", redo);
+    upBtn.addEventListener("click", function () {
+      pickFile(function (file) {
+        status.textContent = "Preparing your art…";
+        var old = cur().upload;
+        makeUpload(file, "art").then(function (rec) {
+          return processArt(rec, trimBox.checked || !old, clearBox.checked || !old);
+        }).then(function (rec) {
+          return S.uploads.put(rec).then(function () { return rec; });
+        }).then(function (rec) {
+          saveArt({ upload: rec.id, trim: trimBox.checked || !old, clear: clearBox.checked || !old });
+          if (old && old !== rec.id) S.uploads.remove(old).catch(function () {});
+          status.textContent = "Your art is in.";
+          draw();
+        }).catch(function (err) { status.textContent = storeProblem(err); });
+      });
+    });
+    rmBtn.addEventListener("click", function () {
+      var a = cur();
+      if (!a.upload) return;
+      saveArt(null);
+      S.uploads.remove(a.upload).catch(function () {});
+      status.textContent = "Removed: the page shows DG's placeholder again.";
+      draw();
+    });
+    draw();
   }
 
   /* ================= Testimonial bank (BRIEF B5) ================= */
@@ -826,6 +1181,7 @@
   /* ================= Fonts (BRIEF B3) ================= */
   var ROLE_INFO = { // name, what it covers, then the default family and weight from boot.js
     heading: ["Headings", "Heading (section title)"],
+    banner: ["Homepage banner font", "Homepage banner (the big title on Home)"],
     body: ["Body text", "Body text"],
     quote: ["Quotes", "Quote (testimonial)"],
     number: ["Numbers & dates", "Number (impact numbers and dates)"],
@@ -833,7 +1189,9 @@
     button: ["Buttons", "Button"]
   };
   Object.keys(ROLE_INFO).forEach(function (r) {
+    // the banner has no default of its own: it follows the headings until it's picked (ANI-546)
     var d = arr(obj(S.boot.roleDefaults)[r]);
+    if (!d.length && r === "banner") d = arr(obj(S.boot.roleDefaults).heading);
     ROLE_INFO[r].push(d[0] || "Inter", d[1] || 400);
   });
   var PAIRS = [ // a short static list (B3), serif headings with a sans for text
@@ -854,7 +1212,10 @@
   }
   function rolePick(role) {
     var p = obj(S.readEdits().fonts.roles[role]);
-    return p.family ? p : { family: ROLE_INFO[role][2], weight: ROLE_INFO[role][3], isDefault: true };
+    if (p.family) return p;
+    // the banner follows the headings until a banner font is picked here or written into boot.js by apply_edits.py
+    if (role === "banner" && !arr(obj(S.boot.roleDefaults).banner).length) { var h = rolePick("heading"); return { family: h.family, weight: h.weight, isDefault: true, follows: "heading" }; }
+    return { family: ROLE_INFO[role][2], weight: ROLE_INFO[role][3], isDefault: true };
   }
   function nearestWeight(weights, w) {
     return weights.slice().sort(function (a, b) { return Math.abs(a - w) - Math.abs(b - w) || a - b; })[0] || 400;
@@ -919,6 +1280,29 @@
     } else check();
   }
 
+  // Text sizes (ANI-602): percent, 80–140, the whole site and one per role; equal to the page's own means no edit
+  function sizeDefault(k) { var d = obj(S.sizeDefaults)[k]; return typeof d === "number" ? d : 100; }
+  function validSize(v) { return typeof v === "number" && v === Math.round(v) && v >= 80 && v <= 140; }
+  function sizeOf(k) { var v = S.readEdits().fonts.sizes[k]; return validSize(v) ? v : sizeDefault(k); }
+  function setSize(k, v) {
+    var e = S.readEdits();
+    if (v === sizeDefault(k)) delete e.fonts.sizes[k]; else e.fonts.sizes[k] = v;
+    S.writeEdits(e);
+    S.applySizes();
+  }
+  function sizeControl(k, label) {
+    var id = "dg-size-" + k, wrap = el("div", { class: "dg-size" + (k === "site" ? " dg-size-site" : "") });
+    wrap.appendChild(el("label", { for: id }, label));
+    var range = el("input", { type: "range", id: id, min: "80", max: "140", step: "5" });
+    var out = el("output", { for: id });
+    var show = function () { var v = sizeOf(k); range.value = String(v); out.textContent = v + "%"; reset.hidden = v === sizeDefault(k); };
+    var reset = button("Reset", { "aria-label": "Reset " + label.toLowerCase() }, function () { setSize(k, sizeDefault(k)); show(); range.focus(); });
+    range.addEventListener("input", function () { setSize(k, +range.value); show(); });
+    wrap.appendChild(range); wrap.appendChild(out); wrap.appendChild(reset);
+    show();
+    return wrap;
+  }
+
   var fontsBox = null;
   function openFonts(box) {
     fontsBox = box;
@@ -936,19 +1320,28 @@
     top.appendChild(button("Pick on page", { title: "Click any text on the page to change its font" }, startPickOnPage));
     top.appendChild(button("Reset fonts", null, function () {
       var e = S.readEdits();
-      e.fonts = { roles: {}, oneOffs: {} };
+      e.fonts = { roles: {}, oneOffs: {}, sizes: e.fonts.sizes };
       S.writeEdits(e);
       S.applyFonts();
       drawRoles("Back to the default fonts.");
     }));
+    top.appendChild(button("Reset sizes", null, function () {
+      var e = S.readEdits();
+      e.fonts.sizes = {};
+      S.writeEdits(e);
+      S.applySizes();
+      drawRoles("Back to the default text sizes.");
+    }));
     box.appendChild(top);
     if (note) box.appendChild(el("p", { class: "sw-hint", role: "status" }, note));
+    box.appendChild(sizeControl("site", "Text size, whole site"));
+    box.appendChild(el("p", { class: "sw-hint" }, "80% to 140%. Phones get half the change, so text stays readable on a small screen."));
     var rows = el("div", { class: "dg-roles" });
     S.roles.forEach(function (r) {
       var p = rolePick(r), row = el("div", { class: "dg-role" });
       var name = el("div", { class: "dg-role-name" });
       name.appendChild(el("b", null, ROLE_INFO[r][0]));
-      name.appendChild(el("span", { class: "dg-role-font" }, p.family + " " + p.weight + (p.isDefault ? " (default)" : "")));
+      name.appendChild(el("span", { class: "dg-role-font" }, p.family + " " + p.weight + (p.follows ? " (same as " + ROLE_INFO[p.follows][0] + ")" : p.isDefault ? " (default)" : "")));
       var sample = el("span", { class: "dg-sample", "aria-hidden": "true" }, "Ag");
       sample.style.fontFamily = "var(--role-" + r + ")";
       sample.style.fontWeight = "var(--weight-" + r + ")";
@@ -961,9 +1354,10 @@
         delete e.fonts.roles[r];
         S.writeEdits(e);
         S.applyFonts();
-        drawRoles(ROLE_INFO[r][0] + " back to " + ROLE_INFO[r][2] + ".");
+        drawRoles(ROLE_INFO[r][0] + " back to " + (r === "banner" ? "the headings' font" : ROLE_INFO[r][2]) + ".");
       }));
       row.appendChild(acts);
+      row.appendChild(sizeControl(r, ROLE_INFO[r][0] + " size"));
       rows.appendChild(row);
     });
     box.appendChild(rows);
@@ -1062,7 +1456,7 @@
       current = target.role ? rolePick(target.role) : {};
       fillWeights();
       drawList();
-      status.textContent = target.role ? label + " back to " + ROLE_INFO[target.role][2] + "." : "Back to its role's font.";
+      status.textContent = target.role ? label + " back to " + (target.role === "banner" ? "the headings' font" : ROLE_INFO[target.role][2]) + "." : "Back to its role's font.";
     }));
     box.appendChild(acts);
     var current = start;
@@ -1122,7 +1516,8 @@
     if (n.closest(".carousel blockquote")) return "quote";
     if (n.closest(".btn, .pillar-name, .carousel .ctrls button")) return "button";
     if (n.closest("nav.primary a, label, .field-label, .rg-month, .carousel figcaption, [data-counter]")) return "label";
-    if (n.closest("h1, h2, h3, h4, .brand, .person .name, .initials")) return "heading";
+    if (n.closest(".hero.bleed h1")) return "banner";
+    if (n.closest("h1, h2, h3, h4, .person .name, .initials")) return "heading";
     return "body";
   }
   var picking = null;
@@ -1177,18 +1572,46 @@
     fontsBox = sw.querySelector(".sw-fonts");
   }
 
-  /* ================= My edits: save, copy, load, reset (BRIEF B1) ================= */
-  var TOP_KEYS = ["schema", "updated", "author", "exportedFrom", "design", "colors", "fonts", "photos", "text", "testimonials", "settings"];
-  function exportObject() {
+  /* ================= My edits: save, copy, load, reset (BRIEF B1; dg-edits/2 since ANI-602) ================= */
+  var SCHEMA = "dg-edits/2", SCHEMAS = ["dg-edits/1", "dg-edits/2"];
+  var TOP_KEYS = ["schema", "updated", "author", "exportedFrom", "design", "colors", "fonts", "photos", "text", "testimonials", "settings", "art", "uploads"];
+  function photoUploadsBesides(slot) { // distinct uploaded photos the other photo spots use
+    var e = S.readEdits(), ids = [];
+    Object.keys(e.photos).forEach(function (k) { var u = obj(e.photos[k]).upload; if (k !== slot && u && ids.indexOf(u) < 0) ids.push(u); });
+    return ids.length;
+  }
+  function uploadIds(e) { // the uploads that photo spots and art slots use: the only ones a file carries
+    var ids = [];
+    Object.keys(obj(e.photos)).forEach(function (k) { var u = obj(e.photos[k]).upload; if (u && ids.indexOf(u) < 0) ids.push(u); });
+    Object.keys(obj(e.art)).forEach(function (k) { var u = obj(e.art[k]).upload; if (u && ids.indexOf(u) < 0) ids.push(u); });
+    return ids;
+  }
+  // Resolves to { data, missing }. With uploads, each picture a spot or art slot uses goes in as base64.
+  function exportObject(withUploads) {
     var e = S.readEdits();
     if (e.author === undefined) {
       var a = window.prompt("Your name, so Anid knows whose edits these are (optional):", "");
       e.author = (a || "").trim().slice(0, 80);
       S.writeEdits(e);
     }
-    var out = { schema: "dg-edits/1", updated: e.updated || nowISO(), author: e.author, exportedFrom: location.pathname, design: S.design() };
-    ["colors", "fonts", "photos", "text", "testimonials", "settings"].forEach(function (k) { if (e[k]) out[k] = e[k]; });
-    return out;
+    var out = { schema: SCHEMA, updated: e.updated || nowISO(), author: e.author, exportedFrom: location.pathname, design: S.design() };
+    ["colors", "fonts", "photos", "text", "testimonials", "settings", "art"].forEach(function (k) { if (e[k]) out[k] = e[k]; });
+    var ids = uploadIds(e);
+    if (!withUploads || !ids.length) return Promise.resolve({ data: out, missing: withUploads ? [] : ids });
+    return Promise.all(ids.map(function (id) {
+      return S.uploads.get(id).then(function (rec) {
+        if (!rec || (rec.kind !== "photo" && rec.kind !== "art") || !(rec.blob instanceof Blob)) return null;
+        return base64Of(rec.blob).then(function (data) { return { id: id, rec: rec, data: data }; });
+      }).catch(function () { return null; });
+    })).then(function (list) {
+      out.uploads = {};
+      var missing = [];
+      list.forEach(function (x, k) {
+        if (!x) { missing.push(ids[k]); return; }
+        out.uploads[x.id] = { kind: x.rec.kind, type: x.rec.blob.type, w: x.rec.w, h: x.rec.h, alt: x.rec.alt || "", added: x.rec.added || "", data: x.data };
+      });
+      return { data: out, missing: missing };
+    });
   }
   function download(name, text) {
     var blob = new Blob([text], { type: "application/json" });
@@ -1200,10 +1623,14 @@
     setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1000);
   }
   function saveFile(isBackup) {
-    var x = exportObject(), name = "dg-edits-" + today() + (isBackup ? "-backup" : "") + ".json";
-    download(name, JSON.stringify(x, null, 2) + "\n");
-    if (!isBackup) S.markExported();
-    return name;
+    return exportObject(true).then(function (x) {
+      var name = "dg-edits-" + today() + (isBackup ? "-backup" : "") + ".json";
+      var text = JSON.stringify(x.data, null, 2) + "\n";
+      download(name, text);
+      if (!isBackup) S.markExported();
+      return { name: name, bytes: text.length, photos: Object.keys(x.data.uploads || {}).length, missing: x.missing.length,
+        over: Math.max(0, Object.keys(x.data.uploads || {}).length - MAX_UPLOADS - S.artSlots.length) };
+    });
   }
   // a short inline question under the My edits buttons
   function ask(text, options) {
@@ -1223,12 +1650,29 @@
     });
   }
   function myEdits(what, from) {
-    if (what === "save") { var n = saveFile(false); S.say("Saved " + n + ". Send it to Anid, or attach it to your dated Notion page."); return; }
+    if (what === "save") {
+      S.say("Saving…");
+      saveFile(false).then(function (r) {
+        var msg = "Saved " + r.name + (r.photos ? " (" + r.photos + (r.photos === 1 ? " picture, " : " pictures, ") + megabytes(r.bytes) + ")" : "") + ". Send it to Anid, or attach it to your dated Notion page.";
+        if (r.bytes > 20e6) msg += " It's over 20 MB, too big for most email: attach it to your Notion page instead.";
+        if (r.over) msg += " It carries more pictures than one file can: the last " + r.over + " won't load. Swap some uploads back for library photos and save again.";
+        if (r.missing) msg += " " + r.missing + (r.missing === 1 ? " uploaded picture is" : " uploaded pictures are") + " no longer in this browser, so the file leaves " + (r.missing === 1 ? "it" : "them") + " out.";
+        S.say(msg, r.bytes > 20e6 || r.missing > 0 || r.over > 0);
+      }, function () { S.say("The file couldn't be made. Try again.", true); });
+      return;
+    }
     if (what === "copy") {
-      var text = JSON.stringify(exportObject(), null, 2);
-      var ok = function () { S.markExported(); S.say("Copied. Paste it into your dated Notion page or an email to Anid."); };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, function () { window.prompt("Copy your edits:", text); ok(); });
-      else { window.prompt("Copy your edits:", text); ok(); }
+      exportObject(false).then(function (x) {
+        var text = JSON.stringify(x.data, null, 2);
+        var n = x.missing.length;
+        var ok = function () {
+          // the copy leaves the pictures out, so spots using an upload (and descriptions) stay "not saved to a file"
+          S.markExported(function (k, v) { return /^alt\./.test(k) || (/^(photos|art)\./.test(k) && v.indexOf('"upload":') >= 0); });
+          S.say(n ? "Copied, without your " + n + " uploaded " + (n === 1 ? "picture" : "pictures") + ": pictures are too large to paste. Use Save my edits to send them." : "Copied. Paste it into your dated Notion page or an email to Anid.", n > 0);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, function () { window.prompt("Copy your edits:", text); ok(); });
+        else { window.prompt("Copy your edits:", text); ok(); }
+      });
       return;
     }
     if (what === "load") { loadFlow(); return; }
@@ -1238,7 +1682,7 @@
     if (!Object.keys(S.flatten(S.readEdits())).length) return Promise.resolve(true);
     return ask(question, ["Download a backup first", "Continue without a backup", "Cancel"]).then(function (k) {
       if (k === 2) return false;
-      if (k === 0) saveFile(true);
+      if (k === 0) return saveFile(true).then(function () { return true; }, function () { return true; });
       return true;
     });
   }
@@ -1262,7 +1706,7 @@
     loadFlow(e.dataTransfer.files[0]);
   });
   function readFile(file) {
-    if (file.size > 2e6) { S.say("That file is too large to be a dg-edits file.", true); return; }
+    if (file.size > MAX_FILE) { S.say("That file is too large to be a dg-edits file.", true); return; }
     var r = new FileReader();
     r.onload = function () {
       var data;
@@ -1272,14 +1716,54 @@
         S.loadJSON(S.BANK_JSON).catch(function () { return null; })]).then(function (ctx) {
         var res = validate(data, { catalog: ctx[0] ? catalogMap : null, manifest: ctx[1], seed: ctx[2] });
         if (res.fatal) { S.say(res.fatal, true); return; }
-        res.edits.updated = nowISO();
-        try { localStorage.setItem("dg-edits-v1", JSON.stringify(res.edits)); } catch (x) { S.say("This browser won't store the edits.", true); return; }
-        try { localStorage.setItem("dg-edits-exported", JSON.stringify(S.flatten(res.edits))); } catch (x) {}
-        try { sessionStorage.setItem("dg-load-report", JSON.stringify({ name: file.name, skipped: res.skipped, count: Object.keys(S.flatten(res.edits)).length })); } catch (x) {}
-        location.reload();
-      });
+        return settleUploads(res).then(function () {
+          res.edits.updated = nowISO();
+          try { localStorage.setItem("dg-edits-v1", JSON.stringify(res.edits)); } catch (x) { S.say("This browser won't store the edits.", true); return; }
+          try { localStorage.setItem("dg-edits-exported", JSON.stringify(S.flatten(res.edits))); } catch (x) {}
+          try { sessionStorage.setItem("dg-load-report", JSON.stringify({ name: file.name, skipped: res.skipped, count: Object.keys(S.flatten(res.edits)).length })); } catch (x) {}
+          location.reload();
+        });
+      }).catch(function () { S.say("That file couldn't be read. Nothing changed.", true); });
     };
     r.readAsText(file);
+  }
+  // After validate(): each photo in the file is decoded once more (a real picture, within the size limits) and stored
+  // in this browser; a spot whose photo or art isn't here afterwards is skipped and listed.
+  function settleUploads(res) {
+    var ids = Object.keys(res.uploads);
+    var stored = {};
+    return ids.reduce(function (chain, id) {
+      return chain.then(function () {
+        var u = res.uploads[id], blob = new Blob([u.bytes], { type: u.type }), edge = u.kind === "art" ? ART_EDGE : PHOTO_EDGE;
+        return loadImage(blob).then(function (img) {
+          if (img.naturalWidth > edge + 48 || img.naturalHeight > edge + 48) throw userError("it's larger than " + edge + " px");
+          return img;
+        }, function () { throw userError("it isn't a picture this browser can read"); }).then(function (img) {
+          var rec = { id: id, kind: u.kind, blob: blob, type: u.type, w: img.naturalWidth, h: img.naturalHeight, alt: u.alt, added: u.added || nowISO() };
+          if (u.kind === "art") rec.orig = blob; // the two art options re-run on the picture as it arrived
+          return S.uploads.put(rec).catch(function (err) { throw userError(S.uploads.problem(err)); });
+        }).then(function () { stored[id] = u.kind; }, function (err) {
+          res.skipped.push("uploaded " + (u.kind === "art" ? "art " : "photo ") + id + ": " + (err && err.user ? err.user : "it couldn't be stored"));
+        });
+      });
+    }, Promise.resolve()).then(function () {
+      var e = res.edits;
+      var checks = [];
+      Object.keys(e.photos).forEach(function (slot) {
+        var id = e.photos[slot].upload;
+        if (!id || stored[id] === "photo") return;
+        checks.push(S.uploads.get(id).then(function (rec) { return rec && rec.kind === "photo"; }, function () { return false; }).then(function (ok) {
+          if (!ok) { delete e.photos[slot]; res.skipped.push("photo " + slot + ": its uploaded photo isn't in the file or in this browser"); }
+        }));
+      });
+      Object.keys(e.art).forEach(function (slot) {
+        if (stored[e.art[slot].upload] === "art") return;
+        checks.push(S.uploads.get(e.art[slot].upload).then(function (rec) { return rec && rec.kind === "art"; }, function () { return false; }).then(function (ok) {
+          if (!ok) { delete e.art[slot]; res.skipped.push(ART_NAMES[slot] + ": its picture isn't in the file or in this browser"); }
+        }));
+      });
+      return Promise.all(checks);
+    });
   }
   // shown once after the reload that follows Load edits
   (function () {
@@ -1300,7 +1784,7 @@
   })();
 
   function resetFlow() {
-    var opts = ["Reset text on this page", "Reset fonts", "Reset photos", "Reset testimonials", "Reset colors", "Reset site settings", "Reset everything…", "Cancel"];
+    var opts = ["Reset text on this page", "Reset fonts and sizes", "Reset photos and art", "Reset testimonials", "Reset colors", "Reset site settings", "Reset everything…", "Cancel"];
     ask("What should go back to the page's own version?", opts).then(function (k) {
       var e = S.readEdits();
       if (k === 0) {
@@ -1314,18 +1798,22 @@
         });
         S.writeEdits(e);
         S.say(n ? "Text on this page is back to the page's own (" + n + (n === 1 ? " change" : " changes") + " removed)." : "No text edits on this page.");
-      } else if (k === 1) { e.fonts = { roles: {}, oneOffs: {} }; S.writeEdits(e); S.applyFonts(); if (fontsBox) drawRoles(); S.say("Fonts are back to the defaults."); }
-      else if (k === 2) { e.photos = {}; S.writeEdits(e); S.applyPhotoEdits(); S.say("Photos are back to the page's own."); }
+      } else if (k === 1) { e.fonts = { roles: {}, oneOffs: {}, sizes: {} }; S.writeEdits(e); S.applyFonts(); S.applySizes(); if (fontsBox) drawRoles(); S.say("Fonts and text sizes are back to the defaults."); }
+      else if (k === 2) {
+        Object.keys(e.art).forEach(function (a) { var u = obj(e.art[a]).upload; if (u) S.uploads.remove(u).catch(function () {}); });
+        e.photos = {}; e.art = {}; S.writeEdits(e); S.applyPhotoEdits(); if (S.applyArt) S.applyArt();
+        S.say("Photos and art are back to the page's own. Your uploaded photos stay under Change photo, Your uploads, until you delete them.");
+      }
       else if (k === 3) { delete e.testimonials; S.writeEdits(e); S.renderBank(); showBankNotes(); S.say("Testimonials are back to DG's bank."); }
       else if (k === 4) { e.colors = {}; S.writeEdits(e); S.applyColorEdits(); S.say("Colors are back to each version's own, in all five designs."); }
       else if (k === 5) { e.settings = {}; S.writeEdits(e); S.refreshSwitches(); S.say("Site settings are back to their defaults."); }
       else if (k === 6) {
-        withBackup("Reset everything removes all your edits in this browser: text on every page, fonts, photos, testimonials, colors and settings.").then(function (go) {
+        withBackup("Reset everything removes all your edits in this browser: text on every page, fonts and sizes, photos (your uploads too) and art, testimonials, colors and settings.").then(function (go) {
           if (!go) return;
           ask("Reset everything? This can't be undone.", ["Reset everything", "Cancel"]).then(function (c) {
             if (c !== 0) return;
             try { localStorage.removeItem("dg-edits-v1"); localStorage.removeItem("dg-edits-exported"); } catch (x) {}
-            location.reload();
+            S.uploads.clear().catch(function () {}).then(function () { location.reload(); });
           });
         });
       }
@@ -1335,11 +1823,12 @@
   /* ---------- Load edits: the file is untrusted (BRIEF B1, research/13 §6). Valid parts load; everything else is
      skipped and listed; nothing is ever rendered as markup. ---------- */
   var HEX = /^#[0-9a-f]{6}$/i, KEY = /^[a-z0-9-]+(\.[a-z0-9-]+)+$/, ID = /^[a-z0-9][a-z0-9-]{0,80}$/i;
-  var SETTING_VALUES = { impactPage: ["off", "on"], missionVariant: ["text", "photo"] };
+  var SETTING_VALUES = { impactPage: ["off", "on"], missionVariant: ["text", "photo"], topBar: ["white", "clear"], pillarOrder: S.pillarOrders || ["practice-sangha-dana"] };
   function validate(data, ctx) {
-    var skipped = [], out = { schema: "dg-edits/1", colors: {}, fonts: { roles: {}, oneOffs: {} }, photos: {}, text: {}, testimonials: {}, settings: {} };
+    var skipped = [], out = { schema: SCHEMA, colors: {}, fonts: { roles: {}, oneOffs: {}, sizes: {} }, photos: {}, text: {}, testimonials: {}, settings: {}, art: {} };
+    var ups = {};
     data = obj(data);
-    if (data.schema !== "dg-edits/1") return { fatal: "That file isn't a dg-edits/1 file, so nothing was loaded." };
+    if (SCHEMAS.indexOf(data.schema) < 0) return { fatal: "That file isn't a dg-edits file (dg-edits/1 or /2), so nothing was loaded." };
     Object.keys(data).forEach(function (k) { if (TOP_KEYS.indexOf(k) < 0) skipped.push("unknown part “" + k.slice(0, 40) + "”"); });
     if (typeof data.author === "string") out.author = data.author.slice(0, 80);
     // colors
@@ -1358,7 +1847,7 @@
     var checkFont = function (label, p) {
       p = obj(p);
       if (!ctx.catalog) { skipped.push(label + ": the font list couldn't load to check it"); return null; }
-      var fam = ctx.catalog[p.family];
+      var fam = typeof p.family === "string" && Object.prototype.hasOwnProperty.call(ctx.catalog, p.family) ? ctx.catalog[p.family] : null;
       if (!fam) { skipped.push(label + ": “" + String(p.family).slice(0, 40) + "” isn't in the font list"); return null; }
       if (fam.weights.indexOf(p.weight) < 0) { skipped.push(label + ": " + fam.family + " has no weight " + String(p.weight).slice(0, 6)); return null; }
       return { family: fam.family, weight: p.weight, weights: fam.weights.slice() };
@@ -1373,15 +1862,54 @@
       var p = checkFont("one-off font " + k, fonts.oneOffs[k]);
       if (p) out.fonts.oneOffs[k] = p;
     });
-    // photos
+    Object.keys(obj(fonts.sizes)).forEach(function (k) {
+      var v = fonts.sizes[k];
+      if (S.sizeKeys.indexOf(k) < 0) skipped.push("text size “" + k.slice(0, 20) + "”: not a role");
+      else if (!validSize(v)) skipped.push("text size " + k + ": must be a whole number from 80 to 140 (percent)");
+      else out.fonts.sizes[k] = v;
+    });
+    // uploaded photos and art (dg-edits/2): checked here by type, size and first bytes, then decoded once more on load
+    var nUp = 0;
+    Object.keys(obj(data.uploads)).forEach(function (id) {
+      var u = obj(data.uploads[id]), kind = u.kind === "art" ? "art" : "photo", label = "uploaded " + kind + " " + id.slice(0, 44);
+      if (!UP_ID.test(id)) { skipped.push("uploaded picture: bad id"); return; }
+      if (++nUp > MAX_UPLOADS + S.artSlots.length) { skipped.push(label + ": too many pictures in one file"); return; }
+      if (!UPLOAD_TYPES[u.type]) { skipped.push(label + ": only JPEG, PNG or WebP"); return; }
+      var bytes = bytesOf(u.data);
+      if (!bytes) { skipped.push(label + ": the picture data is damaged or larger than " + megabytes(MAX_UPLOAD)); return; }
+      if (bytes.length > MAX_UPLOAD) { skipped.push(label + ": larger than " + megabytes(MAX_UPLOAD)); return; }
+      if (sniff(bytes) !== u.type) { skipped.push(label + ": the data isn't a " + UPLOAD_TYPES[u.type] + " picture"); return; }
+      var alt = typeof u.alt === "string" ? S.normalize(u.alt).replace(/\n/g, " ") : "";
+      if (alt && (textProblem(alt) || alt.length > 300)) { skipped.push(label + ": its description " + (textProblem(alt) || "is longer than 300 characters") + ", so it's left out"); alt = ""; }
+      ups[id] = { kind: kind, type: u.type, bytes: bytes, alt: alt, added: typeof u.added === "string" ? u.added.slice(0, 40) : "" };
+    });
+    // photos: a library photo, or one of her uploads
+    var checkFocal = function (slot, p) {
+      var f = obj(p.focal);
+      if (typeof f.x !== "number" || typeof f.y !== "number" || f.x < 0 || f.x > 1 || f.y < 0 || f.y > 1) { skipped.push("photo " + slot + ": focal point outside the photo"); return null; }
+      if (p.fit !== undefined && p.fit !== "cover" && p.fit !== "contain") { skipped.push("photo " + slot + ": fit must be cover or contain"); return null; }
+      return { focal: { x: f.x, y: f.y }, fit: p.fit === "contain" ? "contain" : "cover" };
+    };
     Object.keys(obj(data.photos)).forEach(function (slot) {
-      var p = obj(data.photos[slot]), f = obj(p.focal);
+      var p = obj(data.photos[slot]), ff;
       if (!KEY.test(slot)) { skipped.push("photo: bad spot name"); return; }
+      if (p.upload !== undefined) {
+        if (typeof p.upload !== "string" || !UP_ID.test(p.upload) || p.photo !== undefined) { skipped.push("photo " + slot + ": bad upload name"); return; }
+        if (!(ff = checkFocal(slot, p))) return;
+        out.photos[slot] = { upload: p.upload, focal: ff.focal, fit: ff.fit }; // settleUploads() checks the picture is here
+        return;
+      }
       if (!ctx.manifest) { skipped.push("photo " + slot + ": the photo library couldn't load to check it"); return; }
       if (!arr(ctx.manifest.photos).some(function (x) { return x.id === p.photo; })) { skipped.push("photo " + slot + ": “" + String(p.photo).slice(0, 40) + "” isn't in the library"); return; }
-      if (typeof f.x !== "number" || typeof f.y !== "number" || f.x < 0 || f.x > 1 || f.y < 0 || f.y > 1) { skipped.push("photo " + slot + ": focal point outside the photo"); return; }
-      if (p.fit !== undefined && p.fit !== "cover" && p.fit !== "contain") { skipped.push("photo " + slot + ": fit must be cover or contain"); return; }
-      out.photos[slot] = { photo: p.photo, focal: { x: f.x, y: f.y }, fit: p.fit === "contain" ? "contain" : "cover" };
+      if (!(ff = checkFocal(slot, p))) return;
+      out.photos[slot] = { photo: p.photo, focal: ff.focal, fit: ff.fit };
+    });
+    // art: the uploaded picture each art slot shows (settleUploads() checks it's in the file or this browser)
+    Object.keys(obj(data.art)).forEach(function (slot) {
+      var a = obj(data.art[slot]);
+      if (S.artSlots.indexOf(slot) < 0) { skipped.push("art “" + slot.slice(0, 30) + "”: not an art slot"); return; }
+      if (typeof a.upload !== "string" || !UP_ID.test(a.upload)) { skipped.push("art " + slot + ": bad upload name"); return; }
+      out.art[slot] = { upload: a.upload, trim: a.trim !== false, clear: a.clear !== false };
     });
     // text
     Object.keys(obj(data.text)).forEach(function (k) {
@@ -1455,12 +1983,12 @@
     // settings
     Object.keys(obj(data.settings)).forEach(function (k) {
       var v = data.settings[k];
-      if (!SETTING_VALUES[k]) skipped.push("setting “" + k.slice(0, 30) + "”: unknown");
+      if (!Object.prototype.hasOwnProperty.call(SETTING_VALUES, k)) skipped.push("setting “" + k.slice(0, 30) + "”: unknown");
       else if (SETTING_VALUES[k].indexOf(v) < 0) skipped.push("setting " + k + ": must be " + SETTING_VALUES[k].join(" or "));
       else if (v !== S.settings[k]) out.settings[k] = v;
     });
-    return { edits: out, skipped: skipped };
+    return { edits: out, skipped: skipped, uploads: ups };
   }
 
-  window.dgEditor = { setEditing: setEditing, myEdits: myEdits, openFonts: openFonts, validate: validate };
+  window.dgEditor = { setEditing: setEditing, myEdits: myEdits, openFonts: openFonts, openArt: openArtDrawer, validate: validate };
 })();

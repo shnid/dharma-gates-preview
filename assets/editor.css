@@ -101,6 +101,19 @@ html.dg-picking, html.dg-picking * { cursor: crosshair !important; }
 .dg-preview-box img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .dg-preview figcaption { margin-top: 4px; color: #5b5b5b; font: 500 12px/1.2 var(--font-ui); }
 
+/* uploads (ANI-602): "Upload your own", her uploads, and the art drawer */
+.dg-upload { display: grid; gap: 6px; padding: 10px 12px; border: 1px dashed #b8b8b8; border-radius: 10px; background: #fafafa; }
+.dg-upload .dg-btn { justify-self: start; }
+.dg-upload .dg-warn:empty { display: none; }
+.dg-mine { display: grid; gap: 8px; }
+.dg-mine:empty { display: none; }
+.dg-mine-cell { display: grid; gap: 4px; }
+.dg-btn.dg-mini { justify-self: start; padding: 3px 9px; min-height: 26px; font-size: 12px; font-weight: 500; }
+.dg-art-stage { display: grid; place-items: center; min-height: 160px; padding: 12px; border: 1px solid #d9d9d9; border-radius: 10px;
+  background: repeating-conic-gradient(#ececec 0 25%, #fff 0 50%) 0 0 / 16px 16px; }  /* a checkerboard shows what's see-through */
+.dg-art-stage img { display: block; max-width: 100%; max-height: 240px; width: auto; height: auto; }
+.dg-art-opts { display: grid; gap: 6px; }
+
 /* testimonial bank */
 .dg-bank { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .dg-quote { margin: 0; padding: 10px 12px; border: 1px solid #d9d9d9; border-radius: 10px; display: grid; gap: 6px; background: #fff; }
@@ -136,6 +149,15 @@ html.dg-picking, html.dg-picking * { cursor: crosshair !important; }
 .switcher .dg-fontlist .dg-font[aria-selected="true"] { background: #1d1d1d; color: #fff; }
 .switcher .dg-fontlist .dg-font[aria-selected="true"] small { color: #e0e0e0; }
 .switcher .dg-warn { color: #8a4b00; font-weight: 600; }
+/* text sizes (ANI-602): one slider for the whole site, one under each role */
+.switcher .dg-size { display: grid; grid-template-columns: minmax(0, auto) minmax(90px, 1fr) 3.2em auto; align-items: center; gap: 6px; }
+.switcher .dg-role > .dg-size { grid-column: 1 / -1; padding-left: 48px; }
+.switcher .dg-size label { color: #333; font-weight: 500; }
+.switcher .dg-size-site { margin: 8px 0 2px; }
+.switcher .dg-size-site label { font-weight: 600; color: #1d1d1d; }
+.switcher .dg-size input[type="range"] { width: 100%; accent-color: #1d1d1d; }
+.switcher .dg-size output { font-variant-numeric: tabular-nums; text-align: right; color: #1d1d1d; }
+.switcher .dg-size button { border: 1px solid #ccc; font-weight: 500; padding: 3px 8px; }
 
 /* My edits: the inline question, the load report, dropping a file on the switcher */
 .switcher .dg-ask { display: grid; gap: 6px; padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 10px; background: #fafafa; }

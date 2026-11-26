@@ -9,6 +9,7 @@
 <meta name="description" content="Dharma Gates is a 501(c)(3) nonprofit dedicated to opening pathways into deep meditation training for young adults (18–35), offered on a donation basis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link data-my-edits="fonts" href="https://fonts.googleapis.com/css2?family=EB%20Garamond:wght@400;500;600;700;800&family=IM%20Fell%20English:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <!-- before the first paint: the design version, switcher states and the colors and fonts from "my edits", so nothing flashes -->
 <script src="assets/boot.js"></script>
@@ -16,8 +17,8 @@
 <body data-page="index.html" data-nav="a">
 <main id="main">
 
-<!-- HERO · full-bleed media with text on top + scroll cue (The Returning). The header overlays it, transparent until
-     the page scrolls. The still photo is the fallback; a muted ~5s loop from Lyndsey's fundraiser video fades in over it
+<!-- HERO · full-bleed media with text on top + scroll cue (The Returning). It starts below the white top bar (with the
+     switcher's see-through top bar, the header overlays it, transparent until the page scrolls). The still photo is the fallback; a muted ~5s loop from Lyndsey's fundraiser video fades in over it
      once the page has loaded (site.js). -->
 <section class="hero bleed">
   <div data-photo-slot="home.hero" data-aspect-desktop="1440/868" data-aspect-phone="390/812" class="media">
@@ -29,8 +30,7 @@
   </div>
   <div class="wrap">
     <h1 data-edit="home.hero.title">Opening Buddhist Traditions to the Next Generation</h1>
-    <p data-edit="home.hero.lead" class="lead">We connect young practitioners to Buddhist teachers and practice centers, and remove the conceptual, logistical, and financial barriers that keep people from accessing deep meditation practice.</p>
-    <p class="dg-note">Lyndsey is rewording this blurb. The removed tag said “donation-based” and “ages 18–35”, which help search and tell newcomers and donors who DG is for. Should the blurb keep them?</p>
+    <p data-edit="home.hero.lead" class="lead">We connect young adult practitioners aged 18-35 with authorized teachers and practice centers across Buddhist lineages, helping them find a style of practice that resonates with them. Through our multi-day and single-day retreats, online workshops, and monastic advising, we provide a welcoming entry point into Buddhism for young meditators. Everything we do is offered by-donation.</p>
     <div class="cta-row">
       <a data-edit="home.hero.button.1" class="btn" href="retreats.html">See Upcoming Retreats</a>
       <a data-edit="home.hero.button.2" class="btn ghost" href="monastic-advising.html">Monastic Advising</a>
@@ -44,9 +44,9 @@
 <section id="mission" class="mission band-calm" data-variant="text">
   <div class="wrap">
     <div class="mission-text">
-      <h2 data-edit="home.mission.title">A Non-Profit Dedicated to Deep Buddhist Practice Rooted in Lineage, Run by Young Adults, for Young Adults</h2>
-      <p data-edit="home.mission.body">Dharma Gates is a grassroots nonprofit dedicated to opening pathways into formal meditation practice for young adults 18–35. We connect young practitioners to a variety of Buddhist teachers and practice centers, working to eliminate conceptual, logistical, and financial barriers to practice.</p>
-      <p class="dg-note">DG’s homepage now says “501(c)(3) nonprofit” where this says “grassroots nonprofit”. Which should it say? Lyndsey may send a group photo for the photo version. Once DG’s logo is final, it can sit with this statement (10/22).</p>
+      <h2 data-edit="home.mission.title">Introducing Young Adults to Deep Buddhist Practice</h2>
+      <p data-edit="home.mission.body">Dharma Gates is a 501(c)(3) nonprofit run by young adults, for young adults. We organize multi-day meditation retreats, daylong programs, and advising for young practitioners considering monastic life. Our partners include authorized teachers and centers across Buddhist lineages, so participants can find the tradition that fits them. Every program is offered on a donation basis, so cost is never the reason a young person can't attend.</p>
+      <p class="dg-note">For the photo version (switcher: Mission, Photo), DG can pick a group photo with Change photo.</p>
     </div>
     <figure data-photo-slot="home.mission" data-aspect-desktop="4/3" data-aspect-phone="4/3" class="mission-photo frame" style="--focus: 40% 30%"><img src="assets/img/gassho-closeup-1280.jpg" srcset="assets/img/gassho-closeup-640.jpg 640w, assets/img/gassho-closeup-1280.jpg 1280w, assets/img/gassho-closeup.jpg 1920w" sizes="(min-width: 1024px) 560px, 100vw" width="1280" height="960" loading="lazy" alt="A retreat participant smiling with palms joined, others kneeling on cushions behind"></figure>
   </div>
@@ -63,29 +63,31 @@
   </div>
 </section>
 
-<!-- PILLARS · Deep Practice, Sangha, Dana (R13): three plain geometric arcs, placeholder art only. The names are the
-     tab buttons; each arc acts as its name's button (site.js). Without scripts the three show side by side. -->
+<!-- PILLARS · Deep Practice, Sangha, Dana (R13; round 3): DG's three-stroke brushstroke circle, one stroke per pillar at
+     12, 4 and 8 o'clock (the switcher's Pillar wheel setting picks which goes where). The names are the tab buttons; each
+     stroke acts as its name's button (site.js). Without scripts the three show side by side. -->
 <section id="pillars">
   <div class="wrap">
     <h2 data-edit="home.pillars.title">Our Three Pillars</h2>
-    <p class="dg-note">Placeholder copy and art: Lyndsey is writing the pillar copy; where the pillars link is a team question (DECISIONS #66).</p>
+    <p class="dg-note">DG to decide where each pillar links, if anywhere.</p>
     <div class="pillars" data-pillars>
       <div class="pillar-nav">
-        <svg class="pillar-arcs" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
-          <g data-for="pillar-tab-practice"><path class="halo" d="M27.50 133.81A80 80 0 0 1 93.03 20.30"/><path class="arc" d="M27.50 133.81A80 80 0 0 1 93.03 20.30"/><path class="hit" d="M27.50 133.81A80 80 0 0 1 93.03 20.30"/></g>
-          <g data-for="pillar-tab-sangha"><path class="halo" d="M106.97 20.30A80 80 0 0 1 172.50 133.81"/><path class="arc" d="M106.97 20.30A80 80 0 0 1 172.50 133.81"/><path class="hit" d="M106.97 20.30A80 80 0 0 1 172.50 133.81"/></g>
-          <g data-for="pillar-tab-dana"><path class="halo" d="M165.53 145.89A80 80 0 0 1 34.47 145.89"/><path class="arc" d="M165.53 145.89A80 80 0 0 1 34.47 145.89"/><path class="hit" d="M165.53 145.89A80 80 0 0 1 34.47 145.89"/></g>
+        <svg class="pillar-wheel" viewBox="0 0 966 918" aria-hidden="true" focusable="false">
+          <defs><mask id="pw-ink" maskUnits="userSpaceOnUse" x="0" y="0" width="966" height="918" style="mask-type: alpha"><image href="assets/img/brand/pillars-brushstroke.svg" width="966" height="918"/></mask><clipPath id="pw-clip-top"><path d="M483 459L-152.7 121.0A720 720 0 0 1 1076.4 51.2Z"/></clipPath><clipPath id="pw-clip-right"><path d="M483 459L1076.4 51.2A720 720 0 0 1 533.2 1177.2Z"/></clipPath><clipPath id="pw-clip-left"><path d="M483 459L533.2 1177.2A720 720 0 0 1 -152.7 121.0Z"/></clipPath></defs>
+          <g class="pw-sector" data-sector="top" data-for="pillar-tab-practice"><rect class="pw-ink" width="966" height="918" mask="url(#pw-ink)" clip-path="url(#pw-clip-top)"/><path class="hit" d="M6.2 205.5A540 540 0 0 1 928.0 153.1L722.0 294.7A290 290 0 0 0 226.9 322.9Z"/></g>
+          <g class="pw-sector" data-sector="right" data-for="pillar-tab-sangha"><rect class="pw-ink" width="966" height="918" mask="url(#pw-ink)" clip-path="url(#pw-clip-right)"/><path class="hit" d="M928.0 153.1A540 540 0 0 1 520.7 997.7L503.2 748.3A290 290 0 0 0 722.0 294.7Z"/></g>
+          <g class="pw-sector" data-sector="left" data-for="pillar-tab-dana"><rect class="pw-ink" width="966" height="918" mask="url(#pw-ink)" clip-path="url(#pw-clip-left)"/><path class="hit" d="M520.7 997.7A540 540 0 0 1 6.2 205.5L226.9 322.9A290 290 0 0 0 503.2 748.3Z"/></g>
         </svg>
         <div class="pillar-tabs" role="tablist" aria-label="Our three pillars">
-          <button data-edit="home.pillars.1.name" type="button" class="pillar-name" role="tab" id="pillar-tab-practice" aria-controls="pillar-practice" aria-selected="true" data-pos="upper-left">Deep Practice</button>
-          <button data-edit="home.pillars.2.name" type="button" class="pillar-name" role="tab" id="pillar-tab-sangha" aria-controls="pillar-sangha" aria-selected="false" tabindex="-1" data-pos="upper-right">Sangha</button>
-          <button data-edit="home.pillars.3.name" type="button" class="pillar-name" role="tab" id="pillar-tab-dana" aria-controls="pillar-dana" aria-selected="false" tabindex="-1" data-pos="bottom">Dana</button>
+          <button data-edit="home.pillars.1.name" type="button" class="pillar-name" role="tab" id="pillar-tab-practice" aria-controls="pillar-practice" aria-selected="true" data-pos="top">Deep Practice</button>
+          <button data-edit="home.pillars.2.name" type="button" class="pillar-name" role="tab" id="pillar-tab-sangha" aria-controls="pillar-sangha" aria-selected="false" tabindex="-1" data-pos="right">Sangha</button>
+          <button data-edit="home.pillars.3.name" type="button" class="pillar-name" role="tab" id="pillar-tab-dana" aria-controls="pillar-dana" aria-selected="false" tabindex="-1" data-pos="left">Dana</button>
         </div>
       </div>
       <div class="pillar-panels">
         <div class="pillar-panel is-shown" role="tabpanel" id="pillar-practice" aria-labelledby="pillar-tab-practice" tabindex="0">
           <h3 data-edit="home.pillars.1.title">Deep Practice</h3>
-          <p data-edit="home.pillars.1.body">Dharma Gates offers young adults (18–35) a range of immersive introductory experiences to meditation practice in a variety of Buddhist traditions. The teachers we collaborate with are highly experienced and are authorized within their lineage to teach.</p>
+          <p data-edit="home.pillars.1.body">Dharma Gates offers young adults ages 18–35 immersive, introductory meditation retreats in a range of Buddhist traditions. Every teacher we work with is highly experienced and authorized to teach within their lineage, so newcomers can begin deep practice with guidance they can trust.</p>
           <div class="pillar-photos">
             <figure data-photo-slot="home.pillars.1.photo.1" data-aspect-desktop="1/1" data-aspect-phone="1/1" class="frame" style="--focus: 50% 55%"><img src="assets/img/circle-hall-640.jpg" srcset="assets/img/circle-hall-640.jpg 640w, assets/img/circle-hall-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Retreat participants seated in a circle on cushions in a meditation hall"></figure>
             <figure data-photo-slot="home.pillars.1.photo.2" data-aspect-desktop="1/1" data-aspect-phone="1/1" class="frame" style="--focus: 50% 55%"><img src="assets/img/sitting-temple-garden-640.jpg" srcset="assets/img/sitting-temple-garden-640.jpg 640w, assets/img/sitting-temple-garden-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Rows of young adults meditating outdoors on mats in a temple garden"></figure>
@@ -93,7 +95,7 @@
         </div>
         <div class="pillar-panel" role="tabpanel" id="pillar-sangha" aria-labelledby="pillar-tab-sangha" tabindex="0">
           <h3 data-edit="home.pillars.2.title">Sangha</h3>
-          <p data-edit="home.pillars.2.body">The Buddha famously said that "good friends, companions, and associates are the whole of the spiritual life," and we take that to heart. The cultivation of young adult sangha is an important aspect of our mission. In addition to our in-person young adult retreats, we also offer retreat reunion calls, single-day events, a WhatsApp group chat, and informal community-building meetups.</p>
+          <p data-edit="home.pillars.2.body">Sangha is the Buddhist word for a community of practitioners. The Buddha taught that good friends, companions, and associates are the whole of the spiritual life, and Dharma Gates builds young adult sangha with that teaching in mind. Between in-person retreats, we host retreat reunion calls, single-day events, informal meetups, and a community WhatsApp group so that practitioners stay connected.</p>
           <div class="pillar-photos">
             <figure data-photo-slot="home.pillars.2.photo.1" data-aspect-desktop="1/1" data-aspect-phone="1/1" class="frame" style="--focus: 50% 52%"><img src="assets/img/porch-table-640.jpg" srcset="assets/img/porch-table-640.jpg 480w, assets/img/porch-table-1280.jpg 960w" sizes="(min-width: 1024px) 330px, 50vw" width="480" height="640" loading="lazy" alt="Retreat participants smiling around a long table on a covered porch"></figure>
             <figure data-photo-slot="home.pillars.2.photo.2" data-aspect-desktop="1/1" data-aspect-phone="1/1" class="frame" style="--focus: 50% 28%"><img src="assets/img/three-sitters-lawn-640.jpg" srcset="assets/img/three-sitters-lawn-640.jpg 640w, assets/img/three-sitters-lawn-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Three young practitioners in Zen T-shirts sitting cross-legged on a lawn, smiling"></figure>
@@ -101,7 +103,7 @@
         </div>
         <div class="pillar-panel" role="tabpanel" id="pillar-dana" aria-labelledby="pillar-tab-dana" tabindex="0">
           <h3 data-edit="home.pillars.3.title">Dana</h3>
-          <p data-edit="home.pillars.3.body">In an effort to support accessibility, all of our events are offered in the spirit of dana, or generosity.</p>
+          <p data-edit="home.pillars.3.body">Dana is the Pali word for generosity. Dharma Gates offers every retreat and event on a dana basis, with no required fee, so that young adults can attend regardless of income.</p>
           <div class="pillar-photos">
             <figure data-photo-slot="home.pillars.3.photo.1" data-aspect-desktop="1/1" data-aspect-phone="1/1" class="frame" style="--focus: 50% 47%"><img src="assets/img/group-hillside-640.jpg" srcset="assets/img/group-hillside-640.jpg 640w, assets/img/group-hillside-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="A group of retreat participants and a monk gathered on a green hillside"></figure>
             <figure data-photo-slot="home.pillars.3.photo.2" data-aspect-desktop="1/1" data-aspect-phone="1/1" class="frame" style="--focus: 50% 55%"><img src="assets/img/group-hall-monastics-640.jpg" srcset="assets/img/group-hall-monastics-640.jpg 640w, assets/img/group-hall-monastics-1280.jpg 1280w" sizes="(min-width: 1024px) 330px, 50vw" width="640" height="480" loading="lazy" alt="Retreat participants with palms joined beside monastic teachers in a meditation hall"></figure>
@@ -115,7 +117,7 @@
 <!-- IMPACT · a dark textured strip; the real numbers are in the HTML and count up on scroll (site.js) -->
 <section data-photo-slot="home.impact.bg" data-aspect-desktop="1440/461" data-aspect-phone="65/96" data-photo-kind="background" id="impact" class="dark bg-forest band-compact">
   <div class="wrap">
-    <h2 data-edit="home.impact.title">So Far, Dharma Gates Has…</h2>
+    <h2 data-edit="home.impact.title">Our Impact Since 2019</h2>
     <div class="stats">
       <div class="stat"><b data-edit="home.impact.1.number" data-count>2,000+</b><span data-edit="home.impact.1.label">young adults given the opportunity to practice meditation</span></div>
       <div class="stat"><b data-edit="home.impact.2.number" data-count>39</b><span data-edit="home.impact.2.label">multi-day retreats organized and hosted</span></div>
@@ -175,16 +177,16 @@
         <p data-edit="home.faq.2.a">Dharma Gates believes in creating the most welcoming environment possible to invite young adults into deep practice. That means designing spaces where young people can practice among peers who share similar life questions and concerns as them.</p>
       </details>
       <details>
-        <summary data-edit="home.faq.3.q">I'm looking for an affordable meditation retreat. Where can I find one?</summary>
-        <p><span data-edit="home.faq.3.a.1">All meditation retreats run by Dharma Gates are entirely donation-based. The mission of Dharma Gates is to create financially-accessible, high quality meditation offerings for young adults 18-35. All retreats and programs by Dharma Gates are offered by</span> <em data-edit="home.faq.3.a.2">dana</em><span data-edit="home.faq.3.a.3">, which is a Pali word for generosity. For more information about our dana-culture,</span> <a data-edit="home.faq.3.a.4" href="about.html#dana">click here.</a></p>
+        <summary data-edit="home.faq.3.q">How much does a Dharma Gates retreat cost?</summary>
+        <p><span data-edit="home.faq.3.a.1">All meditation retreats run by Dharma Gates are entirely donation-based, with no required fee. The mission of Dharma Gates is to create financially-accessible, high quality meditation offerings for young adults 18-35. All retreats and programs by Dharma Gates are offered by</span> <em data-edit="home.faq.3.a.2">dana</em><span data-edit="home.faq.3.a.3">, which is a Pali word for generosity. For more information about our dana-culture,</span> <a data-edit="home.faq.3.a.4" href="about.html#dana">click here.</a></p>
       </details>
       <details>
         <summary data-edit="home.faq.4.q">Is Dharma Gates affiliated with a particular teacher, lineage, or tradition?</summary>
-        <p data-edit="home.faq.4.a">Dharma Gates is a Buddhist organization, but is not affiliated with one particular teacher, lineage, or specific Buddhist tradition. The Advisory Board of Dharma Gates is comprised of teachers from a number of different branches of Buddhism, and meditation retreats are offered within a variety of Buddhist styles and lineages to allow our participants to discover what works best for them.</p>
+        <p data-edit="home.faq.4.a">No, Dharma Gates is a Buddhist organization, but is not affiliated with one particular teacher, lineage, or specific Buddhist tradition. The Advisory Board of Dharma Gates is comprised of teachers from a number of different branches of Buddhism, and meditation retreats are offered within a variety of Buddhist styles and lineages to allow our participants to discover what works best for them.</p>
       </details>
       <details>
         <summary data-edit="home.faq.5.q">Do I need to be Buddhist to go on a meditation retreat with Dharma Gates?</summary>
-        <p data-edit="home.faq.5.a">Although all Dharma Gates retreats are run by Buddhist teachers, participants do not need to identify as Buddhist to attend retreat. Dharma Gates welcomes young adult practitioners from all backgrounds and walks of life.</p>
+        <p data-edit="home.faq.5.a">Absolutely not! Although all Dharma Gates retreats are run by Buddhist teachers, participants do not need to identify as Buddhist to attend retreat. Dharma Gates welcomes young adult practitioners from all backgrounds and walks of life.</p>
       </details>
       <details>
         <summary data-edit="home.faq.6.q">I’ve never attended a meditation retreat before. What’s it like?</summary>

@@ -6,13 +6,17 @@
   var h = document.documentElement;
   // Site settings: the defaults for anyone who hasn't changed them. Changes are stored in "my edits" and exported;
   // tools/apply_edits.py rewrites this line when Anid applies them.
-  var SETTINGS = { impactPage: "off", missionVariant: "text" };
+  var SETTINGS = { impactPage: "off", missionVariant: "text", topBar: "white", pillarOrder: "practice-sangha-dana" };
   // Each font role's default family and weight (site.css sets the same in its role tokens), and the families every page
   // already loads with their weights (the Google Fonts <link>s in each page's head). tools/apply_edits.py rewrites
   // these two lines when Anid applies font edits, so the editor's "default" always matches the page.
-  var ROLE_DEFAULTS = { heading: ["Fraunces", 500], body: ["Inter", 400], quote: ["Fraunces", 400], number: ["Fraunces", 500], label: ["Inter", 500], button: ["Inter", 600] };
-  var BASE_FONTS = { "Fraunces": [400, 500], "Inter": [400, 500, 600] };
-  var ROLES = ["heading", "body", "quote", "number", "label", "button"];
+  var ROLE_DEFAULTS = { heading: ["IM Fell English", 400], body: ["EB Garamond", 400], quote: ["IM Fell English", 400], number: ["EB Garamond", 400], label: ["EB Garamond", 500], button: ["EB Garamond", 700] };
+  var BASE_FONTS = { "EB Garamond": [400, 500, 600, 700, 800], "Fraunces": [400, 500], "IM Fell English": [400], "Inter": [400, 500, 600] };
+  // "banner" is Home's banner title (ANI-546). It has no default of its own: until it's picked it follows "heading".
+  var ROLES = ["heading", "banner", "body", "quote", "number", "label", "button"];
+  // Text sizes in percent: the whole site, then each role (site.css's --size-* tokens hold the same). tools/apply_edits.py
+  // rewrites this line when Anid applies size edits, so the editor's "default" always matches the page.
+  var SIZE_DEFAULTS = { site: 100, heading: 100, banner: 100, body: 100, quote: 100, number: 100, label: 100, button: 100 };
   var EDITS_KEY = "dg-edits-v1";
 
   function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -22,11 +26,12 @@
     var e;
     try { e = JSON.parse(get(EDITS_KEY) || "{}"); } catch (x) { e = {}; }
     e = obj(e);
-    e.schema = "dg-edits/1";
-    ["colors", "photos", "text", "testimonials", "settings"].forEach(function (k) { e[k] = obj(e[k]); });
+    e.schema = "dg-edits/2";
+    ["colors", "photos", "text", "testimonials", "settings", "art"].forEach(function (k) { e[k] = obj(e[k]); });
     e.fonts = obj(e.fonts);
     e.fonts.roles = obj(e.fonts.roles);
     e.fonts.oneOffs = obj(e.fonts.oneOffs);
+    e.fonts.sizes = obj(e.fonts.sizes);
     return e;
   }
   var edits = readEdits();
@@ -63,7 +68,7 @@
     return values.indexOf(v) > -1 ? v : SETTINGS[name];
   }
 
-  // ?design=, ?impact=, ?mission= and ?measure= pick a starting point; site.js remembers them and tidies the address bar
+  // ?design=, ?impact=, ?mission=, ?topbar= and ?measure= pick a starting point; site.js remembers them and tidies the address bar
   var q;
   try { q = new URLSearchParams(location.search); } catch (x) { q = { get: function () { return null; } }; }
   var d = q.get("design") || get("dg-design-pick");
@@ -73,6 +78,8 @@
   h.setAttribute("data-impact", i === "on" || i === "off" ? i : setting("impactPage", ["off", "on"]));
   var m = q.get("mission");
   h.setAttribute("data-mission", m === "text" || m === "photo" ? m : setting("missionVariant", ["text", "photo"]));
+  var tb = q.get("topbar");
+  h.setAttribute("data-topbar", tb === "white" || tb === "clear" ? tb : setting("topBar", ["white", "clear"]));
   h.setAttribute("data-notes", get("dg-show-notes") === "off" ? "off" : "on");
   var w = q.get("measure") || get("dg-measure");
   h.setAttribute("data-measure", w === "comfortable" ? "comfortable" : "wide");
@@ -131,6 +138,11 @@
     var p = validPick(edits.fonts.oneOffs[k]);
     if (p) addFontLink(p);
   });
+  // Text sizes (ANI-602): percent in "my edits", a multiplier on <html>
+  ["site"].concat(ROLES).forEach(function (k) {
+    var v = edits.fonts.sizes[k];
+    if (typeof v === "number" && v === Math.round(v) && v >= 80 && v <= 140) h.style.setProperty("--size-" + k, String(v / 100));
+  });
 
-  window.dgBoot = { settings: SETTINGS, roles: ROLES, roleDefaults: ROLE_DEFAULTS, edits: edits, fontHref: fontHref, addFontLink: addFontLink, needsLink: needsLink };
+  window.dgBoot = { settings: SETTINGS, roles: ROLES, roleDefaults: ROLE_DEFAULTS, sizeDefaults: SIZE_DEFAULTS, edits: edits, fontHref: fontHref, addFontLink: addFontLink, needsLink: needsLink };
 })();
