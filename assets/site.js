@@ -17,7 +17,7 @@
   function arr(x) { return Array.isArray(x) ? x : []; }
   // ?design=, ?nav=, ?clip=, ?impact=, ?mission=, ?measure= and ?edit= pick a starting point once; drop them from the
   // address bar so a reload keeps whatever the viewer switches to afterwards
-  var URL_KEYS = ["design", "nav", "clip", "impact", "mission", "measure", "edit"];
+  var URL_KEYS = ["design", "nav", "clip", "impact", "mission", "topbar", "measure", "edit"];
   if (new RegExp("[?&](" + URL_KEYS.join("|") + ")=").test(location.search) && history.replaceState) {
     var keep = new URLSearchParams(location.search);
     URL_KEYS.forEach(function (k) { keep.delete(k); });
@@ -26,10 +26,11 @@
   }
   root.classList.add("js");
 
-  /* ---------- The logo's one swappable spot ----------
-     Placeholder until DG's logo is final. To swap it, set LOGO to an <img> (or inline SVG), e.g.
-     '<img src="assets/img/logo.svg" alt="">', and the header picks it up on every page. */
-  var LOGO = "";
+  /* ---------- The logo (round 3, ANI-546; DECISIONS 140) ----------
+     DG's placeholder logo, the mark and the "dharma gates" wordmark: an SVG trace, with the PNG it was traced from as
+     the fallback. The header shows it on every page; its alt text is the link's name. To swap in DG's final logo,
+     point these two at the new files. */
+  var LOGO = { svg: "assets/img/brand/logo-placeholder.svg", png: "assets/img/brand/logo-placeholder.png", w: 1037, h: 444 };
 
   /* ---------- Navigation variants (the thing to show Lyndsey + Aaron) ----------
      [href, label, submenu, flag]. A flag of "impact" shows the item only while "Impact page in menu" is on. */
@@ -88,8 +89,11 @@
     "index.html": "Home", "retreats.html": "Retreats & Events", "monastic-advising.html": "Monastic Advising",
     "about.html": "About", "impact.html": "Impact", "donate.html": "Donate", "connect.html": "Connect", "more.html": "Everything Else"
   };
-  var SETTINGS = boot.settings || { impactPage: "off", missionVariant: "text" }; // defaults live in boot.js
-  var ROLES = boot.roles || ["heading", "body", "quote", "number", "label", "button"];
+  var SETTINGS = boot.settings || { impactPage: "off", missionVariant: "text", topBar: "white", pillarOrder: "practice-sangha-dana" }; // defaults live in boot.js
+  var ROLES = boot.roles || ["heading", "banner", "body", "quote", "number", "label", "button"];
+  var SIZE_KEYS = ["site"].concat(ROLES); // text sizes: the whole site, then one per font role (ANI-602)
+  var SIZE_DEFAULTS = boot.sizeDefaults || {};
+  var ART_SLOTS = ["site.logo", "home.pillars.art"]; // upload slots for the logo and the pillar wheel (applyArt below)
 
   /* ---------- My edits (BRIEF B1): everything Lyndsey changes lives in one key, dg-edits-v1, and is exported as one
      file. Viewing preferences (design, nav, clip, switcher, DG notes, text width) stay in their own keys and are never
@@ -98,11 +102,12 @@
   function readEdits() {
     var e;
     try { e = obj(JSON.parse(load(EDITS_KEY, "{}"))); } catch (x) { e = {}; }
-    e.schema = "dg-edits/1";
-    ["colors", "photos", "text", "testimonials", "settings"].forEach(function (k) { e[k] = obj(e[k]); });
+    e.schema = "dg-edits/2";
+    ["colors", "photos", "text", "testimonials", "settings", "art"].forEach(function (k) { e[k] = obj(e[k]); });
     e.fonts = obj(e.fonts);
     e.fonts.roles = obj(e.fonts.roles);
     e.fonts.oneOffs = obj(e.fonts.oneOffs);
+    e.fonts.sizes = obj(e.fonts.sizes);
     return e;
   }
   var editListeners = [];
@@ -125,7 +130,12 @@
     var f = obj(e.fonts);
     Object.keys(obj(f.roles)).forEach(function (r) { put("fonts.role." + r, [f.roles[r].family, f.roles[r].weight]); });
     Object.keys(obj(f.oneOffs)).forEach(function (k) { put("fonts.one." + k, [f.oneOffs[k].family, f.oneOffs[k].weight]); });
+    Object.keys(obj(f.sizes)).forEach(function (k) { put("fonts.size." + k, f.sizes[k]); });
     Object.keys(obj(e.photos)).forEach(function (k) { put("photos." + k, e.photos[k]); });
+    Object.keys(obj(e.art)).forEach(function (k) { put("art." + k, e.art[k]); });
+    var used = {}; // descriptions of uploaded photos that a spot uses (the file carries them with the picture)
+    Object.keys(obj(e.photos)).forEach(function (k) { var u = obj(e.photos[k]).upload; if (u) used[u] = 1; });
+    Object.keys(obj(e.alts)).forEach(function (k) { if (used[k]) put("alt." + k, e.alts[k]); });
     var t = obj(e.testimonials);
     Object.keys(obj(t.edit)).forEach(function (k) { put("t.edit." + k, t.edit[k]); });
     arr(t.add).forEach(function (a) { put("t.add." + obj(a).id, a); });
@@ -145,7 +155,17 @@
     Object.keys(then).forEach(function (k) { if (!(k in now)) n++; });
     return n;
   }
-  function markExported() { save(EXPORTED_KEY, JSON.stringify(flatten(readEdits()))); editListeners.forEach(function (fn) { fn(readEdits()); }); }
+  // keep(key, value), if given, picks entries that keep their last saved state (a copy leaves the pictures out)
+  function markExported(keep) {
+    var now = flatten(readEdits());
+    if (keep) {
+      var then = {};
+      try { then = obj(JSON.parse(load(EXPORTED_KEY, "{}"))); } catch (x) {}
+      Object.keys(now).forEach(function (k) { if (keep(k, now[k])) { if (k in then) now[k] = then[k]; else delete now[k]; } });
+    }
+    save(EXPORTED_KEY, JSON.stringify(now));
+    editListeners.forEach(function (fn) { fn(readEdits()); });
+  }
   function totalEdits() { return Object.keys(flatten(readEdits())).length; }
 
   /* ---------- Text (BRIEF B2): a data-edit element's text is what visitors read: DG notes left out, <br> as a line
@@ -239,7 +259,8 @@
 
   var header = '<a class="skip-link" href="#main">Skip to Content</a>' + banner +
     '<header class="site"><div class="wrap nav-row">' +
-    '<a class="brand" href="index.html"><span class="logo-slot" aria-hidden="true" title="Logo placeholder">' + LOGO + "</span>Dharma Gates</a>" +
+    '<a class="brand" href="index.html"><picture class="logo">' + (LOGO.svg ? '<source srcset="' + LOGO.svg + '" type="image/svg+xml">' : "") +
+    '<img src="' + LOGO.png + '" width="' + LOGO.w + '" height="' + LOGO.h + '" alt="Dharma Gates"></picture></a>' +
     '<div class="header-tools"><a class="btn small header-donate" href="donate.html">Donate</a>' +
     '<button type="button" class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">☰</button></div>' +
     '<nav class="primary" id="primary-nav" aria-label="Main">' + navList(NAV_A, "nav-a") + navList(NAV_B, "nav-b") + "</nav>" +
@@ -248,6 +269,13 @@
   // The switcher (BRIEF §4): View is viewing preferences, never exported; Site settings and Edit are "my edits"
   var hasHeroVideo = !!document.querySelector(".hero-video");
   var hasMission = !!document.getElementById("mission");
+  // The pillar wheel's order (ANI-546): which pillar sits at 12, 4 and 8 o'clock, clockwise from the top
+  var PILLAR_IDS = ["practice", "sangha", "dana"];
+  var PILLAR_ORDERS = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]].map(function (o) {
+    return o.map(function (k) { return PILLAR_IDS[k]; }).join("-");
+  });
+  var hasPillars = !!document.querySelector("[data-pillars] .pillar-wheel");
+  var pillarName = function (id) { var t = document.getElementById("pillar-tab-" + id); return t ? t.textContent.trim() : id; };
   var switcher =
     '<div class="switcher" id="switcher"><button type="button" class="sw-toggle" aria-expanded="false" aria-controls="sw-panel">Compare designs ▴</button>' +
     '<div class="sw-panel" id="sw-panel">' +
@@ -258,7 +286,11 @@
       row("Show DG notes", buttons([["on", "On"], ["off", "Off"]], "data-notes")) +
       row("Text width", buttons([["wide", "Wide", "68ch, about 87 characters a line"], ["comfortable", "Comfortable", "58ch, about 74 characters a line"]], "data-measure"))) +
     group("site", "Site settings",
+      row("Top bar", buttons([["white", "White"], ["clear", "See-through", "The pre-round-3 look: over the photo on Home, tinted elsewhere"]], "data-topbar")) +
       (hasMission ? row("Mission", buttons([["text", "Text"], ["photo", "Photo"]], "data-mission")) : "") +
+      (hasPillars ? row("Pillar wheel", '<select data-pillar-order aria-label="Pillar wheel, clockwise from the top">' + PILLAR_ORDERS.map(function (v) {
+        return '<option value="' + v + '">' + v.split("-").map(pillarName).join(", ") + "</option>";
+      }).join("") + "</select>") : "") +
       row("Impact page in menu", buttons([["off", "Off"], ["on", "On"]], "data-impact"))) +
     group("edit", "Edit",
       row("Edit this page", buttons([["off", "Off"], ["on", "On"]], "data-editing")) +
@@ -266,6 +298,7 @@
       SLOTS.map(function (s) { return '<label for="c' + s[0] + '">' + s[1] + '</label><input type="color" id="c' + s[0] + '" data-token="' + s[0] + '">'; }).join("") +
       '</div><div class="sw-actions"><button type="button" data-colors="copy">Copy hex codes</button><button type="button" data-colors="reset">Reset</button></div></details>' +
       '<details class="sw-fonts-panel"><summary>Edit fonts live</summary><div class="sw-fonts"><p class="sw-hint">Loading the font list…</p></div></details>' +
+      row("Site art", '<button type="button" data-art="site.logo" aria-haspopup="dialog">Logo</button>' + (hasPillars ? '<button type="button" data-art="home.pillars.art" aria-haspopup="dialog">Pillars art</button>' : '') + '') +
       row("My edits", '<div class="sw-edits"><button type="button" data-my="save">Save my edits</button><button type="button" data-my="copy">Copy my edits</button>' +
         '<button type="button" data-my="load">Load edits</button><button type="button" data-my="reset" aria-haspopup="true">Reset…</button></div>') +
       '<p class="sw-hint" data-unsaved></p>') +
@@ -452,6 +485,8 @@
   toggle("impact", ["off", "on"], SETTINGS.impactPage, "impact", siteSetting("impactPage", ["off", "on"]), function (v) {
     document.querySelectorAll("[data-impact-link]").forEach(function (a) { a.setAttribute("href", v === "on" ? "impact.html" : "index.html#impact"); });
   });
+  // Top bar (ANI-546): solid white by default; the pre-round-3 see-through look one switch away
+  toggle("topbar", ["white", "clear"], SETTINGS.topBar, "topbar", siteSetting("topBar", ["white", "clear"]));
   // Show DG notes (R6): a viewing preference, on by default
   toggle("notes", ["on", "off"], "on", null, pref("dg-show-notes", "on"));
   // Text width (R1): Wide is 68ch, Comfortable 58ch. A viewing preference, so it's never exported.
@@ -538,6 +573,19 @@
     });
   }
   applyFonts();
+
+  /* ---------- Text sizes from "Edit fonts live" (ANI-602): one multiplier for the whole site and one per role, 80–140%,
+     as --size-* variables on <html>. site.css multiplies every type step by them and keeps the result in bounds, with
+     half the change on phones, so text stays readable at 390px. boot.js sets them before the first paint. ---------- */
+  function validSize(v) { return typeof v === "number" && v === Math.round(v) && v >= 80 && v <= 140; }
+  function applySizes() {
+    var sz = readEdits().fonts.sizes;
+    SIZE_KEYS.forEach(function (k) {
+      if (validSize(sz[k])) root.style.setProperty("--size-" + k, String(sz[k] / 100));
+      else root.style.removeProperty("--size-" + k);
+    });
+  }
+  applySizes();
 
   /* ---------- Preview feedback link: the subject names the page and the design on screen ---------- */
   function updateFeedbackLink() {
@@ -669,6 +717,73 @@
   }
   var PHOTOS_JSON = "assets/data/photos.json", BANK_JSON = "assets/data/testimonials.json";
 
+  /* ---------- Uploaded photos and art (ANI-602). The pictures themselves live in this browser's IndexedDB
+     ("dg-uploads": localStorage is far too small for them); "my edits" only names them ({ upload: "up-…" }). The store
+     is opened only when an edit names an upload, so visitors never touch it. Each picture shows through an object URL
+     made from its stored copy, never from anything typed or loaded as text. ---------- */
+  var UP_DB = "dg-uploads", UP_STORE = "uploads", UP_ID = /^up-[a-z0-9]{6,40}$/;
+  var upDB = null, upURLs = {};
+  function upOpen() {
+    if (!upDB) {
+      upDB = new Promise(function (resolve, reject) {
+        if (!window.indexedDB) { reject(new Error("unavailable")); return; }
+        var req;
+        try { req = indexedDB.open(UP_DB, 1); } catch (x) { reject(x); return; }
+        req.onupgradeneeded = function () { req.result.createObjectStore(UP_STORE, { keyPath: "id" }); };
+        req.onsuccess = function () { resolve(req.result); };
+        req.onerror = function () { reject(req.error || new Error("blocked")); };
+        req.onblocked = function () { reject(new Error("blocked")); };
+      });
+      upDB.catch(function () { upDB = null; }); // a later try may work (another tab closed, storage freed)
+    }
+    return upDB;
+  }
+  function upTx(mode, fn) {
+    return upOpen().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx, req;
+        try { tx = db.transaction(UP_STORE, mode); req = fn(tx.objectStore(UP_STORE)); } catch (x) { reject(x); return; }
+        tx.oncomplete = function () { resolve(req ? req.result : undefined); };
+        tx.onerror = function () { reject(tx.error || new Error("failed")); };
+        tx.onabort = function () { reject(tx.error || new Error("aborted")); };
+      });
+    });
+  }
+  var uploads = {
+    get: function (id) { return UP_ID.test(id || "") ? upTx("readonly", function (st) { return st.get(id); }) : Promise.resolve(undefined); },
+    all: function () { return upTx("readonly", function (st) { return st.getAll(); }); },
+    put: function (rec) {
+      if (upURLs[rec.id]) { URL.revokeObjectURL(upURLs[rec.id]); delete upURLs[rec.id]; }
+      return upTx("readwrite", function (st) { return st.put(rec); });
+    },
+    remove: function (id) {
+      if (upURLs[id]) { URL.revokeObjectURL(upURLs[id]); delete upURLs[id]; }
+      return upTx("readwrite", function (st) { return st.delete(id); });
+    },
+    clear: function () { return upTx("readwrite", function (st) { return st.clear(); }); },
+    url: function (rec) { // one object URL per stored picture, made from the stored Blob
+      if (!rec || !(rec.blob instanceof Blob)) return null;
+      if (!upURLs[rec.id]) upURLs[rec.id] = URL.createObjectURL(rec.blob);
+      return upURLs[rec.id];
+    },
+    // what to tell her when the store won't take a picture
+    problem: function (err) {
+      var n = err && err.name;
+      if (n === "QuotaExceededError") return "This browser's storage for photos is full. Delete an upload you no longer use (Change photo, Your uploads), or save your edits to a file and send the rest by email.";
+      return "This browser won't store uploaded photos (a private window, or site storage is blocked). Open the preview in a normal window, or email the photos to Anid.";
+    }
+  };
+  // An uploaded picture in the shape of a library photo, so a slot shows it the way it shows any photo
+  function uploadPhoto(id) {
+    return uploads.get(id).then(function (rec) {
+      var url = uploads.url(rec);
+      if (!url) return null;
+      return { id: id, upload: true, alt: typeof rec.alt === "string" ? rec.alt : "", w: rec.w, h: rec.h,
+        orientation: rec.w / rec.h >= 2 ? "panorama" : rec.w / rec.h >= 0.95 ? "landscape" : "portrait",
+        focal: { x: 0.5, y: 0.5 }, src: { full: { src: url, w: rec.w } } };
+    }, function () { return null; });
+  }
+
   /* ---------- Photos from "Change photo" (BRIEF B4). Each slot keeps its page default; a pick swaps src, srcset
      and alt from the library and sets the focal point (object-position / background-position = focal × 100%). ---------- */
   var slotDefaults = {};
@@ -743,22 +858,60 @@
     img.style.objectFit = contain ? "contain" : "";
   }
   var missingPhotos = [];
+  // A pick names a library photo ({ photo: id }) or one of her uploads ({ upload: id }). Without the library file
+  // (a page opened from disk) library picks keep the page's own photo; uploads still show.
   function applyPhotoEdits() {
     var picks = readEdits().photos;
     var slots = [].slice.call(document.querySelectorAll("[data-photo-slot]"));
     if (!Object.keys(picks).length) { slots.forEach(resetSlot); return Promise.resolve(); }
-    return loadJSON(PHOTOS_JSON).then(function (m) {
+    var ids = [];
+    Object.keys(picks).forEach(function (k) { var u = obj(picks[k]).upload; if (u && ids.indexOf(u) < 0) ids.push(u); });
+    var library = Object.keys(picks).some(function (k) { return obj(picks[k]).photo; }) ? loadJSON(PHOTOS_JSON).catch(function () { return null; }) : Promise.resolve(null);
+    return Promise.all([library, Promise.all(ids.map(uploadPhoto))]).then(function (r) {
+      var m = r[0], ups = {};
+      ids.forEach(function (id, k) { ups[id] = r[1][k]; });
       missingPhotos = [];
       slots.forEach(function (slot) {
-        var pick = picks[slot.getAttribute("data-photo-slot")];
-        if (!pick) { resetSlot(slot); return; }
-        var photo = arr(m.photos).filter(function (p) { return p.id === obj(pick).photo; })[0];
-        if (!photo) { resetSlot(slot); slot.setAttribute("data-photo-missing", ""); missingPhotos.push(obj(pick).photo); return; }
+        var pick = obj(picks[slot.getAttribute("data-photo-slot")]);
+        if (!pick.photo && !pick.upload) { resetSlot(slot); return; }
+        if (pick.photo && !m) { resetSlot(slot); return; }
+        var photo = pick.upload ? ups[pick.upload] : arr(m.photos).filter(function (p) { return p.id === pick.photo; })[0];
+        if (!photo) { resetSlot(slot); slot.setAttribute("data-photo-missing", ""); missingPhotos.push(pick.upload || pick.photo); return; }
         applySlot(slot, pick, photo);
       });
-    }, function () {});
+    });
   }
   applyPhotoEdits();
+
+  /* ---------- Site art (ANI-602): the header logo and the pillar wheel are upload slots. Their defaults are DG's
+     placeholder files (LOGO above, and the wheel's <image> in index.html; DECISIONS 140). An upload shows here at once;
+     tools/apply_edits.py writes it over the default file. ---------- */
+  var wheelImage = document.querySelector(".pillar-wheel mask image");
+  var artDefaults = { "site.logo": LOGO.svg || LOGO.png, "home.pillars.art": wheelImage ? wheelImage.getAttribute("href") : "" };
+  function showArt(slot, rec) {
+    var url = rec && rec.kind === "art" ? uploads.url(rec) : null;
+    if (slot === "site.logo") {
+      document.querySelectorAll("header.site .brand picture").forEach(function (pic) {
+        var img = pic.querySelector("img"), src = pic.querySelector("source");
+        if (src && url && src.hasAttribute("srcset")) { src.setAttribute("data-srcset", src.getAttribute("srcset")); src.removeAttribute("srcset"); } // the SVG gives way
+        if (src && !url && src.hasAttribute("data-srcset")) src.setAttribute("srcset", src.getAttribute("data-srcset"));
+        img.setAttribute("src", url || LOGO.png);
+        img.setAttribute("width", url ? rec.w : LOGO.w);
+        img.setAttribute("height", url ? rec.h : LOGO.h);
+      });
+    } else if (slot === "home.pillars.art" && wheelImage) {
+      wheelImage.setAttribute("href", url || artDefaults[slot]);
+    }
+  }
+  function applyArt() {
+    var art = readEdits().art;
+    return Promise.all(ART_SLOTS.map(function (slot) {
+      var id = obj(art[slot]).upload;
+      if (!id) { showArt(slot, null); return null; }
+      return uploads.get(id).then(function (rec) { showArt(slot, rec); }, function () { showArt(slot, null); });
+    }));
+  }
+  if (Object.keys(readEdits().art).length) applyArt();
 
   /* ---------- Impact counters: the real numbers are in the HTML ("2,000+"); with scripts and motion allowed they
      count up from 0 once, when scrolled into view. An edited number counts up the same way. Not in edit mode. ---------- */
@@ -999,23 +1152,33 @@
     loadJSON(BANK_JSON).then(function (seed) { bankSeed = obj(seed); renderBank(); }, function () {});
   }
 
-  /* ---------- Pillars (R13): accessible tabs. The names are the tab buttons; each arc acts as its name's button.
-     On desktop, resting the pointer on an arc or name for 150ms previews that pillar; the preview holds while the
-     pointer is anywhere over the circle, names or panel, and the selected pillar returns when it leaves, or on Escape. */
+  /* ---------- Pillars (R13; round 3, ANI-546): accessible tabs around DG's brushstroke wheel. The names are the tab
+     buttons; each stroke (the wheel's sector at 12, 4 or 8 o'clock) acts as its name's button. Which pillar sits where
+     is the "Pillar wheel" setting, clockwise from the top, and the arrow keys follow the same order. On desktop,
+     resting the pointer on a stroke or name for 150ms previews that pillar; the preview holds while the pointer is
+     anywhere over the wheel, names or panel, and the selected pillar returns when it leaves, or on Escape. ---------- */
+  var SECTORS = ["top", "right", "left"]; // clockwise from 12 o'clock
+  var pillarWheels = [];
   document.querySelectorAll("[data-pillars]").forEach(function (box) {
+    var tablist = box.querySelector('[role="tablist"]');
     var tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
     var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute("aria-controls")); });
-    var groups = tabs.map(function (t) { return box.querySelector('g[data-for="' + t.id + '"]'); });
+    var sectors = [].slice.call(box.querySelectorAll(".pw-sector"));
+    var groupOf = function (k) { return box.querySelector('.pw-sector[data-for="' + tabs[k].id + '"]'); };
+    var tabOf = function (g) { return tabs.indexOf(document.getElementById(g.getAttribute("data-for"))); };
     var canHover = window.matchMedia && window.matchMedia("(hover: hover)").matches;
     var selected = Math.max(0, tabs.findIndex(function (t) { return t.getAttribute("aria-selected") === "true"; }));
     var shown = selected, hoverTimer = null;
     var paint = function () {
+      box.classList.toggle("is-previewing", shown !== selected);
       tabs.forEach(function (t, k) {
         t.setAttribute("aria-selected", k === selected ? "true" : "false");
         t.tabIndex = k === selected ? 0 : -1;
-        if (groups[k]) {
-          groups[k].classList.toggle("is-selected", k === selected);
-          groups[k].classList.toggle("is-preview", k === shown && k !== selected);
+        t.classList.toggle("is-shown", k === shown);
+        var g = groupOf(k);
+        if (g) {
+          g.classList.toggle("is-selected", k === selected);
+          g.classList.toggle("is-shown", k === shown);
         }
       });
       panels.forEach(function (p, k) { if (p) p.classList.toggle("is-shown", k === shown); });
@@ -1028,45 +1191,73 @@
     };
     var restore = function () { clearTimeout(hoverTimer); if (shown !== selected) { shown = selected; paint(); } };
     var setHover = function (k, on) {
-      if (groups[k]) groups[k].classList.toggle("is-hover", on);
+      var g = groupOf(k);
+      if (g) g.classList.toggle("is-hover", on);
       tabs[k].classList.toggle("is-hover", on);
     };
+    var enter = function (k, e) {
+      setHover(k, true);
+      if (!canHover || e.pointerType === "touch" || root.classList.contains("dg-editing")) return;
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(function () { shown = k; paint(); }, 150);
+    };
+    var leave = function (k) { setHover(k, false); clearTimeout(hoverTimer); };
     tabs.forEach(function (t, k) {
       t.addEventListener("click", function () { select(k, false); });
-      t.addEventListener("focus", function () { if (groups[k]) groups[k].classList.add("is-focus"); });
-      t.addEventListener("blur", function () { if (groups[k]) groups[k].classList.remove("is-focus"); });
-      var targets = [t];
-      var hit = groups[k] && groups[k].querySelector(".hit");
-      if (hit) {
-        targets.push(hit);
-        hit.addEventListener("click", function () { select(k, false); });
-      }
-      targets.forEach(function (el) {
-        el.addEventListener("pointerenter", function (e) {
-          setHover(k, true);
-          if (!canHover || e.pointerType === "touch" || root.classList.contains("dg-editing")) return;
-          clearTimeout(hoverTimer);
-          hoverTimer = setTimeout(function () { shown = k; paint(); }, 150);
-        });
-        el.addEventListener("pointerleave", function () { setHover(k, false); clearTimeout(hoverTimer); });
-      });
+      t.addEventListener("focus", function () { var g = groupOf(k); if (g) g.classList.add("is-focus"); });
+      t.addEventListener("blur", function () { sectors.forEach(function (g) { g.classList.remove("is-focus"); }); });
+      t.addEventListener("pointerenter", function (e) { enter(k, e); });
+      t.addEventListener("pointerleave", function () { leave(k); });
     });
-    box.querySelector('[role="tablist"]').addEventListener("keydown", function (e) {
-      var k = tabs.indexOf(document.activeElement), n = tabs.length;
-      if (k < 0) return;
+    sectors.forEach(function (g) {
+      var hit = g.querySelector(".hit");
+      if (!hit) return;
+      hit.addEventListener("click", function () { var k = tabOf(g); if (k > -1) select(k, false); });
+      hit.addEventListener("pointerenter", function (e) { var k = tabOf(g); if (k > -1) enter(k, e); });
+      hit.addEventListener("pointerleave", function () { var k = tabOf(g); if (k > -1) leave(k); });
+    });
+    tablist.addEventListener("keydown", function (e) {
+      var list = [].slice.call(tablist.querySelectorAll('[role="tab"]')); // clockwise, the wheel's order
+      var i = list.indexOf(document.activeElement), n = list.length;
+      if (i < 0) return;
       var to = null;
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") to = (k + 1) % n;
-      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") to = (k - 1 + n) % n;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") to = (i + 1) % n;
+      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") to = (i - 1 + n) % n;
       else if (e.key === "Home") to = 0;
       else if (e.key === "End") to = n - 1;
       if (to === null) return;
       e.preventDefault();
-      select(to, true);
+      select(tabs.indexOf(list[to]), true);
     });
     box.addEventListener("pointerleave", restore);
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") restore(); });
+    // the "Pillar wheel" setting: the pillar for each sector, clockwise from the top; the tabs follow in that order
+    pillarWheels.push(function (order) {
+      sectors.forEach(function (g) { g.classList.remove("is-hover", "is-focus"); });
+      tabs.forEach(function (t) { t.classList.remove("is-hover"); });
+      order.split("-").forEach(function (id, i) {
+        var g = box.querySelector('.pw-sector[data-sector="' + SECTORS[i] + '"]');
+        var t = document.getElementById("pillar-tab-" + id);
+        if (!g || !t || tabs.indexOf(t) < 0) return;
+        g.setAttribute("data-for", t.id);
+        t.setAttribute("data-pos", SECTORS[i]);
+        tablist.appendChild(t);
+      });
+      paint();
+    });
     paint();
   });
+  var orderSel = sw.querySelector("[data-pillar-order]");
+  if (orderSel) {
+    var setOrder = function (v, quiet) {
+      orderSel.value = v;
+      pillarWheels.forEach(function (f) { f(v); });
+      if (!quiet) setSetting("pillarOrder", v);
+    };
+    orderSel.addEventListener("change", function () { setOrder(orderSel.value); });
+    setOrder(getSetting("pillarOrder", PILLAR_ORDERS), true);
+    switches.pillarOrder = function () { setOrder(getSetting("pillarOrder", PILLAR_ORDERS), true); };
+  }
 
   /* ---------- Retreat Guru rows (R10, A3) ----------
      Undocumented public endpoint, no token. In WordPress, fetch it server-side and cache it (a transient), never
@@ -1269,6 +1460,9 @@
       withEditor(function (E) { E.myEdits(what, b); });
     });
   });
+  sw.querySelectorAll("[data-art]").forEach(function (b) {
+    b.addEventListener("click", function () { withEditor(function (E) { E.openArt(b.getAttribute("data-art"), b); }); });
+  });
   sw.querySelector(".sw-fonts-panel").addEventListener("toggle", function (e) {
     if (e.target.open) withEditor(function (E) { E.openFonts(sw.querySelector(".sw-fonts")); });
   });
@@ -1286,11 +1480,12 @@
     normalize: normalize, textOf: textOf, setText: setText, shortHash: shortHash, textDefaults: textDefaults, keyed: keyed,
     applyTextEdits: applyTextEdits, design: function () { return design; }, designs: DESIGNS, slots: SLOTS,
     applyColorEdits: applyColorEdits, applyFonts: applyFonts, fontStack: fontStack, roles: ROLES, boot: boot,
-    settings: SETTINGS, refreshSwitches: function () { Object.keys(switches).forEach(function (k) { switches[k](); }); },
+    settings: SETTINGS, pillarOrders: PILLAR_ORDERS, refreshSwitches: function () { Object.keys(switches).forEach(function (k) { switches[k](); }); },
     loadJSON: loadJSON, PHOTOS_JSON: PHOTOS_JSON, BANK_JSON: BANK_JSON, slotDefaults: slotDefaults, applySlot: applySlot,
     resetSlot: resetSlot, applyPhotoEdits: applyPhotoEdits, missingPhotos: function () { return missingPhotos; },
     pctPos: pctPos, sizesOf: sizesOf, bankSeed: function () { return bankSeed; }, mergeBank: mergeBank, bankFor: bankFor, bankOrder: bankOrder,
     renderBank: renderBank, carousels: carousels, setEditingButtons: setEditingButtons, showUnsaved: showUnsaved,
-    placements: PLACEMENTS
+    placements: PLACEMENTS, uploads: uploads, uploadPhoto: uploadPhoto, applySizes: applySizes, sizeKeys: SIZE_KEYS,
+    sizeDefaults: SIZE_DEFAULTS, artSlots: ART_SLOTS, applyArt: applyArt, artDefault: function (slot) { return artDefaults[slot]; }
   };
 })();
